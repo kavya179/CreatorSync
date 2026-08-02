@@ -25,13 +25,15 @@ import {
   CreditCard,
   AlertOctagon,
   TrendingUp,
-  CheckSquare
+  CheckSquare,
+  ChevronRight
 } from 'lucide-react';
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
 
   const getInitials = (name) => {
@@ -49,152 +51,40 @@ const DashboardLayout = () => {
   const getNavItems = () => {
     if (user?.role === 'admin') {
       return [
-        {
-          label: 'Admin Home',
-          path: '/dashboard?tab=dashboard',
-          icon: <LayoutDashboard size={20} />
-        },
-        {
-          label: 'Manage Users',
-          path: '/dashboard?tab=users',
-          icon: <Users size={20} />
-        },
-        {
-          label: 'Moderate Projects',
-          path: '/dashboard?tab=projects',
-          icon: <Briefcase size={20} />
-        },
-        {
-          label: 'Flagged Reports',
-          path: '/dashboard?tab=reports',
-          icon: <AlertOctagon size={20} />
-        },
-        {
-          label: 'Revenue Logs',
-          path: '/dashboard?tab=revenue',
-          icon: <CreditCard size={20} />
-        },
-        {
-          label: 'Platform Stats',
-          path: '/dashboard?tab=analytics',
-          icon: <TrendingUp size={20} />
-        },
-        {
-          label: 'Settings',
-          path: '/dashboard/settings',
-          icon: <Settings size={20} />
-        }
+        { label: 'Admin Home', path: '/dashboard?tab=dashboard', icon: <LayoutDashboard size={20} /> },
+        { label: 'Manage Users', path: '/dashboard?tab=users', icon: <Users size={20} /> },
+        { label: 'Moderate Projects', path: '/dashboard?tab=projects', icon: <Briefcase size={20} /> },
+        { label: 'Flagged Reports', path: '/dashboard?tab=reports', icon: <AlertOctagon size={20} /> },
+        { label: 'Revenue Logs', path: '/dashboard?tab=revenue', icon: <CreditCard size={20} /> },
+        { label: 'Platform Stats', path: '/dashboard?tab=analytics', icon: <TrendingUp size={20} /> },
+        { label: 'Settings', path: '/dashboard/settings', icon: <Settings size={20} /> }
       ];
     } else if (user?.role === 'creator') {
       return [
-        {
-          label: 'Dashboard',
-          path: '/dashboard?tab=dashboard',
-          icon: <LayoutDashboard size={20} />
-        },
-        {
-          label: 'My Profile',
-          path: '/dashboard/profile',
-          icon: <UserCircle size={20} />
-        },
-        {
-          label: 'Discover Campaigns',
-          path: '/discover',
-          icon: <Compass size={20} />
-        },
-        {
-          label: 'My Applications',
-          path: '/dashboard?tab=applications',
-          icon: <FileText size={20} />
-        },
-        {
-          label: 'Active Collaborations',
-          path: '/dashboard?tab=active-collaborations',
-          icon: <Briefcase size={20} />
-        },
-        {
-          label: 'Completed Collaborations',
-          path: '/dashboard?tab=completed-collaborations',
-          icon: <CheckSquare size={20} />
-        },
-        {
-          label: 'Messages',
-          path: '/dashboard?tab=messages',
-          icon: <MessageSquare size={20} />
-        },
-        {
-          label: 'Notifications',
-          path: '/dashboard?tab=notifications',
-          icon: <Bell size={20} />
-        },
-        {
-          label: 'Analytics',
-          path: '/dashboard?tab=analytics',
-          icon: <BarChart2 size={20} />
-        },
-        {
-          label: 'Settings',
-          path: '/dashboard/settings',
-          icon: <Settings size={20} />
-        }
+        { label: 'Dashboard', path: '/dashboard?tab=dashboard', icon: <LayoutDashboard size={20} /> },
+        { label: 'My Profile', path: '/dashboard/profile', icon: <UserCircle size={20} /> },
+        { label: 'Discover Campaigns', path: '/discover', icon: <Compass size={20} /> },
+        { label: 'My Applications', path: '/dashboard?tab=applications', icon: <FileText size={20} /> },
+        { label: 'Active Collaborations', path: '/dashboard?tab=active-collaborations', icon: <Briefcase size={20} /> },
+        { label: 'Completed Collaborations', path: '/dashboard?tab=completed-collaborations', icon: <CheckSquare size={20} /> },
+        { label: 'Messages', path: '/dashboard?tab=messages', icon: <MessageSquare size={20} /> },
+        { label: 'Notifications', path: '/dashboard?tab=notifications', icon: <Bell size={20} /> },
+        { label: 'Analytics', path: '/dashboard?tab=analytics', icon: <BarChart2 size={20} /> },
+        { label: 'Settings', path: '/dashboard/settings', icon: <Settings size={20} /> }
       ];
     } else {
       return [
-        {
-          label: 'Dashboard',
-          path: '/dashboard?tab=dashboard',
-          icon: <LayoutDashboard size={20} />
-        },
-        {
-          label: 'Company Profile',
-          path: '/dashboard?tab=profile',
-          icon: <UserCircle size={20} />
-        },
-        {
-          label: 'Post Campaign',
-          path: '/dashboard?tab=create',
-          icon: <PlusCircle size={20} />
-        },
-        {
-          label: 'My Campaigns',
-          path: '/dashboard?tab=campaigns',
-          icon: <Briefcase size={20} />
-        },
-        {
-          label: 'Applications Received',
-          path: '/dashboard?tab=applications',
-          icon: <FileText size={20} />
-        },
-        {
-          label: 'Shortlisted Creators',
-          path: '/dashboard?tab=shortlist',
-          icon: <Users size={20} />
-        },
-        {
-          label: 'Company Collaborations',
-          path: '/dashboard?tab=collaborations',
-          icon: <Briefcase size={20} />
-        },
-        {
-          label: 'Inbox Messages',
-          path: '/dashboard?tab=messages',
-          icon: <MessageSquare size={20} />
-        },
-        {
-          label: 'Campaign Analytics',
-          path: '/dashboard?tab=analytics',
-          icon: <BarChart2 size={20} />
-        },
-        {
-          label: 'Escrow Payments',
-          path: '/dashboard?tab=payments',
-          icon: <CreditCard size={20} />
-        },
-        {
-          label: 'Account Settings',
-          path: '/dashboard/settings',
-          icon: <Settings size={20} />
-        }
+        { label: 'Dashboard', path: '/dashboard?tab=dashboard', icon: <LayoutDashboard size={20} /> },
+        { label: 'Company Profile', path: '/dashboard?tab=profile', icon: <UserCircle size={20} /> },
+        { label: 'Post Campaign', path: '/dashboard?tab=create', icon: <PlusCircle size={20} /> },
+        { label: 'My Campaigns', path: '/dashboard?tab=campaigns', icon: <Briefcase size={20} /> },
+        { label: 'Applications Received', path: '/dashboard?tab=applications', icon: <FileText size={20} /> },
+        { label: 'Shortlisted Creators', path: '/dashboard?tab=shortlist', icon: <Users size={20} /> },
+        { label: 'Company Collaborations', path: '/dashboard?tab=collaborations', icon: <Briefcase size={20} /> },
+        { label: 'Inbox Messages', path: '/dashboard?tab=messages', icon: <MessageSquare size={20} /> },
+        { label: 'Campaign Analytics', path: '/dashboard?tab=analytics', icon: <BarChart2 size={20} /> },
+        { label: 'Escrow Payments', path: '/dashboard?tab=payments', icon: <CreditCard size={20} /> },
+        { label: 'Account Settings', path: '/dashboard/settings', icon: <Settings size={20} /> }
       ];
     }
   };
@@ -203,25 +93,44 @@ const DashboardLayout = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar for Desktop & Mobile */}
-      <aside className={`dashboard-sidebar ${mobileOpen ? 'open' : ''}`}>
+      {/* Invisible Trigger Strip along left edge */}
+      <div
+        className="sidebar-trigger-zone"
+        onMouseEnter={() => setIsHovered(true)}
+      />
+
+      {/* Glowing Edge Tab Indicator */}
+      <div
+        className="sidebar-edge-pill"
+        title="Hover to reveal menu"
+        onMouseEnter={() => setIsHovered(true)}
+      >
+        <ChevronRight size={14} style={{ color: '#ffffff', opacity: 0.9 }} />
+      </div>
+
+      {/* Hover-reveal Sidebar */}
+      <aside
+        className={`dashboard-sidebar ${mobileOpen || isHovered ? 'open' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="dashboard-sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" className="nav-logo gradient-text" style={{ fontSize: '1.25rem' }}>
             <Share2 size={20} />
             CreatorSync
           </Link>
-          <button className="btn-icon close-sidebar-btn" onClick={() => setMobileOpen(false)}>
+          <button className="btn-icon close-sidebar-btn" onClick={() => { setMobileOpen(false); setIsHovered(false); }}>
             <X size={20} />
           </button>
         </div>
 
-        <nav className="dashboard-nav" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 220px)', paddingRight: '4px' }}>
+        <nav className="dashboard-nav" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 160px)', paddingRight: '4px' }}>
           {navItems.map((item, idx) => (
             <Link
               key={idx}
               to={item.path}
               className={isItemActive(item.path) ? "dashboard-nav-item active" : "dashboard-nav-item"}
-              onClick={() => setMobileOpen(false)}
+              onClick={() => { setMobileOpen(false); setIsHovered(false); }}
             >
               {item.icon}
               {item.label}
@@ -236,7 +145,7 @@ const DashboardLayout = () => {
             </div>
             <div className="dashboard-user-info">
               <span className="dashboard-user-name">{user?.name}</span>
-              <span className="dashboard-user-role" style={{ color: 'var(--primary)', fontWeight: 700 }}>{user?.role}</span>
+              <span className="dashboard-user-role" style={{ color: 'var(--secondary)', fontWeight: 700 }}>{user?.role}</span>
             </div>
           </div>
 
@@ -251,7 +160,7 @@ const DashboardLayout = () => {
       <div className="dashboard-main">
         <header className="dashboard-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button className="btn-icon mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="btn-icon" onClick={() => setMobileOpen(!mobileOpen)} title="Toggle Navigation Menu">
               <Menu size={20} />
             </button>
             <h2 className="dashboard-title-bar">Workspace Panel</h2>
@@ -270,25 +179,37 @@ const DashboardLayout = () => {
       </div>
 
       <style>{`
-        .close-sidebar-btn {
-          display: none !important;
+        .sidebar-trigger-zone {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 24px;
+          height: 100vh;
+          z-index: 998;
         }
-        .mobile-menu-btn {
-          display: none !important;
+
+        .sidebar-edge-pill {
+          position: fixed;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          width: 16px;
+          height: 54px;
+          border-radius: 0 10px 10px 0;
+          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+          box-shadow: 0 0 20px rgba(236, 72, 153, 0.7);
+          z-index: 997;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
         }
-        @media (max-width: 768px) {
-          .close-sidebar-btn {
-            display: flex !important;
-          }
-          .mobile-menu-btn {
-            display: flex !important;
-          }
-          .dashboard-sidebar {
-            transform: translateX(-100%);
-          }
-          .dashboard-sidebar.open {
-            transform: translateX(0);
-          }
+
+        .sidebar-trigger-zone:hover ~ .sidebar-edge-pill,
+        .dashboard-sidebar.open ~ .sidebar-edge-pill {
+          opacity: 0;
+          pointer-events: none;
         }
       `}</style>
     </div>

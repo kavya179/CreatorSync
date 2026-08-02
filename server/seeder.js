@@ -39,485 +39,737 @@ const importData = async () => {
     await Review.deleteMany();
     await Payment.deleteMany();
 
-    console.log('Creating demo users (Brand & Creators)...');
+    console.log('Creating Famous Indian Brands & Creator Accounts...');
 
-    // 1. Company (Brand) User
-    const brandUser = await User.create({
-      name: 'Apex Tech Global',
+    // ────────────────────────────────────────────────────────
+    // 1. BRAND / COMPANY ACCOUNTS
+    // ────────────────────────────────────────────────────────
+
+    // Brand 1: boAt Lifestyle
+    const boatUser = await User.create({
+      name: 'boAt Lifestyle',
       email: 'brand@creatorsync.com',
       password: 'Password123!',
       role: 'brand',
-      profileImage: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=200',
-      username: 'apextechglobal',
-      phone: '+1 (555) 234-5678',
-      country: 'United States',
-      city: 'San Francisco',
+      profileImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200',
+      username: 'boatlifestyle',
+      phone: '+91 98765 43210',
+      country: 'India',
+      city: 'Mumbai',
       isVerified: true,
       themePreference: 'dark',
       language: 'en'
     });
 
-    // Brand Profile
-    await Brand.create({
-      userId: brandUser._id,
-      companyName: 'Apex Tech Global',
-      industry: 'Technology & Consumer Electronics',
-      website: 'https://apextechglobal.example.com',
-      description: 'Leading innovator in high-performance wireless audio, smart wearables, and mobile tech accessories.',
-      companyLogo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200',
-      coverBanner: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-      phone: '+1 (555) 234-5678',
-      country: 'United States',
-      city: 'San Francisco',
-      address: '500 Howard Street, Suite 400, San Francisco, CA 94105',
-      productsServices: 'Pro Wireless ANC Headphones, Smart Audio Glasses, Earbuds Mini, Smartwatch Series 5',
-      mission: 'Empowering creators and consumers with cutting-edge immersive audio and smart devices.',
-      linkedinUrl: 'https://linkedin.com/company/apextechglobal',
-      instagramUrl: 'https://instagram.com/apextechglobal',
-      youtubeUrl: 'https://youtube.com/apextechglobal',
-      twitterUrl: 'https://twitter.com/apextechglobal',
+    const boatBrand = await Brand.create({
+      userId: boatUser._id,
+      companyName: 'boAt Lifestyle',
+      industry: 'Consumer Electronics & Audio Wearables',
+      website: 'https://www.boat-lifestyle.com',
+      description: "India's #1 earwear & wearable audio brand, founded by Aman Gupta & Sameer Mehta. Designing ultra-stylish headphones, ANC earbuds, and smartwatches for India's youth.",
+      companyLogo: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200',
+      coverBanner: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=1200',
+      phone: '+91 98765 43210',
+      country: 'India',
+      city: 'Mumbai',
+      address: 'Imagine Marketing Ltd., Bandra West, Mumbai, Maharashtra 400050',
+      productsServices: 'boAt Airdopes 500 ANC, Wave Call Smartwatch, Rockerz Wireless Headphones, Stone Bluetooth Speakers',
+      mission: 'Plug into Nirvana with affordable, high-design audio accessories.',
+      instagramUrl: 'https://instagram.com/boat.nirvana',
+      youtubeUrl: 'https://youtube.com/c/boatlifestyle',
+      twitterUrl: 'https://twitter.com/RockWithboAt',
       images: [
         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
         'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800'
       ]
     });
 
-    // 2. Creator 1 User (Sarah Jenkins)
-    const creatorUser1 = await User.create({
-      name: 'Sarah Jenkins',
-      email: 'creator@creatorsync.com',
+    // Brand 2: Mamaearth
+    const mamaearthUser = await User.create({
+      name: 'Mamaearth India',
+      email: 'mamaearth@creatorsync.com',
       password: 'Password123!',
-      role: 'creator',
-      profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200',
-      username: 'sarahjenkinstech',
-      phone: '+1 (555) 876-5432',
-      country: 'United States',
-      city: 'Austin',
+      role: 'brand',
+      profileImage: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200',
+      username: 'mamaearth',
+      phone: '+91 99887 76655',
+      country: 'India',
+      city: 'Gurugram',
       isVerified: true,
       themePreference: 'dark',
       language: 'en'
     });
 
-    // Creator Profile 1
-    await Creator.create({
-      userId: creatorUser1._id,
+    const mamaearthBrand = await Brand.create({
+      userId: mamaearthUser._id,
+      companyName: 'Mamaearth',
+      industry: 'D2C Beauty & Personal Care',
+      website: 'https://mamaearth.in',
+      description: 'India’s fastest-growing toxin-free, natural beauty & skincare brand for conscious Indian consumers.',
+      companyLogo: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200',
+      coverBanner: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200',
+      country: 'India',
+      city: 'Gurugram',
+      address: 'Honasa Consumer Ltd., Sector 44, Gurugram, Haryana 122003',
+      productsServices: 'Vitamin C Face Serum, Onion Hair Oil, Ubtan Face Wash, Rice Water Gel',
+      mission: 'Goodness Inside. Toxin-free skincare made with natural Indian ingredients.',
+      instagramUrl: 'https://instagram.com/mamaearth.in',
+      youtubeUrl: 'https://youtube.com/c/mamaearth'
+    });
+
+    // Brand 3: CRED
+    const credUser = await User.create({
+      name: 'CRED India',
+      email: 'cred@creatorsync.com',
+      password: 'Password123!',
+      role: 'brand',
+      profileImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=200',
+      username: 'cred',
+      phone: '+91 91234 56789',
+      country: 'India',
+      city: 'Bengaluru',
+      isVerified: true
+    });
+
+    const credBrand = await Brand.create({
+      userId: credUser._id,
+      companyName: 'CRED',
+      industry: 'Fintech & Premium Rewards',
+      website: 'https://cred.club',
+      description: 'Exclusive rewards and credit card management app for India’s premium creditworthy individuals.',
+      companyLogo: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=200',
+      coverBanner: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200',
+      country: 'India',
+      city: 'Bengaluru',
+      productsServices: 'CRED Pay UPI, CRED Coins, CRED Flash Credit Line, CRED Store Exclusives',
+      mission: 'Making financial discipline rewarding for India’s top credit users.'
+    });
+
+    // Brand 4: Zomato India
+    const zomatoUser = await User.create({
+      name: 'Zomato India',
+      email: 'zomato@creatorsync.com',
+      password: 'Password123!',
+      role: 'brand',
+      profileImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200',
+      username: 'zomato',
+      phone: '+91 98989 89898',
+      country: 'India',
+      city: 'Gurugram',
+      isVerified: true
+    });
+
+    const zomatoBrand = await Brand.create({
+      userId: zomatoUser._id,
+      companyName: 'Zomato',
+      industry: 'Food Tech & Quick Commerce',
+      website: 'https://zomato.com',
+      description: 'India’s leading food ordering, dining discovery, and quick delivery platform.',
+      companyLogo: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200',
+      country: 'India',
+      city: 'Gurugram',
+      productsServices: 'Zomato Gold, Zomato Legends, Quick Delivery, Dining Deals'
+    });
+
+
+    // ────────────────────────────────────────────────────────
+    // 2. FAMOUS INDIAN CREATOR ACCOUNTS
+    // ────────────────────────────────────────────────────────
+
+    // Creator 1: Technical Guruji (Gaurav Chaudhary)
+    const tgUser = await User.create({
+      name: 'Gaurav Chaudhary (Technical Guruji)',
+      email: 'creator@creatorsync.com',
+      password: 'Password123!',
+      role: 'creator',
+      profileImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
+      username: 'technicalguruji',
+      phone: '+91 98111 22233',
+      country: 'India',
+      city: 'New Delhi',
+      isVerified: true,
+      themePreference: 'dark',
+      language: 'hi'
+    });
+
+    const tgCreator = await Creator.create({
+      userId: tgUser._id,
       category: 'Tech & Electronics',
       primaryPlatform: 'YouTube',
-      experienceYears: 5,
-      languages: ['English', 'Spanish'],
+      experienceYears: 9,
+      languages: ['Hindi', 'English'],
       availability: 'Available',
-      followersCount: 450000,
-      avgEngagement: 5.4,
-      avgReach: 185000,
-      monthlyViews: 1250000,
-      bio: 'Tech reviewer & gadget enthusiast. I test the latest audio gear, smartphones, and smart home tech for an audience of 450,000 tech buyers.',
-      portfolioUrl: 'https://sarahjenkinstech.example.com',
-      portfolioDescription: 'Dedicated to honest, high-production 4K gadget reviews, unboxing showcases, and long-term product tests.',
+      followersCount: 23500000, // 23.5M
+      avgEngagement: 6.2,
+      avgReach: 4500000,
+      monthlyViews: 45000000,
+      bio: 'Namaste Dosto! Tech reviewer & gadget enthusiast. I review smartphones, smartwatches, 4K TVs, and audio gear in Hindi for 23.5 Million tech buyers across India.',
+      portfolioUrl: 'https://youtube.com/c/TechnicalGuruji',
+      portfolioDescription: 'India’s largest tech community delivering daily unboxing videos, flagship smartphone reviews, and honest gadget testing.',
       coverBanner: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200',
-      youtubeUrl: 'https://youtube.com/c/sarahjenkinstech',
-      instagramUrl: 'https://instagram.com/sarah.tech.reviews',
-      linkedinUrl: 'https://linkedin.com/in/sarahjenkinstech',
-      xUrl: 'https://twitter.com/sarahjenkinsoff',
-      niche: ['Tech & Electronics', 'Gadgets', 'Audio Gear', 'Consumer Tech'],
-      skills: ['4K Video Editing', 'Unboxing Production', 'Audio Testing', 'Instagram Reels', 'Tech Storytelling'],
+      youtubeUrl: 'https://youtube.com/c/TechnicalGuruji',
+      instagramUrl: 'https://instagram.com/technicalguruji',
+      twitterUrl: 'https://twitter.com/TGuruji',
+      niche: ['Tech & Electronics', 'Gadgets', 'Smartphones', 'Audio Gear'],
+      skills: ['4K Tech Reviews', 'Unboxing Production', 'Hindi Storytelling', 'Product Benchmarking'],
       socialChannels: [
-        { platform: 'youtube', handle: '@sarahjenkinstech', followers: 450000 },
-        { platform: 'instagram', handle: '@sarah.tech.reviews', followers: 280000 },
-        { platform: 'tiktok', handle: '@sarahjenkinsoff', followers: 180000 }
+        { platform: 'youtube', handle: '@TechnicalGuruji', followers: 23500000 },
+        { platform: 'instagram', handle: '@technicalguruji', followers: 4800000 },
+        { platform: 'twitter', handle: '@TGuruji', followers: 3200000 }
       ],
       showcase: [
         {
-          title: 'Flagship Headphones ANC Deep Dive Review',
+          title: 'boAt Airdopes 500 ANC — Unboxing & Hindi Review',
           platform: 'YouTube',
-          description: 'Comprehensive 15-minute 4K review testing noise cancellation in urban environments.',
-          url: 'https://youtube.com/watch?v=demo_headphones_review',
+          description: 'Comprehensive 12-minute review testing active noise cancellation on Delhi Metro.',
+          url: 'https://youtube.com/watch?v=demo_tg_boat',
           thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'
-        },
-        {
-          title: 'Next-Gen Smart Glasses Unboxing Reel',
-          platform: 'Instagram',
-          description: 'Viral 60-second Reel demonstrating open-ear audio tech.',
-          url: 'https://instagram.com/p/demo_smart_glasses',
-          thumbnail: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800'
         }
       ],
       experience: [
         {
-          companyName: 'Sony Audio Division',
-          projectTitle: '1000XM5 Launch Campaign',
-          date: new Date('2025-08-15'),
-          description: 'Created 1 dedicated YouTube video and 3 Instagram Reels generating 620K views.'
-        },
-        {
-          companyName: 'Bose Consumer Tech',
-          projectTitle: 'QuietComfort Ultra Sponsorship',
-          date: new Date('2025-11-20'),
-          description: 'Integrated product placement with exclusive discount code tracking.'
+          companyName: 'boAt Lifestyle',
+          projectTitle: 'Airdopes ANC Launch',
+          date: new Date('2025-10-15'),
+          description: 'Created 1 dedicated YouTube video generating 1.2M views.'
         }
       ],
       achievements: [
-        { title: 'Best Tech Creator Award 2025 - TechCon', date: new Date('2025-10-10') },
-        { title: 'Crossed 1M Total YouTube Impressions', date: new Date('2025-12-01') }
-      ],
-      certificates: [
-        { title: 'Certified Digital Content Specialist', issuer: 'YouTube Academy', date: new Date('2024-05-12') }
-      ],
-      images: [
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
-        'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800'
+        { title: 'Best Tech Creator Award 2025 - TechCon India', date: new Date('2025-11-10') }
       ]
     });
 
-    // 3. Creator 2 User (Alex Rivera)
-    const creatorUser2 = await User.create({
-      name: 'Alex Rivera',
-      email: 'alex@creatorsync.com',
+    // Creator 2: Ajey Nagar (CarryMinati)
+    const carryUser = await User.create({
+      name: 'Ajey Nagar (CarryMinati)',
+      email: 'carry@creatorsync.com',
       password: 'Password123!',
       role: 'creator',
       profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200',
-      username: 'alexriverafit',
-      phone: '+1 (555) 345-6789',
-      country: 'United States',
-      city: 'Los Angeles',
-      isVerified: true,
-      themePreference: 'dark',
-      language: 'en'
+      username: 'carryminati',
+      phone: '+91 98222 33344',
+      country: 'India',
+      city: 'Faridabad',
+      isVerified: true
     });
 
-    // Creator Profile 2
-    await Creator.create({
-      userId: creatorUser2._id,
-      category: 'Fitness & Health',
-      primaryPlatform: 'Instagram',
-      experienceYears: 4,
-      languages: ['English'],
+    const carryCreator = await Creator.create({
+      userId: carryUser._id,
+      category: 'Gaming & Comedy',
+      primaryPlatform: 'YouTube',
+      experienceYears: 10,
+      languages: ['Hindi', 'English'],
       availability: 'Available',
-      followersCount: 280000,
-      avgEngagement: 4.8,
-      avgReach: 120000,
-      monthlyViews: 850000,
-      bio: 'Fitness coach & active lifestyle creator. Sharing workout routines, sports audio gear reviews, and athletic nutrition.',
-      portfolioUrl: 'https://alexriverafit.example.com',
-      portfolioDescription: 'High-energy fitness Reels and YouTube shorts targeting active lifestyle enthusiasts.',
-      coverBanner: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200',
-      instagramUrl: 'https://instagram.com/alexriverafit',
-      youtubeUrl: 'https://youtube.com/c/alexriverafitness',
-      niche: ['Fitness & Health', 'Sports Gear', 'Active Lifestyle'],
-      skills: ['Fitness Content', 'Short Form Reels', 'Workout Demos'],
+      followersCount: 41200000, // 41.2M
+      avgEngagement: 9.8,
+      avgReach: 12000000,
+      monthlyViews: 85000000,
+      bio: 'India’s premier gaming & comedy creator. Known for high-octane gameplay live streams, viral roasts, and defining Indian youth pop culture.',
+      portfolioUrl: 'https://youtube.com/c/CarryMinati',
+      coverBanner: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200',
+      niche: ['Gaming', 'Comedy', 'Live Streaming', 'Pop Culture'],
+      skills: ['Live Game Streaming', 'Roast Comedy', 'Brand Commercial Integration'],
       socialChannels: [
-        { platform: 'instagram', handle: '@alexriverafit', followers: 280000 },
-        { platform: 'youtube', handle: '@alexriverafitness', followers: 95000 }
+        { platform: 'youtube', handle: '@CarryMinati', followers: 41200000 },
+        { platform: 'instagram', handle: '@carryminati', followers: 19500000 }
+      ],
+      showcase: [
+        {
+          title: 'CRED Pay Summer Carnival Commercial Roast',
+          platform: 'YouTube',
+          description: 'Viral 5-minute comedic sketch showcasing CRED Pay cashback rewards.',
+          url: 'https://youtube.com/watch?v=demo_carry_cred',
+          thumbnail: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800'
+        }
       ]
     });
 
-    console.log('Creating demo Campaigns (Projects)...');
+    // Creator 3: Bhuvan Bam (BB Ki Vines)
+    const bhuvanUser = await User.create({
+      name: 'Bhuvan Bam (BB Ki Vines)',
+      email: 'bhuvan@creatorsync.com',
+      password: 'Password123!',
+      role: 'creator',
+      profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200',
+      username: 'bhuvanbam',
+      country: 'India',
+      city: 'New Delhi',
+      isVerified: true
+    });
 
-    // Campaign 1: Active Main Campaign
+    const bhuvanCreator = await Creator.create({
+      userId: bhuvanUser._id,
+      category: 'Comedy & Entertainment',
+      primaryPlatform: 'YouTube',
+      experienceYears: 9,
+      languages: ['Hindi'],
+      availability: 'Available',
+      followersCount: 26400000, // 26.4M
+      avgEngagement: 8.5,
+      monthlyViews: 38000000,
+      bio: 'Actor, singer, songwriter & creator of BB Ki Vines. India’s pioneer original digital comedy artist.',
+      niche: ['Comedy & Entertainment', 'Music & Acting', 'Brand Campaigns'],
+      socialChannels: [
+        { platform: 'youtube', handle: '@BBKiVines', followers: 26400000 },
+        { platform: 'instagram', handle: '@bhuvan.bam22', followers: 18200000 }
+      ]
+    });
+
+    // Creator 4: Shlok Srivastava (Tech Burner)
+    const shlokUser = await User.create({
+      name: 'Shlok Srivastava (Tech Burner)',
+      email: 'shlok@creatorsync.com',
+      password: 'Password123!',
+      role: 'creator',
+      profileImage: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200',
+      username: 'techburner',
+      country: 'India',
+      city: 'New Delhi',
+      isVerified: true
+    });
+
+    const shlokCreator = await Creator.create({
+      userId: shlokUser._id,
+      category: 'Tech & Innovation',
+      primaryPlatform: 'YouTube',
+      followersCount: 11400000, // 11.4M
+      avgEngagement: 7.4,
+      monthlyViews: 28000000,
+      bio: 'Making technology super fun, engaging, and accessible! Wild tech experiments, gadget teardowns, and smartphone reviews.',
+      niche: ['Tech & Electronics', 'Gadgets', 'Innovation'],
+      socialChannels: [
+        { platform: 'youtube', handle: '@TechBurner', followers: 11400000 },
+        { platform: 'instagram', handle: '@techburner', followers: 4200000 }
+      ]
+    });
+
+    // Creator 5: Prajakta Koli (MostlySane)
+    const prajaktaUser = await User.create({
+      name: 'Prajakta Koli (MostlySane)',
+      email: 'prajakta@creatorsync.com',
+      password: 'Password123!',
+      role: 'creator',
+      profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200',
+      username: 'mostly_sane',
+      country: 'India',
+      city: 'Mumbai',
+      isVerified: true
+    });
+
+    const prajaktaCreator = await Creator.create({
+      userId: prajaktaUser._id,
+      category: 'Lifestyle & Comedy',
+      primaryPlatform: 'YouTube',
+      followersCount: 7200000, // 7.2M
+      avgEngagement: 5.8,
+      monthlyViews: 15000000,
+      bio: 'Observational comedy, relatable vlogs, and youth lifestyle series. UNDP Youth Climate Champion.',
+      niche: ['Lifestyle', 'Comedy', 'Beauty & Fashion'],
+      socialChannels: [
+        { platform: 'youtube', handle: '@MostlySane', followers: 7200000 },
+        { platform: 'instagram', handle: '@mostly_sane', followers: 5100000 }
+      ]
+    });
+
+
+    // ────────────────────────────────────────────────────────
+    // 3. CAMPAIGN BRIEFS (INDIAN BRANDS)
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Indian Brand Campaign Briefs...');
+
+    // Campaign 1: boAt Airdopes 500 ANC Launch (Active)
     const project1 = await Project.create({
-      brandId: brandUser._id,
-      title: 'Apex Pro Wireless Headphones Launch',
-      productName: 'Apex Pro ANC Headphones',
-      description: 'We are launching our flagship Apex Pro Active Noise Cancelling Wireless Headphones. We need tech & lifestyle creators to showcase unboxing, active noise cancellation in noisy environments, and high-fidelity sound quality.',
+      brandId: boatUser._id,
+      title: 'boAt Airdopes 500 ANC Flagship Launch',
+      productName: 'boAt Airdopes 500 ANC Earbuds',
+      description: 'boAt Lifestyle is launching our top-of-the-line Airdopes 500 Active Noise Cancelling Earbuds with 35dB Hybrid ANC, Beast Mode low latency, and 38-hour playback. We need tech and lifestyle creators across India to test ANC in real Indian city environments.',
       deliverables: [
-        '1 Dedicated YouTube Review Video (8-12 mins)',
-        '2 Instagram Reels showcasing ANC test',
-        '1 Unboxing Story set with link'
+        '1 Dedicated YouTube Review Video (8-12 mins) in Hindi/English',
+        '2 Instagram Reels showcasing ANC Metro & Café Noise Test',
+        '1 Story with Swipe-Up Buy Link'
       ],
       niche: ['Tech & Electronics', 'Gadgets', 'Audio Gear'],
       targetPlatforms: ['YouTube', 'Instagram'],
-      budget: { min: 5000, max: 8000, currency: 'USD' },
-      paymentPerCreator: 2500,
+      budget: { min: 350000, max: 600000, currency: 'INR' },
+      paymentPerCreator: 450000,
       creatorsRequired: 3,
-      minFollowers: 50000,
-      minEngagementRate: 3.5,
+      minFollowers: 100000,
+      minEngagementRate: 4.0,
       preferredCreatorCategory: 'Tech & Electronics',
-      language: 'English',
-      location: 'Global',
-      requirements: ['4K resolution video', 'Highlight 40-hour battery life', 'Must include link in bio/description'],
+      language: 'Hindi',
+      location: 'India',
+      requirements: ['4K resolution video', 'Demonstrate 35dB ANC test on Delhi/Mumbai metro', 'Highlight ENx quad mic clarity'],
       isRemote: true,
       status: 'active',
-      appDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      appDeadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
       startDate: new Date(),
       endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       submissionDeadline: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
       productImages: [
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
-        'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800'
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'
       ],
-      brandGuidelines: 'Maintain an upbeat, premium aesthetic. Focus on ergonomics, sound clarity, ANC isolation, and battery performance.'
+      brandGuidelines: 'Youthful, high-energy tone. Use hashtag #PlugIntoNirvana and tag @boat.nirvana.'
     });
 
-    // Campaign 2: Active Secondary Campaign
+    // Campaign 2: Mamaearth Vitamin C Glow Campaign (Active)
     const project2 = await Project.create({
-      brandId: brandUser._id,
-      title: 'Smart Audio Glasses Summer Campaign',
-      productName: 'Apex Vision Sound Frames',
-      description: 'Summer promotion for open-ear Bluetooth sunglasses. Looking for outdoor, fitness, and tech creators.',
-      deliverables: ['1 Short Form Reel/TikTok', '1 Product Integration Video'],
-      niche: ['Fitness & Health', 'Tech & Electronics', 'Lifestyle'],
-      targetPlatforms: ['Instagram', 'TikTok'],
-      budget: { min: 3000, max: 5000, currency: 'USD' },
-      paymentPerCreator: 1800,
+      brandId: mamaearthUser._id,
+      title: 'Mamaearth Vitamin C Face Serum Summer Campaign',
+      productName: 'Mamaearth Vitamin C Serum with Gotu Kola',
+      description: 'Skincare awareness campaign focusing on Indian skin types, natural glow, and toxin-free ingredients.',
+      deliverables: ['2 Instagram Reels (Before & After 7 Days)', '1 YouTube Integration'],
+      niche: ['Lifestyle', 'Beauty & Fashion'],
+      targetPlatforms: ['Instagram', 'YouTube'],
+      budget: { min: 200000, max: 450000, currency: 'INR' },
+      paymentPerCreator: 250000,
       creatorsRequired: 2,
       status: 'active',
-      location: 'Global'
+      location: 'India'
     });
 
-    // Campaign 3: Completed Campaign
+    // Campaign 3: CRED Pay Summer Carnival (Active)
     const project3 = await Project.create({
-      brandId: brandUser._id,
-      title: 'Ultra Soundbar QX Launch Review',
-      productName: 'Apex Soundbar QX',
-      description: 'Home theater cinema soundbar campaign featuring room-filling Dolby Atmos technology.',
-      deliverables: ['1 Home Theater Setup Video', '1 Instagram Reel'],
-      niche: ['Tech & Electronics', 'Home Entertainment'],
-      targetPlatforms: ['YouTube', 'Instagram'],
-      budget: { min: 4000, max: 6000, currency: 'USD' },
-      paymentPerCreator: 3500,
-      creatorsRequired: 1,
-      status: 'completed',
-      location: 'Global'
+      brandId: credUser._id,
+      title: 'CRED Pay Summer Jackpot Launch',
+      productName: 'CRED Pay UPI & Rewards',
+      description: 'High-concept creative comedy campaign highlighting cashback rewards and luxury prizes on UPI payments.',
+      deliverables: ['1 High-Production Cinematic Reel', '1 YouTube Short Showcase'],
+      niche: ['Comedy & Entertainment', 'Lifestyle', 'Fintech'],
+      targetPlatforms: ['Instagram', 'YouTube'],
+      budget: { min: 500000, max: 1000000, currency: 'INR' },
+      paymentPerCreator: 600000,
+      creatorsRequired: 2,
+      status: 'active',
+      location: 'India'
     });
 
-    // Campaign 4: Draft Campaign
-    await Project.create({
-      brandId: brandUser._id,
-      title: 'Fall Smartwatch Series 5 Brief',
-      productName: 'Apex Watch Series 5',
-      description: 'Draft sponsorship for upcoming fitness smartwatch launch with AMOLED display & ECG sensors.',
-      deliverables: ['1 Full Review Video', '2 Fitness Tracking Reels'],
+    // Campaign 4: boAt Wave Call Smartwatch (Completed)
+    const project4 = await Project.create({
+      brandId: boatUser._id,
+      title: 'boAt Wave Call Smartwatch Launch',
+      productName: 'boAt Wave Call Smartwatch',
+      description: 'BT calling smartwatch launch featuring HD display and 100+ sports modes.',
+      deliverables: ['1 Fitness & Calling Review Video', '1 Instagram Reel'],
       niche: ['Tech & Electronics', 'Fitness & Health'],
       targetPlatforms: ['YouTube', 'Instagram'],
-      budget: { min: 6000, max: 10000, currency: 'USD' },
-      paymentPerCreator: 3000,
-      status: 'draft'
+      budget: { min: 300000, max: 500000, currency: 'INR' },
+      paymentPerCreator: 350000,
+      creatorsRequired: 1,
+      status: 'completed',
+      location: 'India'
     });
 
-    // Campaign 5: Paused Campaign
-    await Project.create({
-      brandId: brandUser._id,
-      title: 'Earbuds Mini Special Edition',
-      productName: 'Apex Earbuds Mini',
-      description: 'Compact pocket earbuds campaign paused temporarily for inventory restock.',
-      deliverables: ['1 Unboxing Video'],
-      niche: ['Tech & Electronics'],
-      targetPlatforms: ['Instagram'],
-      budget: { min: 2000, max: 3500, currency: 'USD' },
-      paymentPerCreator: 1500,
-      status: 'paused'
+    // Campaign 5: Zomato Gourmet Dining Festival (Active)
+    const project5 = await Project.create({
+      brandId: zomatoUser._id,
+      title: 'Zomato Gold Gourmet Dining Review',
+      productName: 'Zomato Gold Membership',
+      description: 'Food vloggers & lifestyle creators reviewing 1+1 food offers across top restaurants in Mumbai, Delhi & Bangalore.',
+      deliverables: ['2 Restaurant Review Vlogs', '3 Instagram Stories'],
+      niche: ['Lifestyle', 'Food & Dining'],
+      targetPlatforms: ['Instagram', 'YouTube'],
+      budget: { min: 150000, max: 300000, currency: 'INR' },
+      paymentPerCreator: 200000,
+      creatorsRequired: 3,
+      status: 'active',
+      location: 'India'
     });
 
-    console.log('Creating demo Applications...');
 
-    // Application 1: Sarah -> Project 1 (Approved / Accepted)
+    // ────────────────────────────────────────────────────────
+    // 4. APPLICATIONS & PITCH PROPOSALS
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Applications & Pitch Proposals...');
+
+    // Application 1: Technical Guruji -> boAt Airdopes (Approved)
     await Application.create({
       projectId: project1._id,
-      creatorId: creatorUser1._id,
-      pitch: 'I would love to feature the Apex Pro ANC headphones in my upcoming audio gear roundup! My channel reaches 450K tech buyers looking for active noise cancelling headphones.',
-      proposedRate: 2500,
+      creatorId: tgUser._id,
+      pitch: 'Namaste boAt team! I would love to feature the Airdopes 500 ANC in a dedicated 15-minute 4K review video on my channel (23.5M subs). We will perform a live noise isolation test inside the Delhi Metro.',
+      proposedRate: 450000,
       status: 'approved'
     });
 
-    // Application 2: Alex -> Project 1 (Shortlisted)
+    // Application 2: Tech Burner -> boAt Airdopes (Shortlisted)
     await Application.create({
       projectId: project1._id,
-      creatorId: creatorUser2._id,
-      pitch: 'Hey Apex team! I can showcase your headphones during gym workouts and commuting Reels for an active fitness audience.',
-      proposedRate: 2000,
+      creatorId: shlokUser._id,
+      pitch: 'Hey Aman & boAt team! We can execute an epic tech teardown and sound-isolation experiment Reel for 11.4M tech fans.',
+      proposedRate: 400000,
       status: 'shortlisted'
     });
 
-    // Application 3: Alex -> Project 2 (Pending)
+    // Application 3: CarryMinati -> CRED Pay (Approved)
+    await Application.create({
+      projectId: project3._id,
+      creatorId: carryUser._id,
+      pitch: 'Hey CRED team! I will create a hilarious 5-minute comedic sketch demonstrating how CRED Pay cashback gives you instant dopamine boosts during online shopping.',
+      proposedRate: 600000,
+      status: 'approved'
+    });
+
+    // Application 4: Prajakta -> Mamaearth (Pending)
     await Application.create({
       projectId: project2._id,
-      creatorId: creatorUser2._id,
-      pitch: 'Looking forward to demonstrating the vision audio glasses during outdoor running and cycling videos.',
-      proposedRate: 1800,
+      creatorId: prajaktaUser._id,
+      pitch: 'Hi Mamaearth! I can integrate the Vitamin C serum seamlessly into a relatable "Summer Morning Routine" vlog.',
+      proposedRate: 250000,
       status: 'pending'
     });
 
-    console.log('Creating demo Collaboration Workspaces...');
+    // Application 5: Bhuvan Bam -> CRED Pay (Pending)
+    await Application.create({
+      projectId: project3._id,
+      creatorId: bhuvanUser._id,
+      pitch: 'Hey Kunal & CRED team! Titu Mama and Sameer Fuddi sketch video incorporating CRED Coins rewards.',
+      proposedRate: 650000,
+      status: 'pending'
+    });
 
-    // Workspace 1: Active Collaboration (Sarah & Brand on Project 1)
+    // Application 6: Technical Guruji -> boAt Wave Call (Completed)
+    await Application.create({
+      projectId: project4._id,
+      creatorId: tgUser._id,
+      pitch: 'Dedicated smartwatch review testing HD bluetooth calling in traffic.',
+      proposedRate: 350000,
+      status: 'approved'
+    });
+
+
+    // ────────────────────────────────────────────────────────
+    // 5. COLLABORATION WORKSPACES
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Collaboration Workspaces...');
+
+    // Workspace 1: Active Collaboration (boAt & Technical Guruji on Project 1)
     const workspace1 = await Workspace.create({
       projectId: project1._id,
-      brandId: brandUser._id,
-      creatorId: creatorUser1._id,
-      agreedRate: 2500,
+      brandId: boatUser._id,
+      creatorId: tgUser._id,
+      agreedRate: 450000,
       status: 'active',
       paymentStatus: 'escrowed',
       milestones: [
         {
-          title: 'Script & Concept Approval',
-          description: 'Submit video outline and key talking points for brand verification.',
-          dueDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          title: 'Review Video Script & Angle Approval',
+          description: 'Submit video outline and Delhi Metro noise test plan.',
+          dueDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
           status: 'approved',
-          submissionUrl: 'https://docs.google.com/document/d/demo_script_outline',
-          submissionNotes: 'Approved script covering noise cancellation benchmarks and 40h battery life test.'
+          submissionUrl: 'https://docs.google.com/document/d/demo_tg_boat_script',
+          submissionNotes: 'Approved script covering 35dB Hybrid ANC, Beast Mode, and 38h battery test.'
         },
         {
-          title: 'Video Draft & Unboxing Proof',
-          description: 'Upload unboxing footage and noise isolation demo video for review.',
-          dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          title: '4K Draft Video Upload',
+          description: 'Upload 4K video draft proof for boAt team verification.',
+          dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
           status: 'submitted',
-          submissionUrl: 'https://youtube.com/watch?v=demo_unboxing_apex_draft',
-          submissionNotes: 'Full 4K edit draft ready for review. Unboxing sequence starts at 0:45.'
+          submissionUrl: 'https://youtube.com/watch?v=demo_tg_boat_draft',
+          submissionNotes: 'Full 4K edit ready. Noise test sequence at 02:15.'
         },
         {
-          title: 'Final Publication & Instagram Reels',
-          description: 'Publish video live on YouTube and post 2 promotional Instagram Reels with link in bio.',
-          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          title: 'Live Publication & 2 Instagram Reels',
+          description: 'Publish video live on YouTube and post 2 Reels with buy link.',
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
           status: 'pending'
         }
       ]
     });
 
-    // Workspace 2: Completed Collaboration (Sarah & Brand on Project 3)
-    await Workspace.create({
+    // Workspace 2: Active Collaboration (CRED & CarryMinati on Project 3)
+    const workspace2 = await Workspace.create({
       projectId: project3._id,
-      brandId: brandUser._id,
-      creatorId: creatorUser1._id,
-      agreedRate: 3500,
-      status: 'completed',
-      paymentStatus: 'paid',
+      brandId: credUser._id,
+      creatorId: carryUser._id,
+      agreedRate: 600000,
+      status: 'active',
+      paymentStatus: 'escrowed',
       milestones: [
         {
-          title: 'Dolby Atmos Home Theater Setup Review',
-          description: 'Full video publication and Instagram post.',
-          dueDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+          title: 'Comedy Sketch Script Approval',
+          description: 'Submit comedy sketch story board for CRED creative team review.',
+          dueDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
           status: 'approved',
-          submissionUrl: 'https://youtube.com/watch?v=demo_soundbar_qx_live',
-          submissionNotes: 'Published live! Video received over 120,000 views in the first week.'
+          submissionNotes: 'Approved storyboard.'
+        },
+        {
+          title: 'Cinematic Reel Draft Submission',
+          description: 'Upload 60-second video draft.',
+          dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+          status: 'pending'
         }
       ]
     });
 
-    console.log('Creating demo Messages & Notifications...');
+    // Workspace 3: Completed Collaboration (boAt & Technical Guruji on Project 4)
+    await Workspace.create({
+      projectId: project4._id,
+      brandId: boatUser._id,
+      creatorId: tgUser._id,
+      agreedRate: 350000,
+      status: 'completed',
+      paymentStatus: 'paid',
+      milestones: [
+        {
+          title: 'BT Calling Review & Fitness Demo',
+          description: 'Full video publication and Instagram post.',
+          dueDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+          status: 'approved',
+          submissionUrl: 'https://youtube.com/watch?v=demo_wavecall_tg',
+          submissionNotes: 'Published live! Received over 850,000 views.'
+        }
+      ]
+    });
 
-    // Messages between Brand & Sarah on Project 1
+
+    // ────────────────────────────────────────────────────────
+    // 6. MESSAGES & CHAT THREADS
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Direct Chat Messages...');
+
+    // Thread 1: boAt & Technical Guruji
     await Message.create({
       projectId: project1._id,
-      senderId: brandUser._id,
-      receiverId: creatorUser1._id,
-      text: 'Hi Sarah! We are thrilled to partner with you on the Apex Pro Wireless Headphones launch campaign!',
+      senderId: boatUser._id,
+      receiverId: tgUser._id,
+      text: 'Namaste Gaurav ji! We are super excited to partner with Technical Guruji for our flagship boAt Airdopes 500 ANC launch!',
       read: true
     });
 
     await Message.create({
       projectId: project1._id,
-      senderId: creatorUser1._id,
-      receiverId: brandUser._id,
-      text: 'Thanks so much! I received the review sample box yesterday. The premium packaging and build quality look incredible.',
+      senderId: tgUser._id,
+      receiverId: boatUser._id,
+      text: 'Dhanyawad boAt team! The review unit package has arrived. The Hybrid ANC and battery backup look very impressive.',
       read: true
     });
 
     await Message.create({
       projectId: project1._id,
-      senderId: creatorUser1._id,
-      receiverId: brandUser._id,
-      text: "I've uploaded the draft video link for Milestone 2 in our collaboration workspace. Let me know what you think!",
-      attachments: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'],
+      senderId: tgUser._id,
+      receiverId: boatUser._id,
+      text: 'I have uploaded the 4K draft review video link for Milestone 2 in our workspace. Please review the Delhi Metro noise test section at 02:15!',
       read: false
     });
 
-    // Notifications for Brand
+    // Thread 2: CRED & CarryMinati
+    await Message.create({
+      projectId: project3._id,
+      senderId: credUser._id,
+      receiverId: carryUser._id,
+      text: 'Hey Carry! We love the comedy roast concept for CRED Pay. The script outline looks hilarious!',
+      read: true
+    });
+
+
+    // ────────────────────────────────────────────────────────
+    // 7. NOTIFICATIONS
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Notifications...');
+
+    // Notifications for boAt (Brand)
     await Notification.create({
-      recipientId: brandUser._id,
-      senderId: creatorUser1._id,
+      recipientId: boatUser._id,
+      senderId: tgUser._id,
       projectId: project1._id,
       type: 'new_application',
-      title: 'New Application Received 📥',
-      body: 'Creator "Sarah Jenkins" submitted an application for campaign "Apex Pro Wireless Headphones Launch".',
+      title: 'New Pitch Received 📥',
+      body: 'Creator "Gaurav Chaudhary (Technical Guruji)" submitted a pitch for campaign "boAt Airdopes 500 ANC Flagship Launch".',
       link: '/dashboard?tab=applications',
       isRead: true
     });
 
     await Notification.create({
-      recipientId: brandUser._id,
-      senderId: creatorUser1._id,
+      recipientId: boatUser._id,
+      senderId: tgUser._id,
       projectId: project1._id,
       type: 'submission_uploaded',
-      title: 'Submission Uploaded 📤',
-      body: 'Creator "Sarah Jenkins" uploaded deliverable proof for milestone: "Video Draft & Unboxing Proof" in campaign "Apex Pro Wireless Headphones Launch".',
+      title: 'Draft Proof Uploaded 📤',
+      body: 'Creator "Technical Guruji" uploaded deliverable draft proof for milestone: "4K Draft Video Upload" in "boAt Airdopes 500 ANC".',
       link: '/dashboard?tab=collaborations',
       isRead: false
     });
 
-    // Notifications for Creator
+    // Notifications for Technical Guruji (Creator)
     await Notification.create({
-      recipientId: creatorUser1._id,
-      senderId: brandUser._id,
+      recipientId: tgUser._id,
+      senderId: boatUser._id,
       projectId: project1._id,
       type: 'application_status',
-      title: 'Campaign Application Accepted! 🎉',
-      body: 'Your sponsorship application for "Apex Pro Wireless Headphones Launch" has been accepted.',
+      title: 'Pitch Accepted! 🎉',
+      body: 'boAt Lifestyle accepted your campaign pitch for "boAt Airdopes 500 ANC Flagship Launch".',
       link: '/dashboard?tab=applications',
       isRead: true
     });
 
     await Notification.create({
-      recipientId: creatorUser1._id,
-      senderId: brandUser._id,
-      projectId: project3._id,
+      recipientId: tgUser._id,
+      senderId: boatUser._id,
+      projectId: project4._id,
       type: 'payment_completed',
-      title: 'Payment Released! 💰',
-      body: 'Brand marked payment of $3,500 as PAID for campaign "Ultra Soundbar QX Launch Review".',
+      title: 'Payout Released! 💰',
+      body: 'boAt Lifestyle marked payment of ₹3,50,000 as RELEASED for campaign "boAt Wave Call Smartwatch Launch".',
       link: '/dashboard?tab=completed-collaborations',
       isRead: true
     });
 
-    console.log('Creating demo Reviews & Payments...');
 
-    // Review 1: Brand -> Sarah
+    // ────────────────────────────────────────────────────────
+    // 8. RATINGS, REVIEWS & PAYMENTS
+    // ────────────────────────────────────────────────────────
+    console.log('Creating Reviews & Payments...');
+
+    // Review: boAt -> Technical Guruji
     await Review.create({
-      projectId: project3._id,
-      reviewerId: brandUser._id,
-      revieweeId: creatorUser1._id,
+      projectId: project4._id,
+      reviewerId: boatUser._id,
+      revieweeId: tgUser._id,
       rating: 5,
-      comment: 'Sarah delivered top-tier 4K content on time. Her audience engagement resulted in excellent product sales conversion!'
+      comment: 'Technical Guruji delivered world-class 4K Hindi review content. The audience response drove massive product pre-orders!'
     });
 
-    // Review 2: Sarah -> Brand
+    // Review: Technical Guruji -> boAt
     await Review.create({
-      projectId: project3._id,
-      reviewerId: creatorUser1._id,
-      revieweeId: brandUser._id,
+      projectId: project4._id,
+      reviewerId: tgUser._id,
+      revieweeId: boatUser._id,
       rating: 5,
-      comment: 'Working with Apex Tech Global was a pleasure! Clear brand guidelines and instant payout release upon milestone completion.'
+      comment: 'Pleasure collaborating with boAt Lifestyle. Prompt milestone approvals and instant escrow payout release.'
     });
 
     // Payments
     await Payment.create({
-      projectId: project3._id,
-      creatorId: creatorUser1._id,
-      brandId: brandUser._id,
-      amount: 3500,
+      projectId: project4._id,
+      creatorId: tgUser._id,
+      brandId: boatUser._id,
+      amount: 350000,
       status: 'released',
-      transactionReference: `PAY-COMP-${Date.now()}`
+      transactionReference: `PAY-BOAT-INR-${Date.now()}`
     });
 
     await Payment.create({
       projectId: project1._id,
-      creatorId: creatorUser1._id,
-      brandId: brandUser._id,
-      amount: 2500,
+      creatorId: tgUser._id,
+      brandId: boatUser._id,
+      amount: 450000,
       status: 'escrowed',
-      transactionReference: `PAY-ESCROW-${Date.now()}`
+      transactionReference: `ESCROW-BOAT-INR-${Date.now()}`
     });
 
     console.log('\n======================================================');
-    console.log('SUCCESS! Demo Database Seeded with Full Features Data');
+    console.log('SUCCESS! Rich Demo Data Seeded for ALL Brands & Creators');
     console.log('======================================================');
-    console.log('Use the following login credentials to test all features:');
-    console.log('\n🏢 COMPANY (BRAND) ACCOUNT:');
-    console.log('   Email:    brand@creatorsync.com');
-    console.log('   Password: Password123!');
-    console.log('\n👤 CREATOR ACCOUNT:');
-    console.log('   Email:    creator@creatorsync.com');
-    console.log('   Password: Password123!');
-    console.log('\n👤 SECOND CREATOR ACCOUNT:');
-    console.log('   Email:    alex@creatorsync.com');
-    console.log('   Password: Password123!');
+    console.log('Demo Login Credentials:');
+    console.log('\n🏢 BRAND ACCOUNTS:');
+    console.log('   boAt Lifestyle:   brand@creatorsync.com   / Password123!');
+    console.log('   Mamaearth:        mamaearth@creatorsync.com / Password123!');
+    console.log('   CRED:             cred@creatorsync.com      / Password123!');
+    console.log('   Zomato:           zomato@creatorsync.com    / Password123!');
+    console.log('\n👤 CREATOR ACCOUNTS:');
+    console.log('   Technical Guruji: creator@creatorsync.com   / Password123!');
+    console.log('   CarryMinati:      carry@creatorsync.com     / Password123!');
+    console.log('   BB Ki Vines:      bhuvan@creatorsync.com    / Password123!');
+    console.log('   Tech Burner:      shlok@creatorsync.com     / Password123!');
+    console.log('   MostlySane:       prajakta@creatorsync.com  / Password123!');
     console.log('======================================================\n');
 
     process.exit(0);

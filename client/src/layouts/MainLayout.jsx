@@ -23,9 +23,6 @@ const MainLayout = () => {
           </ul>
         </nav>
         <div className="nav-actions">
-          <button onClick={toggleTheme} className="btn-icon" aria-label="Toggle Theme">
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
           {user ? (
             <>
               <Link to="/dashboard" className="btn btn-outline" style={{ padding: '8px 16px' }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import campaignService from '../../services/campaignService';
 import notificationService from '../../services/notificationService';
@@ -11,15 +11,15 @@ import {
   Briefcase,
   Users,
   DollarSign,
-  PlusCircle,
   FileText,
+  PlusCircle,
   Bell,
   MessageSquare,
-  BarChart2,
-  CheckCircle,
-  Clock,
-  ArrowUpRight,
-  UserCheck
+  TrendingUp,
+  UserCheck,
+  Building2,
+  Sparkles,
+  ArrowUpRight
 } from 'lucide-react';
 
 // Chart.js integrations
@@ -27,38 +27,26 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
   BarElement,
   ArcElement,
-  BarController,
-  DoughnutController,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 } from 'chart.js';
 import { Bar as BarChart, Doughnut as DoughnutChart } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
   BarElement,
   ArcElement,
-  BarController,
-  DoughnutController,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 );
 
 const CompanyDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [applications, setApplications] = useState([]);
@@ -75,28 +63,18 @@ const CompanyDashboard = () => {
       try {
         setLoading(true);
         // 1. Fetch company campaigns
-        const campRes = await campaignService.getMyCampaigns();
-        const myCamps = campRes.campaigns || campRes || [];
-        setCampaigns(myCamps);
+        const campsRes = await campaignService.getCompanyCampaigns();
+        const camps = campsRes.campaigns || campsRes || [];
+        setCampaigns(camps);
 
         // Calculate total budget allocated
-        const totalBudget = myCamps.reduce((sum, c) => sum + (c.budget?.max || 0), 0);
+        const totalBudget = camps.reduce((sum, c) => sum + (c.budget?.max || 0), 0);
 
-        // 2. Fetch applications across all campaigns
-        let allApps = [];
-        for (const camp of myCamps) {
-          try {
-            const apps = await campaignService.getCampaignApplications(camp._id);
-            if (Array.isArray(apps)) {
-              allApps = [...allApps, ...apps];
-            }
-          } catch (e) {
-            // ignore empty
-          }
-        }
+        // 2. Fetch applications across campaigns
+        const appsRes = await api.get('/applications/company');
+        const allApps = appsRes.data || [];
         setApplications(allApps);
 
-        // Calculate spent budget
         const totalSpent = allApps
           .filter(a => a.status === 'approved' || a.status === 'completed')
           .reduce((sum, a) => sum + (a.proposedRate || 0), 0);
@@ -131,7 +109,7 @@ const CompanyDashboard = () => {
       {
         label: 'Budget Allocated ($)',
         data: campaigns.map(c => c.budget?.max || 1000),
-        backgroundColor: ['#ff6b6b', '#00e5a0', '#00b4d8', '#ffbe0b', '#7209b7'],
+        backgroundColor: ['#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e'],
         borderRadius: 6
       }
     ]
@@ -146,7 +124,7 @@ const CompanyDashboard = () => {
           applications.filter(a => a.status === 'approved').length || 2,
           applications.filter(a => a.status === 'rejected').length || 1
         ],
-        backgroundColor: ['#ffbe0b', '#00e5a0', '#ef4444'],
+        backgroundColor: ['#f59e0b', '#10b981', '#f43f5e'],
         borderWidth: 0
       }
     ]
@@ -155,11 +133,11 @@ const CompanyDashboard = () => {
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#a8a0bf' } }
+      legend: { labels: { color: '#cbd5e1' } }
     },
     scales: {
-      x: { ticks: { color: '#a8a0bf' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-      y: { ticks: { color: '#a8a0bf' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.06)' } }
     }
   };
 
@@ -169,21 +147,39 @@ const CompanyDashboard = () => {
 
   return (
     <div className="animate-fade-in-up">
-      {/* Header Banner */}
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-            Company Sponsor Dashboard 💼
-          </h1>
-          <p style={{ color: 'var(--text-secondary)', margin: '4px 0 0 0', fontSize: '0.95rem' }}>
-            Manage active campaigns, review applicant pitches, and track marketing ROI.
-          </p>
-        </div>
+      {/* Hero Welcome Glass Banner */}
+      <div
+        className="glass-panel mb-4"
+        style={{
+          padding: '32px',
+          borderRadius: '24px',
+          background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.16) 0%, rgba(139, 92, 246, 0.18) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 14px', borderRadius: '9999px', background: 'rgba(236, 72, 153, 0.2)', border: '1px solid rgba(236, 72, 153, 0.4)', color: '#ec4899', fontSize: '0.78rem', fontWeight: 700, marginBottom: '12px' }}>
+              <Building2 size={14} /> Brand Sponsor Portal
+            </div>
+            <h1 style={{ fontSize: '2rem', fontWeight: 900, margin: 0, color: '#ffffff', fontFamily: "'Outfit', var(--font-sans)" }}>
+              Welcome, <span className="gradient-text-sec">{user?.name}</span> 💼
+            </h1>
+            <p style={{ color: '#cbd5e1', margin: '6px 0 0 0', fontSize: '0.98rem' }}>
+              Manage active campaign briefs, review applicant pitches, and track influencer marketing ROI.
+            </p>
+          </div>
 
-        <Link to="/company/post-campaign" className="btn btn-primary" style={{ padding: '10px 20px', fontWeight: 700 }}>
-          <PlusCircle size={16} />
-          Post New Campaign Brief
-        </Link>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <Link to="/company/post-campaign" className="auth-btn-primary" style={{ width: 'auto', padding: '12px 24px', textDecoration: 'none', fontSize: '0.9rem' }}>
+              <PlusCircle size={16} />
+              Post New Campaign Brief
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* 4 Overview Metric Stat Widgets */}
@@ -193,8 +189,9 @@ const CompanyDashboard = () => {
             title="TOTAL CAMPAIGNS"
             value={campaigns.length}
             subtitle="Active sponsor briefs"
-            icon={<Briefcase size={20} style={{ color: 'var(--primary)' }} />}
-            color="var(--primary)"
+            icon={<Briefcase size={20} style={{ color: '#8b5cf6' }} />}
+            color="#8b5cf6"
+            trend="Active Pool"
           />
         </div>
 
@@ -203,8 +200,9 @@ const CompanyDashboard = () => {
             title="TOTAL APPLICATIONS"
             value={applications.length}
             subtitle="Creator pitches received"
-            icon={<FileText size={20} style={{ color: 'var(--warning)' }} />}
-            color="var(--warning)"
+            icon={<FileText size={20} style={{ color: '#f59e0b' }} />}
+            color="#f59e0b"
+            trend="Review Ready"
           />
         </div>
 
@@ -213,8 +211,9 @@ const CompanyDashboard = () => {
             title="BUDGET ALLOCATED"
             value={`$${budgetSummary.totalAllocated.toLocaleString()}`}
             subtitle="Campaign fund pool"
-            icon={<DollarSign size={20} style={{ color: 'var(--success)' }} />}
-            color="var(--success)"
+            icon={<DollarSign size={20} style={{ color: '#10b981' }} />}
+            color="#10b981"
+            trend="+15.2%"
           />
         </div>
 
@@ -223,8 +222,9 @@ const CompanyDashboard = () => {
             title="HIRED CREATORS"
             value={applications.filter(a => a.status === 'approved').length}
             subtitle="Active collaborations"
-            icon={<UserCheck size={20} style={{ color: '#00b4d8' }} />}
-            color="#00b4d8"
+            icon={<UserCheck size={20} style={{ color: '#ec4899' }} />}
+            color="#ec4899"
+            trend="99.4% Verified"
           />
         </div>
       </div>
@@ -246,38 +246,38 @@ const CompanyDashboard = () => {
         </div>
       </div>
 
-      {/* Applications Review Feed & Creator Performance */}
+      {/* Applications Review Feed & Notifications */}
       <div className="row g-4 mb-4">
         <div className="col-12 col-lg-7">
-          <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
+          <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
-                <Users size={18} style={{ color: 'var(--primary)' }} />
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff' }}>
+                <Users size={20} style={{ color: '#8b5cf6' }} />
                 Recent Creator Applications
               </h4>
-              <Link to="/company/campaigns" className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.75rem' }}>
+              <Link to="/company/campaigns" className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '9999px' }}>
                 View All
               </Link>
             </div>
 
             {applications.length === 0 ? (
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>
+              <p style={{ color: '#a1a1aa', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>
                 No creator applications received yet. Post a brief to start receiving pitches!
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {applications.slice(0, 4).map((app) => (
-                  <div key={app._id} className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
+                  <div key={app._id} className="p-3" style={{ background: '#140d24', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <div className="d-flex align-items-center gap-2">
-                        <span style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--text-primary)' }}>
+                        <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#ffffff' }}>
                           {app.creatorId?.name || 'Creator'}
                         </span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Rate: ${app.proposedRate}</span>
+                        <span style={{ fontSize: '0.78rem', color: '#8b85a3' }}>Rate: ${app.proposedRate}</span>
                       </div>
                       <span className={`badge badge-${app.status}`} style={{ fontSize: '0.75rem' }}>{app.status}</span>
                     </div>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0 8px 0' }}>"{app.pitch}"</p>
+                    <p style={{ fontSize: '0.83rem', color: '#cbd5e1', margin: '4px 0 8px 0' }}>"{app.pitch}"</p>
                   </div>
                 ))}
               </div>
@@ -287,19 +287,19 @@ const CompanyDashboard = () => {
 
         {/* Notifications & Messaging Thread Summary */}
         <div className="col-12 col-lg-5">
-          <div className="card glass-panel border-0 shadow-sm mb-4" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
-              <Bell size={18} style={{ color: 'var(--warning)' }} />
-              Notifications Alert
+          <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px' }}>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff' }}>
+              <Bell size={20} style={{ color: '#f59e0b' }} />
+              Notifications & Activity
             </h4>
             {notifications.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontStyle: 'italic', margin: 0 }}>No new notifications.</p>
+              <p style={{ color: '#a1a1aa', fontSize: '0.88rem', fontStyle: 'italic', margin: 0 }}>No new notifications.</p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {notifications.slice(0, 3).map((n) => (
-                  <div key={n._id} className="p-2" style={{ borderBottom: '1px solid var(--border-color)', fontSize: '0.82rem' }}>
-                    <span style={{ fontWeight: 700, display: 'block' }}>{n.title}</span>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{n.body}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {notifications.slice(0, 4).map((n) => (
+                  <div key={n._id} className="p-3" style={{ background: '#140d24', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <span style={{ fontWeight: 700, display: 'block', color: '#ffffff', fontSize: '0.88rem' }}>{n.title}</span>
+                    <span style={{ color: '#cbd5e1', fontSize: '0.8rem' }}>{n.body}</span>
                   </div>
                 ))}
               </div>
