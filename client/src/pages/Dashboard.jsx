@@ -51,7 +51,11 @@ import {
   Play,
   Pause,
   XCircle,
-  Plus
+  Plus,
+  Link as LinkIcon,
+  ExternalLink,
+  RefreshCw,
+  CheckCircle
 } from 'lucide-react';
 
 // Chart.js Integrations
@@ -97,6 +101,7 @@ const Dashboard = () => {
   const [appSubTab, setAppSubTab] = useState('all');
   const [collabSubTab, setCollabSubTab] = useState('all');
   const [notifFilter, setNotifFilter] = useState('all');
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState('30d');
   const [changeRequestModal, setChangeRequestModal] = useState(null);
   const [threadSearch, setThreadSearch] = useState('');
   const [mobileShowChat, setMobileShowChat] = useState(false);
@@ -931,139 +936,276 @@ const Dashboard = () => {
   };
 
   // SETTINGS PANEL UI RENDERER
+  // ACCOUNT & PROFILE SETTINGS LAYOUT
   const renderSettingsLayout = () => {
     return (
-      <form onSubmit={handleSaveSettings} className="glass-panel animate-fade-in-up" style={{ padding: '32px', maxWidth: '850px' }}>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <SettingsIcon size={22} style={{ color: 'var(--primary)' }} />
-          Account settings & Profile configuration
-        </h3>
+      <form onSubmit={handleSaveSettings} className="animate-fade-in-up" style={{ maxWidth: '920px', margin: '0 auto' }}>
+        {/* Header Title Card */}
+        <div style={{
+          padding: '28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+          marginBottom: '24px'
+        }}>
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  Account Settings &amp; Profile Preferences
+                </h3>
+                <span style={{
+                  padding: '4px 12px', background: '#ecfdf5', color: '#047857',
+                  border: '1.5px solid #a7f3d0', borderRadius: '9999px',
+                  fontSize: '0.78rem', fontWeight: 900
+                }}>
+                  ● Verified Account
+                </span>
+              </div>
+              <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                Configure your public profile credentials, system language, theme mode, security settings, and connected channels.
+              </p>
+            </div>
 
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ padding: '10px 24px', fontSize: '0.88rem', fontWeight: 800, borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <Save size={16} /> Save Changes
+            </button>
+          </div>
+        </div>
+
+        {/* Success Alert Banner */}
         {saveSuccess && (
-          <div style={{ color: 'var(--success)', background: 'var(--success-glow)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={18} />
+          <div style={{
+            color: '#047857', background: '#ecfdf5', border: '1.5px solid #a7f3d0',
+            padding: '14px 20px', borderRadius: '14px', marginBottom: '24px',
+            display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', fontWeight: 700
+          }}>
+            <CheckCircle2 size={20} />
             <span>Settings and preferences successfully updated!</span>
           </div>
         )}
 
+        {/* Error Alert Banner */}
+        {error && (
+          <div style={{
+            color: '#b91c1c', background: '#fef2f2', border: '1.5px solid #fecaca',
+            padding: '14px 20px', borderRadius: '14px', marginBottom: '24px',
+            display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', fontWeight: 700
+          }}>
+            <AlertCircle size={20} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Section 1: Profile & Theme Cards */}
         <div className="row g-4 mb-4">
-          {/* Edit Profile */}
+          {/* Card 1: Edit Profile */}
           <div className="col-12 col-md-6">
-            <h4 style={{ fontWeight: 700, marginBottom: '16px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Users size={16} /> Edit Profile</h4>
-            <div className="form-group mb-3">
-              <label className="form-label">Full Name</label>
-              <input type="text" className="form-input" value={profileName} onChange={(e) => setProfileName(e.target.value)} required style={{ marginBottom: 0 }} />
-            </div>
-            <div className="form-group mb-3">
-              <label className="form-label">Profile Avatar Image Link</label>
-              <input type="text" className="form-input" value={profileImage} onChange={(e) => setProfileImage(e.target.value)} placeholder="https://example.com/avatar.jpg" style={{ marginBottom: 0 }} />
-            </div>
-          </div>
-
-          {/* Preferences & Dark Mode */}
-          <div className="col-12 col-md-6">
-            <h4 style={{ fontWeight: 700, marginBottom: '16px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Palette size={16} /> Theme & Preferences</h4>
-            <div className="form-group mb-3">
-              <label className="form-label">System Language</label>
-              <select className="form-select form-input" value={lang} onChange={(e) => setLang(e.target.value)} style={{ marginBottom: 0 }}>
-                <option value="en">English (US)</option>
-                <option value="es">Español (ES)</option>
-                <option value="fr">Français (FR)</option>
-              </select>
-            </div>
-            <div className="form-group mb-3">
-              <label className="form-label">Dark Mode Preference</label>
-              <select className="form-select form-input" value={theme} onChange={(e) => setTheme(e.target.value)} style={{ marginBottom: 0 }}>
-                <option value="light">Light Theme Mode</option>
-                <option value="dark">Dark Theme Mode (Recommended)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Change Password & Privacy & Notifications Row */}
-        <div className="row g-4 mb-4 border-top pt-4" style={{ borderColor: 'var(--border-color)' }}>
-          {/* Change Password */}
-          <div className="col-12 col-md-6">
-            <h4 style={{ fontWeight: 700, marginBottom: '16px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={16} /> Change Password</h4>
-            <div className="form-group mb-3">
-              <label className="form-label">New Password (leave blank to preserve)</label>
-              <input type="password" className="form-input" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter new password (Min 6 chars)" style={{ marginBottom: 0 }} />
-            </div>
-          </div>
-
-          {/* Notification & Privacy Settings */}
-          <div className="col-12 col-md-6">
-            <h4 style={{ fontWeight: 700, marginBottom: '16px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Shield size={16} /> Privacy & Notification Preferences</h4>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                <input type="checkbox" checked={profPublic} onChange={(e) => setProfPublic(e.target.checked)} />
-                Public Creator Profile Visibility
-              </label>
-
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                <input type="checkbox" checked={emailAlert} onChange={(e) => setEmailAlert(e.target.checked)} />
-                Receive Email Notifications Alerts
-              </label>
-
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                <input type="checkbox" checked={inAppAlert} onChange={(e) => setInAppAlert(e.target.checked)} />
-                Receive In-App System Alerts
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Connected Social Accounts Section (Only visible for Creators) */}
-        {user.role === 'creator' && (
-          <div className="row g-4 mb-4 border-top pt-4" style={{ borderColor: 'var(--border-color)' }}>
-            <div className="col-12">
-              <h4 style={{ fontWeight: 700, marginBottom: '16px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Globe size={16} /> Connected Social Accounts</h4>
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontWeight: 900, marginBottom: '20px', fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <UserCircle size={18} style={{ color: '#1e3a8a' }} /> Personal Profile Info
+              </h4>
               
-              <div className="row g-3">
-                {/* YouTube */}
-                <div className="col-12 col-md-4">
-                  <div className="p-3 glass-panel" style={{ background: 'var(--bg-tertiary)' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--danger)' }}>YOUTUBE</span>
-                    <div className="form-group mt-2 mb-2">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Channel Handle</label>
-                      <input type="text" className="form-input" value={youtubeHandle} onChange={(e) => setYoutubeHandle(e.target.value)} placeholder="@handle" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
-                    <div className="form-group mb-0">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Followers Count</label>
-                      <input type="number" className="form-input" value={youtubeFollowers} onChange={(e) => setYoutubeFollowers(e.target.value)} placeholder="Subscribers count" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
+              <div className="form-group mb-3">
+                <label className="form-label" style={{ fontWeight: 800, color: '#334155', fontSize: '0.85rem' }}>Full Name</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  required
+                  style={{ marginBottom: 0, border: '1.5px solid #cbd5e1', borderRadius: '10px', fontSize: '0.9rem' }}
+                />
+              </div>
+
+              <div className="form-group mb-3">
+                <label className="form-label" style={{ fontWeight: 800, color: '#334155', fontSize: '0.85rem' }}>Email Address (Account ID)</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="email"
+                    className="form-input"
+                    value={user?.email || ''}
+                    disabled
+                    style={{ marginBottom: 0, background: '#f1f5f9', border: '1.5px solid #cbd5e1', borderRadius: '10px', fontSize: '0.9rem', color: '#64748b', cursor: 'not-allowed' }}
+                  />
+                  <Lock size={14} style={{ position: 'absolute', right: '14px', top: '14px', color: '#94a3b8' }} />
+                </div>
+              </div>
+
+              <div className="form-group mb-0">
+                <label className="form-label" style={{ fontWeight: 800, color: '#334155', fontSize: '0.85rem' }}>Profile Avatar Image Link</label>
+                <div className="d-flex gap-2 align-items-center">
+                  <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#e2e8f0', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, border: '2px solid #1e3a8a' }}>
+                    {profileImage ? <img src={profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : profileName?.substring(0, 2).toUpperCase()}
+                  </div>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={profileImage}
+                    onChange={(e) => setProfileImage(e.target.value)}
+                    placeholder="https://example.com/avatar.jpg"
+                    style={{ marginBottom: 0, border: '1.5px solid #cbd5e1', borderRadius: '10px', fontSize: '0.88rem', flex: 1 }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2: Theme & Preferences */}
+          <div className="col-12 col-md-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontWeight: 900, marginBottom: '20px', fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Globe size={18} style={{ color: '#2563eb' }} /> Regional &amp; Localization
+              </h4>
+
+              <div className="form-group mb-0">
+                <label className="form-label" style={{ fontWeight: 800, color: '#334155', fontSize: '0.85rem' }}>System Language</label>
+                <select
+                  className="form-select form-input"
+                  value={lang}
+                  onChange={(e) => setLang(e.target.value)}
+                  style={{ marginBottom: 0, border: '1.5px solid #cbd5e1', borderRadius: '10px', fontSize: '0.9rem' }}
+                >
+                  <option value="en">English (US)</option>
+                  <option value="hi">हिन्दी (Hindi)</option>
+                  <option value="es">Español (ES)</option>
+                  <option value="fr">Français (FR)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 2: Security & Notifications Cards */}
+        <div className="row g-4 mb-4">
+          {/* Card 3: Change Password */}
+          <div className="col-12 col-md-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontWeight: 900, marginBottom: '20px', fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Lock size={18} style={{ color: '#b45309' }} /> Security &amp; Credentials
+              </h4>
+
+              <div className="form-group mb-0">
+                <label className="form-label" style={{ fontWeight: 800, color: '#334155', fontSize: '0.85rem' }}>New Password</label>
+                <input
+                  type="password"
+                  className="form-input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter new password (min 6 characters)"
+                  style={{ marginBottom: 0, border: '1.5px solid #cbd5e1', borderRadius: '10px', fontSize: '0.9rem' }}
+                />
+                <small style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '6px', display: 'block' }}>
+                  Leave blank to keep your current password unchanged.
+                </small>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 4: Privacy & Notifications */}
+          <div className="col-12 col-md-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontWeight: 900, marginBottom: '20px', fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Shield size={18} style={{ color: '#047857' }} /> Privacy &amp; Notification Preferences
+              </h4>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#334155' }}>Public Profile Visibility</span>
+                  <input type="checkbox" checked={profPublic} onChange={(e) => setProfPublic(e.target.checked)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+                </label>
+
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#334155' }}>Email Notification Alerts</span>
+                  <input type="checkbox" checked={emailAlert} onChange={(e) => setEmailAlert(e.target.checked)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+                </label>
+
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#334155' }}>In-App Activity System Alerts</span>
+                  <input type="checkbox" checked={inAppAlert} onChange={(e) => setInAppAlert(e.target.checked)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Creator Social Channels Card (Creators Only) */}
+        {user.role === 'creator' && (
+          <div style={{
+            padding: '28px', borderRadius: '20px', background: '#ffffff',
+            border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+            marginBottom: '24px'
+          }}>
+            <h4 style={{ fontWeight: 900, marginBottom: '20px', fontSize: '1.05rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Globe size={18} style={{ color: '#1e3a8a' }} /> Connected Social Media Channels
+            </h4>
+
+            <div className="row g-3">
+              {/* YouTube */}
+              <div className="col-12 col-md-4">
+                <div style={{ padding: '18px', background: '#fef2f2', borderRadius: '14px', border: '1.5px solid #fecaca' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 900, color: '#dc2626', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Youtube size={16} /> YOUTUBE CHANNEL
+                  </span>
+                  <div className="form-group mt-3 mb-2">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Handle</label>
+                    <input type="text" className="form-input" value={youtubeHandle} onChange={(e) => setYoutubeHandle(e.target.value)} placeholder="@channelhandle" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
+                  </div>
+                  <div className="form-group mb-0">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Subscribers</label>
+                    <input type="number" className="form-input" value={youtubeFollowers} onChange={(e) => setYoutubeFollowers(e.target.value)} placeholder="e.g. 450000" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
                   </div>
                 </div>
+              </div>
 
-                {/* Instagram */}
-                <div className="col-12 col-md-4">
-                  <div className="p-3 glass-panel" style={{ background: 'var(--bg-tertiary)' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ec4899' }}>INSTAGRAM</span>
-                    <div className="form-group mt-2 mb-2">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Username</label>
-                      <input type="text" className="form-input" value={instaHandle} onChange={(e) => setInstaHandle(e.target.value)} placeholder="username" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
-                    <div className="form-group mb-0">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Followers Count</label>
-                      <input type="number" className="form-input" value={instaFollowers} onChange={(e) => setInstaFollowers(e.target.value)} placeholder="Followers count" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
+              {/* Instagram */}
+              <div className="col-12 col-md-4">
+                <div style={{ padding: '18px', background: '#fdf2f8', borderRadius: '14px', border: '1.5px solid #fbcfe8' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 900, color: '#db2777', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Instagram size={16} /> INSTAGRAM HANDLE
+                  </span>
+                  <div className="form-group mt-3 mb-2">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Username</label>
+                    <input type="text" className="form-input" value={instaHandle} onChange={(e) => setInstaHandle(e.target.value)} placeholder="username" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
+                  </div>
+                  <div className="form-group mb-0">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Followers</label>
+                    <input type="number" className="form-input" value={instaFollowers} onChange={(e) => setInstaFollowers(e.target.value)} placeholder="e.g. 280000" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
                   </div>
                 </div>
+              </div>
 
-                {/* TikTok */}
-                <div className="col-12 col-md-4">
-                  <div className="p-3 glass-panel" style={{ background: 'var(--bg-tertiary)' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>TIKTOK</span>
-                    <div className="form-group mt-2 mb-2">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Username</label>
-                      <input type="text" className="form-input" value={tiktokHandle} onChange={(e) => setTiktokHandle(e.target.value)} placeholder="username" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
-                    <div className="form-group mb-0">
-                      <label className="form-label" style={{ fontSize: '0.72rem' }}>Followers Count</label>
-                      <input type="number" className="form-input" value={tiktokFollowers} onChange={(e) => setTiktokFollowers(e.target.value)} placeholder="Followers count" style={{ fontSize: '0.78rem', padding: '6px 10px', marginBottom: 0 }} />
-                    </div>
+              {/* TikTok / Twitter */}
+              <div className="col-12 col-md-4">
+                <div style={{ padding: '18px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Globe size={16} /> TIKTOK / X HANDLE
+                  </span>
+                  <div className="form-group mt-3 mb-2">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Username</label>
+                    <input type="text" className="form-input" value={tiktokHandle} onChange={(e) => setTiktokHandle(e.target.value)} placeholder="username" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
+                  </div>
+                  <div className="form-group mb-0">
+                    <label className="form-label" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155' }}>Followers</label>
+                    <input type="number" className="form-input" value={tiktokFollowers} onChange={(e) => setTiktokFollowers(e.target.value)} placeholder="e.g. 150000" style={{ fontSize: '0.82rem', padding: '8px 12px', marginBottom: 0, border: '1px solid #cbd5e1', borderRadius: '8px' }} />
                   </div>
                 </div>
               </div>
@@ -1071,14 +1213,28 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Save Settings & Delete Account Actions */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginTop: '24px' }}>
-          <button type="submit" className="btn btn-primary">
-            <Save size={18} />
-            Save Profile & Preferences
+        {/* Save Settings & Delete Account Action Footer */}
+        <div style={{
+          padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px'
+        }}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ padding: '12px 28px', fontSize: '0.92rem', fontWeight: 800, borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            <Save size={18} /> Save Profile &amp; Preferences
           </button>
 
-          <button type="button" onClick={handleDeleteAccount} className="btn" style={{ background: 'var(--danger-glow)', color: 'var(--danger)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+          <button
+            type="button"
+            onClick={handleDeleteAccount}
+            style={{
+              padding: '12px 20px', fontSize: '0.88rem', fontWeight: 800, borderRadius: '10px',
+              background: '#fef2f2', color: '#b91c1c', border: '1.5px solid #fecaca', cursor: 'pointer'
+            }}
+          >
             Delete Account Profile
           </button>
         </div>
@@ -1089,6 +1245,9 @@ const Dashboard = () => {
   // ANALYTICS CHART BUILDERS
   // COMPANY & CREATOR ANALYTICS LAYOUT
   const renderAnalyticsLayout = () => {
+    // ────────────────────────────────────────────────────────
+    // BRAND / COMPANY ROLE ANALYTICS
+    // ────────────────────────────────────────────────────────
     if (user.role === 'brand') {
       const totalCampaigns = campaigns.length;
       const activeCampaigns = campaigns.filter(c => c.status === 'published' || c.status === 'active').length;
@@ -1098,13 +1257,13 @@ const Dashboard = () => {
       const acceptanceRate = totalApps > 0 ? Math.round((acceptedApps / totalApps) * 100) : 38;
 
       const totalBudgetAllocated = campaigns.reduce((acc, c) => {
-        const val = typeof c.budget === 'object' ? (c.budget?.max || c.budget?.min || 2500) : (Number(c.budget) || 2500);
+        const val = typeof c.budget === 'object' ? (c.budget?.max || c.budget?.min || 250000) : (Number(c.budget) || 250000);
         return acc + val;
-      }, 0) || 25000;
+      }, 0) || 1500000;
 
       const totalSpent = workspaces
-        .filter(w => w.status === 'completed' || w.paymentStatus === 'paid')
-        .reduce((acc, w) => acc + (w.agreedRate || 1800), 0) || 16500;
+        .filter(w => w.status === 'completed' || w.paymentStatus === 'paid' || w.status === 'active')
+        .reduce((acc, w) => acc + (w.proposedRate || w.agreedRate || 350000), 0) || 975000;
 
       const budgetUtilRate = Math.min(100, Math.round((totalSpent / totalBudgetAllocated) * 100));
       const avgRating = 4.9;
@@ -1116,8 +1275,8 @@ const Dashboard = () => {
           {
             label: 'Applications Received',
             data: [12, 19, 24, 32, 28, 45, totalApps > 0 ? totalApps : 52],
-            borderColor: 'rgba(255, 107, 107, 1)',
-            backgroundColor: 'rgba(255, 107, 107, 0.15)',
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.12)',
             borderWidth: 3,
             tension: 0.4,
             fill: true
@@ -1125,8 +1284,8 @@ const Dashboard = () => {
           {
             label: 'Campaigns Created',
             data: [2, 4, 3, 6, 5, 8, totalCampaigns > 0 ? totalCampaigns : 10],
-            borderColor: 'rgba(59, 130, 246, 1)',
-            backgroundColor: 'rgba(59, 130, 246, 0.15)',
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
             borderWidth: 3,
             tension: 0.4,
             fill: true
@@ -1136,323 +1295,260 @@ const Dashboard = () => {
 
       // Chart 2: Budget Utilization & Payouts per Campaign
       const campLabels = campaigns.slice(0, 5).map(c => c.title?.substring(0, 14) || 'Campaign');
-      const campBudgets = campaigns.slice(0, 5).map(c => typeof c.budget === 'object' ? (c.budget?.max || 2500) : (Number(c.budget) || 2500));
+      const campBudgets = campaigns.slice(0, 5).map(c => typeof c.budget === 'object' ? (c.budget?.max || 350000) : (Number(c.budget) || 350000));
       
       const budgetPerfData = {
-        labels: campLabels.length > 0 ? campLabels : ['Tech Pro 2026', 'Summer Glow', 'FitLife Active', 'Gamer Zone'],
+        labels: campLabels.length > 0 ? campLabels : ['boAt ANC', 'CRED Summer', 'Mamaearth Glow', 'Zomato Gold'],
         datasets: [
           {
             label: 'Allocated Budget ($)',
-            data: campBudgets.length > 0 ? campBudgets : [5000, 3500, 4000, 6000],
-            backgroundColor: 'rgba(255, 107, 107, 0.85)',
-            borderRadius: 6
+            data: campBudgets.length > 0 ? campBudgets : [600000, 1000000, 450000, 300000],
+            backgroundColor: '#1e3a8a',
+            borderRadius: 8
           },
           {
-            label: 'Spent Payouts ($)',
-            data: campBudgets.length > 0 ? campBudgets.map(b => Math.round(b * 0.75)) : [3800, 2600, 3100, 4500],
-            backgroundColor: 'rgba(16, 185, 129, 0.85)',
-            borderRadius: 6
+            label: 'Committed Payouts ($)',
+            data: campBudgets.length > 0 ? campBudgets.map(b => Math.round(b * 0.75)) : [450000, 700000, 275000, 200000],
+            backgroundColor: '#10b981',
+            borderRadius: 8
           }
         ]
       };
 
-      // Top Performing Creators
-      const topCreators = [
-        {
-          _id: 'c1',
-          name: 'Sarah Jenkins',
-          category: 'Tech & Electronics',
-          platform: 'YouTube',
-          followers: '450K',
-          engagementRate: '5.2%',
-          rating: 4.9,
-          completedCampaigns: 8,
-          photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150'
-        },
-        {
-          _id: 'c2',
-          name: 'Alex Rivera',
-          category: 'Fitness & Health',
-          platform: 'Instagram',
-          followers: '280K',
-          engagementRate: '4.8%',
-          rating: 4.8,
-          completedCampaigns: 6,
-          photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'
-        },
-        {
-          _id: 'c3',
-          name: 'Elena Rostova',
-          category: 'Fashion & Beauty',
-          platform: 'TikTok',
-          followers: '620K',
-          engagementRate: '6.1%',
-          rating: 5.0,
-          completedCampaigns: 11,
-          photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
-        }
-      ];
-
       return (
         <div className="animate-fade-in-up">
-          {/* Header Title */}
-          <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0 }}>Company Analytics & Campaign Performance</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '4px 0 0 0' }}>
-                Track campaign ROI, budget utilization, creator performance summaries, and monthly stats.
-              </p>
-            </div>
-            <div className="d-flex gap-2">
-              <span className="badge badge-primary" style={{ padding: '6px 12px', fontSize: '0.78rem', borderRadius: 'var(--radius-full)' }}>
-                ● Real-Time Metrics
+          {/* Header Title Banner */}
+          <div style={{
+            padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+            border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+            marginBottom: '24px'
+          }}>
+            <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  Company Analytics &amp; Campaign ROI Performance
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                  Real-time reporting on campaign expenditure, pitch conversion metrics, creator engagement, and budget utilization.
+                </p>
+              </div>
+              <span style={{
+                padding: '6px 16px', background: '#ecfdf5', color: '#047857',
+                border: '1.5px solid #a7f3d0', borderRadius: '9999px',
+                fontSize: '0.8rem', fontWeight: 900, display: 'inline-flex', alignItems: 'center', gap: '6px'
+              }}>
+                🟢 Live Real-Time Data
               </span>
             </div>
           </div>
 
-          {/* 6 Key Performance Bootstrap Cards */}
+          {/* 6 Key Performance Stat Cards */}
           <div className="row g-3 mb-4">
-            {/* Card 1: Campaign Performance */}
+            {/* Card 1: Total Campaigns */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>CAMPAIGN PERF</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--primary)' }}>{totalCampaigns}</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{activeCampaigns} Active Briefs</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  CAMPAIGNS
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0f172a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {totalCampaigns}
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>{activeCampaigns} Active Briefs</small>
               </div>
             </div>
 
             {/* Card 2: Applications Received */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>APPLICATIONS</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)' }}>{totalApps}</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Creator pitches</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#2563eb', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  PITCHES
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0f172a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {totalApps}
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Pitches received</small>
               </div>
             </div>
 
             {/* Card 3: Acceptance Rate */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>ACCEPTANCE RATE</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--success)' }}>{acceptanceRate}%</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{acceptedApps} Approved</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  ACCEPTANCE
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#047857', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {acceptanceRate}%
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>{acceptedApps} Approved</small>
               </div>
             </div>
 
             {/* Card 4: Budget Utilization */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>BUDGET UTILIZED</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--warning)' }}>{budgetUtilRate}%</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>${totalSpent.toLocaleString()} spent</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#b45309', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  BUDGET USED
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#b45309', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {budgetUtilRate}%
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>${totalSpent.toLocaleString()}</small>
               </div>
             </div>
 
-            {/* Card 5: Completed Campaigns */}
+            {/* Card 5: Completed Projects */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>COMPLETED</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: '#d63384' }}>{completedCampaigns}</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Closed campaigns</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0369a1', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  COMPLETED
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0369a1', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {completedCampaigns}
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Finalized projects</small>
               </div>
             </div>
 
-            {/* Card 6: Average Campaign Rating */}
+            {/* Card 6: Average Brand Rating */}
             <div className="col-12 col-sm-6 col-lg-2">
-              <div className="card glass-panel glass-panel-hover border-0 shadow-sm p-3 h-100">
-                <div className="card-body p-0">
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>AVG RATING</span>
-                  <h3 className="mt-2 mb-1" style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f59e0b' }}>{avgRating} ⭐</h3>
-                  <small style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Brand score rating</small>
-                </div>
+              <div style={{
+                padding: '20px', borderRadius: '16px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+                height: '100%', transition: 'all 0.2s ease'
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#f59e0b', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  BRAND RATING
+                </span>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#f59e0b', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  {avgRating} ⭐
+                </h3>
+                <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Overall score</small>
               </div>
             </div>
           </div>
 
-          {/* Creator Performance Summary Section */}
-          <div className="card glass-panel border-0 shadow-sm p-4 mb-4 text-white">
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Users size={18} style={{ color: 'var(--primary)' }} /> Creator Performance Summary
+          {/* Creator Performance Metrics Grid */}
+          <div style={{
+            padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+            border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+            marginBottom: '24px'
+          }}>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0f172a', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Users size={18} style={{ color: '#1e3a8a' }} /> Creator Network Engagement Benchmarks
             </h4>
             <div className="row g-3">
               <div className="col-12 col-sm-6 col-md-3">
-                <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>AVERAGE REACH</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff' }}>145.2K</span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--success)', display: 'block', marginTop: '2px' }}>↑ +12.4% vs last month</span>
+                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>AVERAGE REACH</span>
+                  <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0f172a' }}>1.45M</span>
+                  <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 800, display: 'block', marginTop: '4px' }}>↑ +14.2% vs last quarter</span>
                 </div>
               </div>
               <div className="col-12 col-sm-6 col-md-3">
-                <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>AVG ENGAGEMENT RATE</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff' }}>4.82%</span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--primary)', display: 'block', marginTop: '2px' }}>Above industry benchmark</span>
+                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>AVG ENGAGEMENT RATE</span>
+                  <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1e3a8a' }}>6.82%</span>
+                  <span style={{ fontSize: '0.75rem', color: '#1e3a8a', fontWeight: 800, display: 'block', marginTop: '4px' }}>High industry benchmark</span>
                 </div>
               </div>
               <div className="col-12 col-sm-6 col-md-3">
-                <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>ON-TIME DELIVERY</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--success)' }}>98.4%</span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', marginTop: '2px' }}>Milestone deadlines met</span>
+                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>ON-TIME DELIVERY</span>
+                  <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#047857' }}>98.8%</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, display: 'block', marginTop: '4px' }}>Milestone deadlines met</span>
                 </div>
               </div>
               <div className="col-12 col-sm-6 col-md-3">
-                <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>REPEAT COLLABORATIONS</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#d63384' }}>6 Creators</span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', marginTop: '2px' }}>High retention rate</span>
+                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>REPEAT COLLABORATORS</span>
+                  <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0369a1' }}>5 Creators</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, display: 'block', marginTop: '4px' }}>High partner retention</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Charts Row: Monthly Campaign Stats & Budget Utilization */}
+          {/* Charts Row */}
           <div className="row g-4 mb-4">
-            {/* Chart 1: Monthly Campaign Statistics */}
             <div className="col-12 col-lg-6">
-              <div className="card glass-panel border-0 shadow-sm p-4 text-white h-100">
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Monthly Campaign Statistics</h4>
+              <div style={{
+                padding: '24px', borderRadius: '20px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                height: '100%'
+              }}>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                  Monthly Applications &amp; Campaign Growth
+                </h4>
                 <div style={{ height: '270px', position: 'relative' }}>
                   <LineChart data={monthlyStatsData} options={{ responsive: true, maintainAspectRatio: false }} />
                 </div>
               </div>
             </div>
 
-            {/* Chart 2: Budget Utilization & Payouts */}
             <div className="col-12 col-lg-6">
-              <div className="card glass-panel border-0 shadow-sm p-4 text-white h-100">
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Budget vs Payout Expenditure ($)</h4>
+              <div style={{
+                padding: '24px', borderRadius: '20px', background: '#ffffff',
+                border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                height: '100%'
+              }}>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                  Allocated Budget vs Committed Payouts ($)
+                </h4>
                 <div style={{ height: '270px', position: 'relative' }}>
                   <BarChart data={budgetPerfData} options={{ responsive: true, maintainAspectRatio: false }} />
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Top Performing Campaigns Table Section */}
-          <div className="card glass-panel border-0 shadow-sm p-4 mb-4 text-white">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Briefcase size={18} style={{ color: 'var(--primary)' }} /> Top Performing Campaigns
-              </h4>
-              <Link to="/dashboard?tab=campaigns" className="btn btn-outline" style={{ padding: '4px 12px', fontSize: '0.78rem' }}>View All Campaigns</Link>
-            </div>
-
-            {campaigns.length === 0 ? (
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textAlign: 'center', padding: '20px' }}>No active campaigns available.</p>
-            ) : (
-              <div className="table-responsive">
-                <table className="table table-dark table-hover align-middle mb-0" style={{ background: 'transparent' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid var(--border-color)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                      <th>CAMPAIGN TITLE</th>
-                      <th>CATEGORY</th>
-                      <th>BUDGET</th>
-                      <th>APPLICATIONS</th>
-                      <th>STATUS</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {campaigns.slice(0, 5).map((camp) => {
-                      const campApps = applications.filter(a => (a.projectId?._id || a.projectId) === camp._id).length;
-                      const bMax = typeof camp.budget === 'object' ? (camp.budget?.max || 2500) : (Number(camp.budget) || 2500);
-
-                      return (
-                        <tr key={camp._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.88rem' }}>
-                          <td style={{ fontWeight: 800 }}>{camp.title}</td>
-                          <td>
-                            <span className="badge badge-primary" style={{ padding: '3px 8px', fontSize: '0.72rem' }}>
-                              {camp.category || camp.niche?.[0] || 'General'}
-                            </span>
-                          </td>
-                          <td style={{ fontWeight: 700, color: 'var(--success)' }}>${bMax.toLocaleString()}</td>
-                          <td style={{ fontWeight: 800 }}>{campApps} Pitches</td>
-                          <td>
-                            <span style={{
-                              padding: '2px 8px', borderRadius: 'var(--radius-full)', fontSize: '0.7rem', fontWeight: 700,
-                              background: camp.status === 'published' ? 'rgba(16,185,129,0.15)' : 'var(--bg-tertiary)',
-                              color: camp.status === 'published' ? 'var(--success)' : 'var(--text-muted)'
-                            }}>
-                              {camp.status?.toUpperCase() || 'PUBLISHED'}
-                            </span>
-                          </td>
-                          <td>
-                            <Link to={`/campaigns/${camp._id}`} className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.75rem' }}>
-                              View Brief
-                            </Link>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-          {/* Top Performing Creators Cards Section */}
-          <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={18} style={{ color: '#f59e0b' }} /> Top Performing Creators
-            </h4>
-
-            <div className="row g-3">
-              {topCreators.map((creator) => (
-                <div key={creator._id} className="col-12 col-md-4">
-                  <div className="glass-panel p-3 h-100" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                    <div className="d-flex align-items-center gap-3 mb-3">
-                      <img src={creator.photo} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} />
-                      <div>
-                        <h5 style={{ fontWeight: 800, margin: 0, fontSize: '0.95rem' }}>{creator.name}</h5>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700 }}>{creator.category}</span>
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center mb-2" style={{ fontSize: '0.8rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Followers: <strong style={{ color: '#fff' }}>{creator.followers}</strong></span>
-                      <span style={{ color: 'var(--text-muted)' }}>Engagement: <strong style={{ color: 'var(--success)' }}>{creator.engagementRate}</strong></span>
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center mb-3" style={{ fontSize: '0.8rem' }}>
-                      <span style={{ color: '#f59e0b', fontWeight: 800 }}>⭐ {creator.rating} Rating</span>
-                      <span style={{ color: 'var(--text-muted)' }}>{creator.completedCampaigns} Campaigns</span>
-                    </div>
-
-                    <button
-                      onClick={() => navigate(`/creators/${creator._id}`)}
-                      className="btn btn-primary w-100"
-                      style={{ padding: '6px 12px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-                    >
-                      <Eye size={14} /> View Creator Report
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       );
     }
 
-    const lineChartData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    // ────────────────────────────────────────────────────────
+    // CREATOR ROLE ANALYTICS
+    // ────────────────────────────────────────────────────────
+    const creatorWorkspaces = workspaces;
+    const completedWs = creatorWorkspaces.filter(w => w.status === 'completed');
+    const activeWs = creatorWorkspaces.filter(w => w.status === 'active');
+    
+    const totalEarnings = completedWs.reduce((acc, w) => acc + (w.proposedRate || w.agreedRate || 0), 0);
+    const activeCommittedValue = activeWs.reduce((acc, w) => acc + (w.proposedRate || w.agreedRate || 0), 0);
+    const totalPitches = applications.length;
+    const approvedPitches = applications.filter(a => a.status === 'approved' || a.status === 'shortlisted' || a.status === 'accepted').length;
+    const pitchAcceptanceRate = totalPitches > 0 ? Math.round((approvedPitches / totalPitches) * 100) : 85;
+    const avgDealSize = (completedWs.length + activeWs.length) > 0 
+      ? Math.round((totalEarnings + activeCommittedValue) / (completedWs.length + activeWs.length))
+      : 350000;
+
+    // Creator Charts Data
+    const revenueTrendData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
       datasets: [
         {
-          label: user.role === 'creator' ? 'Sponsorship Income ($)' : (user.role === 'brand' ? 'Sponsorship Budgets ($)' : 'Platform Service Fee Revenue ($)'),
-          data: user.role === 'creator' ? [1200, 2400, 1800, 3100, 2800, 4200] : (user.role === 'brand' ? [4000, 6500, 5200, 8900, 7100, 12000] : [150, 320, 290, 480, 510, 680]),
-          borderColor: 'rgba(255, 107, 107, 1)',
-          backgroundColor: 'rgba(255, 107, 107, 0.1)',
+          label: 'Sponsorship Income (₹)',
+          data: [150000, 280000, 350000, 420000, 550000, 700000, totalEarnings > 0 ? totalEarnings : 850000],
+          borderColor: '#047857',
+          backgroundColor: 'rgba(4, 120, 87, 0.12)',
           borderWidth: 3,
           tension: 0.4,
           fill: true
@@ -1460,42 +1556,44 @@ const Dashboard = () => {
       ]
     };
 
-    const barChartData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    const pitchPerfData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
       datasets: [
         {
-          label: user.role === 'creator' ? 'Pitches Submitted' : (user.role === 'brand' ? 'Applications Received' : 'Daily User Signups'),
-          data: user.role === 'creator' ? [2, 4, 3, 7, 5, 8] : (user.role === 'brand' ? [12, 19, 15, 24, 21, 35] : [45, 80, 65, 110, 95, 150]),
-          backgroundColor: 'rgba(59, 130, 246, 0.85)',
-          borderRadius: 6
+          label: 'Pitches Sent',
+          data: [2, 3, 5, 4, 6, 5, totalPitches > 0 ? totalPitches : 7],
+          backgroundColor: '#1e3a8a',
+          borderRadius: 8
+        },
+        {
+          label: 'Pitches Approved',
+          data: [2, 2, 4, 3, 5, 4, approvedPitches > 0 ? approvedPitches : 6],
+          backgroundColor: '#10b981',
+          borderRadius: 8
         }
       ]
     };
 
-    const doughnutChartData = {
-      labels: ['YouTube', 'Instagram', 'TikTok'],
+    const platformDistributionData = {
+      labels: ['YouTube Vlogs & Shorts', 'Instagram Reels & Stories', 'Twitter / X Threads'],
       datasets: [
         {
-          data: user.role === 'creator' ? [45, 30, 25] : (user.role === 'brand' ? [50, 20, 30] : [35, 40, 25]),
-          backgroundColor: [
-            'rgba(239, 68, 68, 0.85)',
-            'rgba(236, 72, 153, 0.85)',
-            'rgba(0, 0, 0, 0.85)'
-          ],
-          borderColor: 'rgba(255, 255, 255, 0.1)',
-          borderWidth: 1
+          data: [55, 35, 10],
+          backgroundColor: ['#ef4444', '#ec4899', '#1d9bf0'],
+          borderColor: '#ffffff',
+          borderWidth: 2
         }
       ]
     };
 
-    const growthChartData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    const audienceReachData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
       datasets: [
         {
-          label: user.role === 'creator' ? 'Followers Reach Index' : (user.role === 'brand' ? 'Brand Page Clicks' : 'Active Sessions'),
-          data: user.role === 'creator' ? [12000, 14500, 17200, 21000, 24500, 31000] : (user.role === 'brand' ? [350, 520, 480, 720, 680, 980] : [1200, 1800, 1600, 2500, 2200, 3400]),
-          borderColor: 'rgba(16, 185, 129, 1)',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          label: 'Total Monthly Channel Views / Reach',
+          data: [1200000, 1800000, 2400000, 3100000, 4200000, 5500000, 6800000],
+          borderColor: '#1e3a8a',
+          backgroundColor: 'rgba(30, 58, 138, 0.1)',
           borderWidth: 3,
           tension: 0.3,
           fill: true
@@ -1505,42 +1603,331 @@ const Dashboard = () => {
 
     return (
       <div className="animate-fade-in-up">
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '24px' }}>
-          {user.role === 'creator' ? 'Channel Analytics Insights' : (user.role === 'brand' ? 'Campaign Performance Metrics' : 'Platform Operations Stats')}
-        </h3>
+        {/* Header Title Banner */}
+        <div style={{
+          padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+          marginBottom: '24px'
+        }}>
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                Creator Performance &amp; Revenue Analytics
+              </h3>
+              <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                Real-time earnings reporting, sponsorship pitch conversion metrics, audience reach index, and campaign history.
+              </p>
+            </div>
+            <span style={{
+              padding: '6px 16px', background: '#ecfdf5', color: '#047857',
+              border: '1.5px solid #a7f3d0', borderRadius: '9999px',
+              fontSize: '0.8rem', fontWeight: 900, display: 'inline-flex', alignItems: 'center', gap: '6px'
+            }}>
+              ⭐ Top Verified Creator
+            </span>
+          </div>
+        </div>
 
-        <div className="grid-container" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px' }}>
-          {/* Revenue growth Chart */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Sponsorship Revenue Growth</h4>
-            <div style={{ height: '240px', position: 'relative' }}>
-              <LineChart data={lineChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+        {/* 6 Key Performance Stat Cards */}
+        <div className="row g-3 mb-4">
+          {/* Card 1: Total Completed Earnings */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                TOTAL EARNED
+              </span>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#047857', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                ₹{totalEarnings.toLocaleString()}
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>{completedWs.length} Paid Projects</small>
             </div>
           </div>
 
-          {/* Applications/Pitches index Chart */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Applications & Campaign Pitches</h4>
-            <div style={{ height: '240px', position: 'relative' }}>
-              <BarChart data={barChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+          {/* Card 2: Active Workspace Value */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                ACTIVE ESCROW
+              </span>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#1e3a8a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                ₹{activeCommittedValue.toLocaleString()}
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>{activeWs.length} Active Deals</small>
             </div>
           </div>
 
-          {/* Platform distribution shares */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Target Platforms Distribution Share</h4>
-            <div style={{ height: '240px', display: 'flex', justifyContent: 'center', position: 'relative' }}>
-              <DoughnutChart data={doughnutChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+          {/* Card 3: Pitches Submitted */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#2563eb', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                PITCHES SENT
+              </span>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0f172a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                {totalPitches}
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Applications sent</small>
             </div>
           </div>
 
-          {/* Follower reach growth index */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px' }}>Audience Reach Growth Index</h4>
-            <div style={{ height: '240px', position: 'relative' }}>
-              <LineChart data={growthChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+          {/* Card 4: Pitch Acceptance Rate */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                ACCEPTANCE
+              </span>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#047857', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                {pitchAcceptanceRate}%
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>{approvedPitches} Approved</small>
             </div>
           </div>
+
+          {/* Card 5: Average Deal Size */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#b45309', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                AVG DEAL SIZE
+              </span>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#b45309', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                ₹{avgDealSize.toLocaleString()}
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Per deal average</small>
+            </div>
+          </div>
+
+          {/* Card 6: Creator Star Rating */}
+          <div className="col-12 col-sm-6 col-lg-2">
+            <div style={{
+              padding: '20px', borderRadius: '16px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+              height: '100%', transition: 'all 0.2s ease'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#f59e0b', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                RATING SCORE
+              </span>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f59e0b', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>
+                4.9 ⭐
+              </h3>
+              <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Partner reviews</small>
+            </div>
+          </div>
+        </div>
+
+        {/* Creator Channel Benchmarks Section */}
+        <div style={{
+          padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+          marginBottom: '24px'
+        }}>
+          <h4 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0f172a', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sparkles size={18} style={{ color: '#1e3a8a' }} /> Audience Engagement &amp; Channel Delivery Index
+          </h4>
+          <div className="row g-3">
+            <div className="col-12 col-sm-6 col-md-3">
+              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>MONTHLY REACH</span>
+                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0f172a' }}>6.8M Views</span>
+                <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 800, display: 'block', marginTop: '4px' }}>↑ +18.4% growth</span>
+              </div>
+            </div>
+            <div className="col-12 col-sm-6 col-md-3">
+              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>AVG ENGAGEMENT RATE</span>
+                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1e3a8a' }}>7.4%</span>
+                <span style={{ fontSize: '0.75rem', color: '#1e3a8a', fontWeight: 800, display: 'block', marginTop: '4px' }}>Top 5% creator benchmark</span>
+              </div>
+            </div>
+            <div className="col-12 col-sm-6 col-md-3">
+              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>ON-TIME MILESTONES</span>
+                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#047857' }}>100%</span>
+                <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 800, display: 'block', marginTop: '4px' }}>Zero delayed deadlines</span>
+              </div>
+            </div>
+            <div className="col-12 col-sm-6 col-md-3">
+              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>REPEAT BRAND SPONSORS</span>
+                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0369a1' }}>4 Brands</span>
+                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, display: 'block', marginTop: '4px' }}>High sponsor satisfaction</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 4 Interactive Charts Grid */}
+        <div className="row g-4 mb-4">
+          {/* Chart 1: Revenue Growth */}
+          <div className="col-12 col-lg-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                Sponsorship Revenue Growth (₹)
+              </h4>
+              <div style={{ height: '250px', position: 'relative' }}>
+                <LineChart data={revenueTrendData} options={{ responsive: true, maintainAspectRatio: false }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Chart 2: Pitches Submitted vs Approved */}
+          <div className="col-12 col-lg-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                Pitches Sent vs Proposals Approved
+              </h4>
+              <div style={{ height: '250px', position: 'relative' }}>
+                <BarChart data={pitchPerfData} options={{ responsive: true, maintainAspectRatio: false }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Chart 3: Platform Income Share */}
+          <div className="col-12 col-lg-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                Platform Revenue Distribution Share
+              </h4>
+              <div style={{ height: '250px', display: 'flex', justifyContent: 'center', position: 'relative' }}>
+                <DoughnutChart data={platformDistributionData} options={{ responsive: true, maintainAspectRatio: false }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Chart 4: Audience Reach Growth */}
+          <div className="col-12 col-lg-6">
+            <div style={{
+              padding: '24px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              height: '100%'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px' }}>
+                Audience Channel Reach Growth Index
+              </h4>
+              <div style={{ height: '250px', position: 'relative' }}>
+                <LineChart data={audienceReachData} options={{ responsive: true, maintainAspectRatio: false }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Creator Sponsorships History Table */}
+        <div style={{
+          padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+        }}>
+          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Briefcase size={18} style={{ color: '#1e3a8a' }} /> Sponsorship Workspace Performance Summary
+            </h4>
+            <Link to="/dashboard?tab=collaborations" className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.8rem', fontWeight: 800 }}>
+              View All Collaborations
+            </Link>
+          </div>
+
+          {creatorWorkspaces.length === 0 ? (
+            <p style={{ color: '#64748b', fontSize: '0.9rem', textAlign: 'center', padding: '30px' }}>
+              No active or completed sponsorship workspaces found.
+            </p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table align-middle mb-0" style={{ background: 'transparent' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0', fontSize: '0.78rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <th style={{ padding: '12px 16px' }}>BRAND PARTNER</th>
+                    <th style={{ padding: '12px 16px' }}>CAMPAIGN TITLE</th>
+                    <th style={{ padding: '12px 16px' }}>AGREED RATE</th>
+                    <th style={{ padding: '12px 16px' }}>MILESTONES</th>
+                    <th style={{ padding: '12px 16px' }}>STATUS</th>
+                    <th style={{ padding: '12px 16px' }}>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {creatorWorkspaces.slice(0, 5).map((ws) => {
+                    const brand = ws.brandId || {};
+                    const proj = ws.projectId || {};
+                    const isCompleted = ws.status === 'completed';
+
+                    return (
+                      <tr key={ws._id} style={{ borderBottom: '1px solid #f1f5f9', fontSize: '0.9rem' }}>
+                        <td style={{ padding: '14px 16px', fontWeight: 800, color: '#0f172a' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div style={{
+                              width: '32px', height: '32px', borderRadius: '8px',
+                              background: '#1e3a8a', color: '#ffffff', fontWeight: 900,
+                              fontSize: '0.78rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            }}>
+                              {brand.profileImage
+                                ? <img src={brand.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} alt="" />
+                                : (brand.name ? brand.name.substring(0, 2).toUpperCase() : 'CS')
+                              }
+                            </div>
+                            <span>{brand.name || 'Brand Partner'}</span>
+                          </div>
+                        </td>
+                        <td style={{ padding: '14px 16px', fontWeight: 800, color: '#0f172a' }}>{proj.title || 'Sponsorship'}</td>
+                        <td style={{ padding: '14px 16px', fontWeight: 900, color: '#047857' }}>
+                          ₹{(ws.proposedRate || ws.agreedRate || 0).toLocaleString()}
+                        </td>
+                        <td style={{ padding: '14px 16px', fontWeight: 800, color: '#475569' }}>
+                          {ws.milestones?.length || 0} Milestones
+                        </td>
+                        <td style={{ padding: '14px 16px' }}>
+                          <span style={{
+                            padding: '4px 12px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 900,
+                            background: isCompleted ? '#ecfdf5' : '#eff6ff',
+                            color: isCompleted ? '#047857' : '#1e3a8a',
+                            border: isCompleted ? '1px solid #a7f3d0' : '1px solid #bfdbfe'
+                          }}>
+                            {isCompleted ? '🏆 Completed' : '🟢 Active'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '14px 16px' }}>
+                          <Link
+                            to={`/workspaces/${ws._id}`}
+                            className="btn btn-outline"
+                            style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 800, borderRadius: '8px' }}
+                          >
+                            Open Workspace
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -1756,66 +2143,125 @@ const Dashboard = () => {
 
             </div>
 
-            {/* Sections Content Area */}
-            <div className="row g-4 gy-4" style={{ rowGap: '36px' }}>
+            {/* 1. Full-Width Parallel Quick Actions Bar */}
+            <div style={{
+              padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              marginBottom: '28px'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, marginBottom: '18px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <TrendingUp size={18} style={{ color: '#1e3a8a' }} />
+                Quick Actions Workspace Navigation
+              </h4>
+              <div className="row g-3">
+                <div className="col-12 col-sm-6 col-md-3">
+                  <Link to="/discover" style={{
+                    padding: '14px 18px', background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                    color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', borderRadius: '12px',
+                    textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)', transition: 'all 0.2s ease', width: '100%'
+                  }}>
+                    <Compass size={18} /> Discover Briefs
+                  </Link>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <Link to="/dashboard/profile" style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    transition: 'all 0.2s ease', width: '100%'
+                  }}>
+                    <UserCircle size={18} /> Edit My Profile
+                  </Link>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <button onClick={() => setSearchParams({ tab: 'messages' })} style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    width: '100%', transition: 'all 0.2s ease'
+                  }}>
+                    <MessageSquare size={18} /> Inbox Messages
+                  </button>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <button onClick={() => setSearchParams({ tab: 'analytics' })} style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    width: '100%', transition: 'all 0.2s ease'
+                  }}>
+                    <BarChart2 size={18} /> Outreach Analytics
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Equal Parallel Dual-Column Layout (50/50 Grid) */}
+            <div className="row g-4 gy-4">
               
-              {/* Left Side: Profile, Recommendations, Pitches, Deadlines, Activity */}
-              <div className="col-12 col-lg-8 d-flex flex-column gap-4">
+              {/* Left Column (col-12 col-lg-6) */}
+              <div className="col-12 col-lg-6 d-flex flex-column gap-4">
                 
-                {/* 1. Profile Completion Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Sparkles size={18} style={{ color: 'var(--primary)' }} />
-                    Profile Completeness index
+                {/* Profile Completion Section */}
+                <div style={{
+                  padding: '24px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                    <Sparkles size={18} style={{ color: '#1e3a8a' }} />
+                    Profile Completeness Index
                   </h4>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Overall score progress</span>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary)' }}>{profileCompletionPct}%</span>
+                    <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>Overall score progress</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#047857' }}>{profileCompletionPct}%</span>
                   </div>
-                  <div className="progress mb-3" style={{ height: '8px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)' }}>
+                  <div className="progress mb-3" style={{ height: '8px', background: '#f1f5f9', borderRadius: '9999px' }}>
                     <div
                       className="progress-bar"
                       role="progressbar"
                       style={{
                         width: `${profileCompletionPct}%`,
-                        background: 'var(--primary-gradient)',
-                        borderRadius: 'var(--radius-full)'
+                        background: 'linear-gradient(90deg, #1e3a8a, #2563eb)',
+                        borderRadius: '9999px'
                       }}
                       aria-valuenow={profileCompletionPct}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     ></div>
                   </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                  <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0, lineHeight: '1.5' }}>
                     {profileCompletionPct < 100 
-                      ? "Add more work history experiences, certificate credentials, and links under My Profile to maximize outreach verification and profile visibility."
+                      ? "Add more work history experiences, portfolio credentials, and channel links under My Profile to maximize campaign visibility."
                       : "Awesome! Your creator profile is 100% complete and fully optimized for brand searches."}
                   </p>
                 </div>
 
-                {/* 2. Recent Campaign Recommendations */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
-                      <Compass size={20} style={{ color: '#1e3a8a' }} />
+                {/* Campaign Recommendations */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <Compass size={18} style={{ color: '#1e3a8a' }} />
                       Campaign Recommendations
                     </h4>
-                    <Link to="/discover" className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Browse Opportunities</Link>
+                    <Link to="/discover" className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>Browse All</Link>
                   </div>
                   {displayInvitations.length === 0 ? (
                     <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No campaigns matching your niches currently active.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       {displayInvitations.map((camp) => (
-                        <div key={camp._id} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
-                          <div style={{ flex: '1 1 300px', minWidth: '240px' }}>
-                            <span className="badge badge-primary" style={{ fontSize: '0.78rem', marginBottom: '8px', display: 'inline-block' }}>{camp.targetPlatforms?.join(', ')}</span>
-                            <h5 style={{ fontSize: '1rem', fontWeight: 800, margin: '6px 0 6px 0', color: '#0f172a' }}>{camp.title}</h5>
-                            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Budget: ₹{camp.budget?.min ? camp.budget.min.toLocaleString() : '1,00,000'} - ₹{camp.budget?.max ? camp.budget.max.toLocaleString() : '5,00,000'}</span>
+                        <div key={camp._id} style={{ padding: '18px 20px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
+                          <div style={{ flex: '1 1 200px', minWidth: '180px' }}>
+                            <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#1e3a8a', background: '#eff6ff', border: '1px solid #bfdbfe', padding: '2px 8px', borderRadius: '6px', display: 'inline-block', marginBottom: '6px' }}>{camp.targetPlatforms?.join(', ')}</span>
+                            <h5 style={{ fontSize: '0.95rem', fontWeight: 800, margin: '4px 0', color: '#0f172a' }}>{camp.title}</h5>
+                            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>Budget: ₹{camp.budget?.min ? camp.budget.min.toLocaleString() : '1,00,000'} - ₹{camp.budget?.max ? camp.budget.max.toLocaleString() : '5,00,000'}</span>
                           </div>
-                          <Link to={`/campaigns/${camp._id}`} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.84rem', flexShrink: 0, textDecoration: 'none', borderRadius: '8px', fontWeight: 800 }}>
-                            Pitch Opportunity
-                            <ArrowUpRight size={16} style={{ marginLeft: '6px' }} />
+                          <Link to={`/campaigns/${camp._id}`} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.8rem', flexShrink: 0, textDecoration: 'none', borderRadius: '8px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            Pitch <ArrowUpRight size={14} />
                           </Link>
                         </div>
                       ))}
@@ -1823,27 +2269,30 @@ const Dashboard = () => {
                   )}
                 </div>
 
-                {/* 3. Recent Applications Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
-                      <FileText size={20} style={{ color: '#1e3a8a' }} />
+                {/* Recent Applications Status */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <FileText size={18} style={{ color: '#1e3a8a' }} />
                       Recent Applications Status
                     </h4>
-                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Full History</button>
+                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>Full History</button>
                   </div>
                   {recentApplications.length === 0 ? (
                     <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>You haven't pitched to any campaigns yet.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       {recentApplications.map((app) => (
-                        <div key={app._id} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
-                          <div className="d-flex justify-content-between align-items-center mb-2" style={{ flexWrap: 'wrap', gap: '12px' }}>
-                            <h5 style={{ fontSize: '0.98rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{app.campaignId?.title || app.projectId?.title || 'Campaign Pitch'}</h5>
-                            <span className={`badge badge-${app.status}`} style={{ fontSize: '0.78rem', padding: '4px 12px' }}>{app.status}</span>
+                        <div key={app._id} style={{ padding: '18px 20px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                          <div className="d-flex justify-content-between align-items-center mb-2" style={{ flexWrap: 'wrap', gap: '8px' }}>
+                            <h5 style={{ fontSize: '0.92rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{app.campaignId?.title || app.projectId?.title || 'Campaign Pitch'}</h5>
+                            <span className={`badge badge-${app.status}`} style={{ fontSize: '0.75rem', padding: '4px 10px' }}>{app.status}</span>
                           </div>
-                          <p style={{ fontSize: '0.88rem', color: '#475569', margin: '8px 0 14px 0', lineHeight: '1.6' }}>"{app.pitch?.substring(0, 95)}..."</p>
-                          <div className="d-flex justify-content-between align-items-center mt-2" style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600, paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
+                          <p style={{ fontSize: '0.84rem', color: '#475569', margin: '6px 0 10px 0', lineHeight: '1.5' }}>"{app.pitch?.substring(0, 85)}..."</p>
+                          <div className="d-flex justify-content-between align-items-center mt-2" style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600, paddingTop: '10px', borderTop: '1px solid #e2e8f0' }}>
                             <span>Proposed rate: <strong style={{ color: '#0f172a' }}>₹{app.proposedRate ? app.proposedRate.toLocaleString() : '50,000'}</strong></span>
                             <span>{new Date(app.createdAt).toLocaleDateString()}</span>
                           </div>
@@ -1853,30 +2302,33 @@ const Dashboard = () => {
                   )}
                 </div>
 
-                {/* 4. Upcoming Deadlines Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
-                      <Calendar size={20} style={{ color: '#1e3a8a' }} />
+                {/* Upcoming Deadlines Section */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <Calendar size={18} style={{ color: '#1e3a8a' }} />
                       Upcoming Deadlines
                     </h4>
-                    <button onClick={() => setSearchParams({ tab: 'active-collaborations' })} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Track Workspaces</button>
+                    <button onClick={() => setSearchParams({ tab: 'active-collaborations' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>Track Workspaces</button>
                   </div>
                   {displayDeadlines.length === 0 ? (
                     <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No pending milestone deadlines.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       {displayDeadlines.map((dl, idx) => (
-                        <div key={idx} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #d97706', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
-                          <div style={{ flex: '1 1 260px', minWidth: '220px' }}>
-                            <h5 style={{ fontSize: '0.98rem', fontWeight: 800, margin: '0 0 6px 0', color: '#0f172a' }}>{dl.title}</h5>
-                            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Project: {dl.projectTitle}</span>
+                        <div key={idx} style={{ padding: '18px 20px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #d97706', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
+                          <div>
+                            <h5 style={{ fontSize: '0.92rem', fontWeight: 800, margin: '0 0 4px 0', color: '#0f172a' }}>{dl.title}</h5>
+                            <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>Project: {dl.projectTitle}</span>
                           </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
-                            <span style={{ fontSize: '0.82rem', color: '#d97706', fontWeight: 800, display: 'block', background: '#fffbe8', padding: '4px 12px', borderRadius: '6px', border: '1px solid #fef3c7' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                            <span style={{ fontSize: '0.78rem', color: '#d97706', fontWeight: 800, background: '#fffbe8', padding: '3px 10px', borderRadius: '6px', border: '1px solid #fef3c7' }}>
                               Due: {new Date(dl.dueDate).toLocaleDateString()}
                             </span>
-                            <Link to={`/workspaces/${dl.workspaceId}`} style={{ fontSize: '0.8rem', color: '#1e3a8a', fontWeight: 800, textDecoration: 'none' }}>Workspace Details →</Link>
+                            <Link to={`/workspaces/${dl.workspaceId}`} style={{ fontSize: '0.78rem', color: '#1e3a8a', fontWeight: 800, textDecoration: 'none' }}>Details →</Link>
                           </div>
                         </div>
                       ))}
@@ -1884,16 +2336,110 @@ const Dashboard = () => {
                   )}
                 </div>
 
-                {/* 5. Recent Activity Timeline Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Layers size={18} style={{ color: 'var(--primary)' }} />
+              </div>
+
+              {/* Right Column (col-12 col-lg-6) */}
+              <div className="col-12 col-lg-6 d-flex flex-column gap-4">
+                
+                {/* Recent Notifications */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <Bell size={18} style={{ color: '#1e3a8a' }} />
+                      Recent Notifications
+                    </h4>
+                    <button onClick={() => setSearchParams({ tab: 'notifications' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', fontWeight: 800, borderRadius: '8px' }}>View All</button>
+                  </div>
+                  {displayNotifications.length === 0 ? (
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No alerts found in feed.</p>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {displayNotifications.slice(0, 4).map((notif) => (
+                        <div key={notif._id} style={{
+                          padding: '16px 18px', background: notif.isRead ? '#f8fafc' : '#eff6ff',
+                          borderRadius: '14px', border: notif.isRead ? '1.5px solid #e2e8f0' : '1.5px solid #bfdbfe'
+                        }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                            <h5 style={{ fontSize: '0.88rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{notif.title}</h5>
+                            <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600 }}>{new Date(notif.createdAt).toLocaleDateString()}</span>
+                          </div>
+                          <p style={{ fontSize: '0.82rem', color: '#475569', margin: 0, lineHeight: '1.5' }}>{notif.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Recent Messages */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <MessageSquare size={18} style={{ color: '#1e3a8a' }} />
+                      Recent Messages
+                    </h4>
+                    <button onClick={() => setSearchParams({ tab: 'messages' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', fontWeight: 800, borderRadius: '8px' }}>Open Inbox</button>
+                  </div>
+                  {recentMessages.length === 0 ? (
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No messaging records.</p>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {recentMessages.map((thread) => (
+                        <div
+                          key={thread.projectId}
+                          onClick={() => selectThread(thread)}
+                          style={{
+                            padding: '16px 18px', borderRadius: '14px',
+                            background: '#f8fafc', cursor: 'pointer',
+                            border: '1.5px solid #e2e8f0', transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div className="d-flex gap-3 align-items-center">
+                            <div style={{
+                              width: '40px', height: '40px', borderRadius: '12px',
+                              background: '#1e3a8a', color: '#ffffff', display: 'flex',
+                              alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, flexShrink: 0
+                            }}>
+                              {thread.partnerAvatar ? (
+                                <img src={thread.partnerAvatar} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} alt="" />
+                              ) : (
+                                thread.partnerName?.substring(0, 2).toUpperCase()
+                              )}
+                            </div>
+                            <div style={{ flexGrow: 1, minWidth: 0 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{thread.partnerName}</span>
+                                {thread.unreadCount > 0 && (
+                                  <span style={{ fontSize: '0.68rem', fontWeight: 900, background: '#dc2626', color: '#fff', padding: '2px 8px', borderRadius: '9999px' }}>{thread.unreadCount} New</span>
+                                )}
+                              </div>
+                              <span style={{ fontSize: '0.8rem', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{thread.lastMessageText}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Activity Timeline */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 900, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                    <Layers size={18} style={{ color: '#1e3a8a' }} />
                     Recent Activity Timeline
                   </h4>
                   {timelineEvents.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No recent activities logged on your timeline feed.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No recent activities logged on your timeline feed.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative', paddingLeft: '20px', borderLeft: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative', paddingLeft: '20px', borderLeft: '2px solid #e2e8f0' }}>
                       {timelineEvents.map((evt, idx) => (
                         <div key={idx} style={{ position: 'relative' }}>
                           <span style={{
@@ -1903,118 +2449,14 @@ const Dashboard = () => {
                             width: '10px',
                             height: '10px',
                             borderRadius: '50%',
-                            background: evt.type === 'notification' ? 'var(--primary)' : 'var(--secondary)',
-                            border: '2px solid var(--bg-secondary)'
+                            background: evt.type === 'notification' ? '#1e3a8a' : '#047857',
+                            border: '2px solid #ffffff'
                           }}></span>
                           <div className="d-flex justify-content-between align-items-start">
-                            <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 4px 0' }}>{evt.title}</h5>
-                            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{new Date(evt.date).toLocaleDateString()}</span>
+                            <h5 style={{ fontSize: '0.86rem', fontWeight: 800, margin: '0 0 4px 0', color: '#0f172a' }}>{evt.title}</h5>
+                            <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600 }}>{new Date(evt.date).toLocaleDateString()}</span>
                           </div>
-                          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', margin: 0 }}>{evt.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-              </div>
-
-              {/* Right Side Widgets Column */}
-              <div className="col-12 col-lg-4 d-flex flex-column gap-4">
-                
-                {/* 6. Quick Actions Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <TrendingUp size={18} style={{ color: 'var(--primary)' }} />
-                    Quick Actions
-                  </h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <Link to="/discover" className="btn btn-primary animate-hover" style={{ width: '100%' }}>
-                      <Compass size={16} />
-                      Discover Briefs
-                    </Link>
-                    <Link to="/dashboard/profile" className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      <UserCircle size={16} />
-                      Edit My Profile
-                    </Link>
-                    <button onClick={() => setSearchParams({ tab: 'messages' })} className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      <MessageSquare size={16} />
-                      Inbox Messages
-                    </button>
-                    <button onClick={() => setSearchParams({ tab: 'analytics' })} className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      <BarChart2 size={16} />
-                      Outreach Analytics
-                    </button>
-                  </div>
-                </div>
-
-                {/* 7. Recent Notifications Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Bell size={18} style={{ color: 'var(--primary)' }} />
-                      Recent Notifications
-                    </h4>
-                    <button onClick={() => setSearchParams({ tab: 'notifications' })} className="btn btn-outline" style={{ padding: '6px 10px', fontSize: '0.75rem' }}>View All</button>
-                  </div>
-                  {displayNotifications.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No alerts found in feed.</p>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {displayNotifications.slice(0, 4).map((notif) => (
-                        <div key={notif._id} className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', borderLeft: notif.isRead ? 'none' : '3px solid var(--primary)' }}>
-                          <h5 style={{ fontSize: '0.82rem', fontWeight: 800, margin: '0 0 4px 0' }}>{notif.title}</h5>
-                          <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', margin: '0 0 8px 0' }}>{notif.body}</p>
-                          {!notif.isRead && (
-                            <button
-                              onClick={() => handleMarkAsRead(notif._id)}
-                              className="btn btn-outline"
-                              style={{ padding: '2px 8px', fontSize: '0.68rem' }}
-                            >
-                              Mark Read
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 8. Recent Messages Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <MessageSquare size={18} style={{ color: 'var(--primary)' }} />
-                      Recent Messages
-                    </h4>
-                    <button onClick={() => setSearchParams({ tab: 'messages' })} className="btn btn-outline" style={{ padding: '6px 10px', fontSize: '0.75rem' }}>Open Inbox</button>
-                  </div>
-                  {recentMessages.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No messaging records.</p>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {recentMessages.map((thread) => (
-                        <div
-                          key={thread.projectId}
-                          onClick={() => selectThread(thread)}
-                          style={{
-                            padding: '12px',
-                            borderRadius: 'var(--radius-sm)',
-                            background: 'var(--bg-tertiary)',
-                            cursor: 'pointer',
-                            border: '1px solid var(--border-color)'
-                          }}
-                          className="glass-panel-hover"
-                        >
-                          <div className="d-flex gap-2 align-items-center">
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700 }}>
-                              {thread.partnerName?.substring(0, 2).toUpperCase()}
-                            </div>
-                            <div style={{ flexGrow: 1, minWidth: 0 }}>
-                              <span style={{ fontSize: '0.82rem', fontWeight: 700, display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{thread.partnerName}</span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', display: 'block' }}>{thread.lastMessageText}</span>
-                            </div>
-                          </div>
+                          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>{evt.description}</p>
                         </div>
                       ))}
                     </div>
@@ -3226,325 +3668,291 @@ const Dashboard = () => {
             {
               label: 'Allocated Budget ($)',
               data: campaignMaxBudgets.length > 0 ? campaignMaxBudgets : [1500, 3000],
-              backgroundColor: 'rgba(255, 107, 107, 0.4)',
-              borderColor: 'rgba(255, 107, 107, 1)',
+              backgroundColor: 'rgba(30, 58, 138, 0.4)',
+              borderColor: '#1e3a8a',
               borderWidth: 1,
-              borderRadius: 4
+              borderRadius: 6
             },
             {
               label: 'Committed Spend ($)',
               data: campaignSpend.length > 0 ? campaignSpend : [1000, 2000],
-              backgroundColor: 'rgba(16, 185, 129, 0.85)',
-              borderRadius: 4
+              backgroundColor: '#10b981',
+              borderRadius: 6
             }
           ]
         };
 
         return (
           <div className="animate-fade-in-up container-fluid p-0">
-            {/* Header banner */}
-            <div className="glass-panel mb-4 p-4 d-flex justify-content-between align-items-center flex-wrap gap-3" style={{ background: 'var(--primary-glow)' }}>
-              <div>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0 }}>Welcome back, {user.name}!</h2>
-                <p style={{ color: 'var(--text-secondary)', margin: '4px 0 0 0', fontSize: '0.9rem' }}>Complete overview of your marketing campaigns and outreach activities.</p>
+            {/* Studio Header Banner */}
+            <div style={{
+              padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              marginBottom: '24px'
+            }}>
+              <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                    Welcome to Brand Enterprise Studio, {user.name}! 🏢
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                    Overview of active marketing briefs, creator proposals, campaign spend, and escrow payouts.
+                  </p>
+                </div>
+                <button onClick={() => setSearchParams({ tab: 'create' })} className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: '10px', fontSize: '0.88rem', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                  <PlusCircle size={18} /> Post New Campaign Brief
+                </button>
               </div>
-              <button onClick={() => setSearchParams({ tab: 'create' })} className="btn btn-primary" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                <PlusCircle size={16} /> Create Campaign
-              </button>
             </div>
 
-            {/* Dashboard Cards Grid (8 Cards) */}
-            <div className="row g-4 mb-4">
-              {/* Card 1: Total Campaigns */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>TOTAL CAMPAIGNS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{totalCampaigns}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Created briefs</small>
-                    </div>
-                    <div style={{ background: 'var(--primary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Briefcase size={20} style={{ color: 'var(--primary)' }} />
-                    </div>
-                  </div>
+            {/* 8 Stat Cards Grid */}
+            <div className="row g-3 mb-4">
+              <div className="col-12 col-sm-6 col-lg-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>TOTAL BRIEF CAMPAIGNS</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{totalCampaigns}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Published Opportunities</small>
                 </div>
               </div>
 
-              {/* Card 2: Active Campaigns */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.05em' }}>ACTIVE CAMPAIGNS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>{activeCampaigns}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Live in discover</small>
-                    </div>
-                    <div style={{ background: 'var(--primary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Sparkles size={20} style={{ color: 'var(--primary)' }} />
-                    </div>
-                  </div>
+              <div className="col-12 col-sm-6 col-lg-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase' }}>ACTIVE CAMPAIGNS</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#047857', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{activeCampaigns}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Live in Creator Marketplace</small>
                 </div>
               </div>
 
-              {/* Card 3: Draft Campaigns */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--warning)', letterSpacing: '0.05em' }}>DRAFT CAMPAIGNS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--warning)' }}>{draftCampaigns}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Unpublished briefs</small>
-                    </div>
-                    <div style={{ background: 'var(--warning-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Clock size={20} style={{ color: 'var(--warning)' }} />
-                    </div>
-                  </div>
+              <div className="col-12 col-sm-6 col-lg-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#d97706', letterSpacing: '0.05em', textTransform: 'uppercase' }}>DRAFT BRIEFS</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#d97706', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{draftCampaigns}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Unpublished Drafts</small>
                 </div>
               </div>
 
-              {/* Card 4: Completed Campaigns */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--success)', letterSpacing: '0.05em' }}>COMPLETED</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{completedCampaigns}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Finished projects</small>
-                    </div>
-                    <div style={{ background: 'var(--success-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <CheckCircle2 size={20} style={{ color: 'var(--success)' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 5: Applications Received */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--secondary)', letterSpacing: '0.05em' }}>APPLICATIONS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--secondary)' }}>{applicationsReceived}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Creator pitches</small>
-                    </div>
-                    <div style={{ background: 'var(--secondary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <FileText size={20} style={{ color: 'var(--secondary)' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 6: Active Collaborations */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>COLLABORATIONS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{activeCollaborations}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Active workspaces</small>
-                    </div>
-                    <div style={{ background: 'var(--primary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Users size={20} style={{ color: 'var(--primary)' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 7: Budget Spent */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--success)', letterSpacing: '0.05em' }}>BUDGET SPENT</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>${budgetSpent.toLocaleString()}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Committed payouts</small>
-                    </div>
-                    <div style={{ background: 'var(--success-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <DollarSign size={20} style={{ color: 'var(--success)' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 8: Unread Notifications */}
-              <div className="col-12 col-sm-6 col-md-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>NOTIFICATIONS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: unreadNotifications > 0 ? 'var(--warning)' : 'var(--text-primary)' }}>{unreadNotifications}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Unread alerts</small>
-                    </div>
-                    <div style={{ background: 'var(--warning-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Bell size={20} style={{ color: 'var(--warning)' }} />
-                    </div>
-                  </div>
+              <div className="col-12 col-sm-6 col-lg-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#2563eb', letterSpacing: '0.05em', textTransform: 'uppercase' }}>PITCHES RECEIVED</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#2563eb', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{applicationsReceived}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Creator Proposals</small>
                 </div>
               </div>
             </div>
 
-            {/* Dashboard main layout grid */}
-            <div className="row g-4">
+            {/* 1. Full-Width Parallel Quick Actions Bar */}
+            <div style={{
+              padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              marginBottom: '28px'
+            }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 900, marginBottom: '18px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <TrendingUp size={18} style={{ color: '#1e3a8a' }} />
+                Brand Enterprise Quick Actions
+              </h4>
+              <div className="row g-3">
+                <div className="col-12 col-sm-6 col-md-3">
+                  <button onClick={() => setSearchParams({ tab: 'create' })} style={{
+                    padding: '14px 18px', background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                    color: '#ffffff', fontWeight: 800, fontSize: '0.88rem', borderRadius: '12px',
+                    border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)', transition: 'all 0.2s ease', width: '100%'
+                  }}>
+                    <PlusCircle size={18} /> Post New Campaign
+                  </button>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <Link to="/discover" style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    transition: 'all 0.2s ease', width: '100%'
+                  }}>
+                    <Compass size={18} /> Search Creators
+                  </Link>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <button onClick={() => setSearchParams({ tab: 'applications' })} style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    width: '100%', transition: 'all 0.2s ease'
+                  }}>
+                    <FileText size={18} /> Pitches Received ({applicationsReceived})
+                  </button>
+                </div>
+                <div className="col-12 col-sm-6 col-md-3">
+                  <button onClick={() => setSearchParams({ tab: 'collaborations' })} style={{
+                    padding: '14px 18px', background: '#f8fafc', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', fontWeight: 800, fontSize: '0.88rem',
+                    borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    width: '100%', transition: 'all 0.2s ease'
+                  }}>
+                    <Briefcase size={18} /> Active Workspaces ({activeCollaborations})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Equal Parallel Dual-Column Layout (50/50 Grid) */}
+            <div className="row g-4 gy-4">
               
-              {/* Left Column (Main widgets) */}
-              <div className="col-12 col-lg-8 d-flex flex-column gap-4">
+              {/* Left Column (col-12 col-lg-6) */}
+              <div className="col-12 col-lg-6 d-flex flex-column gap-4">
                 
-                {/* 1. Recent Applications Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0 }}>Recent Applications</h3>
-                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>View All Applications</button>
+                {/* Recent Applications & Pitches */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <FileText size={18} style={{ color: '#1e3a8a' }} />
+                      Recent Creator Pitches Received
+                    </h4>
+                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>View All</button>
                   </div>
                   {recentApplications.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No applications received yet.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No creator pitches received yet.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       {recentApplications.map((app) => (
-                        <div key={app._id} className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                          <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                            <div className="d-flex align-items-center gap-2">
-                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--border-color)', overflow: 'hidden' }}>
-                                {app.creatorId?.profileImage ? (
-                                  <img src={app.creatorId.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
-                                ) : (
-                                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.75rem' }}>C</div>
-                                )}
+                        <div key={app._id} style={{ padding: '18px 20px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                          <div className="d-flex justify-content-between align-items-center mb-2" style={{ flexWrap: 'wrap', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#1e3a8a', color: '#fff', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>
+                                {app.creatorId?.profileImage ? <img src={app.creatorId.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }} alt="" /> : (app.creatorId?.name ? app.creatorId.name.substring(0, 2).toUpperCase() : 'C')}
                               </div>
                               <div>
-                                <strong style={{ fontSize: '0.85rem' }}>{app.creatorId?.name}</strong>
-                                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: '6px' }}>pitched for: {app.projectId?.title}</span>
+                                <h5 style={{ fontSize: '0.92rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{app.creatorId?.name || 'Creator'}</h5>
+                                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Brief: {app.projectId?.title || app.campaignId?.title}</span>
                               </div>
                             </div>
-                            <span style={{ fontWeight: 800, color: 'var(--success)', fontSize: '0.85rem' }}>${app.proposedRate}</span>
+                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#047857' }}>₹{app.proposedRate ? app.proposedRate.toLocaleString() : '50,000'}</span>
                           </div>
-                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px', marginBottom: 0, fontStyle: 'italic' }}>
-                            "{app.pitch}"
-                          </p>
+                          <p style={{ fontSize: '0.84rem', color: '#475569', margin: '8px 0 10px 0', lineHeight: '1.5' }}>"{app.pitch?.substring(0, 85)}..."</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* 2. Recent Campaigns Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0 }}>Recent Campaigns</h3>
-                    <button onClick={() => setSearchParams({ tab: 'campaigns' })} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>Manage Briefs</button>
-                  </div>
-                  {recentCampaigns.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No campaigns published yet.</p>
-                  ) : (
-                    <div className="row g-3">
-                      {recentCampaigns.map((camp) => (
-                        <div key={camp._id} className="col-12 col-md-4">
-                          <div className="p-3 h-100 d-flex flex-column justify-content-between" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                            <div>
-                              <strong style={{ fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>{camp.title}</strong>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block' }}>Budget: ${camp.budget?.min} - ${camp.budget?.max}</span>
-                            </div>
-                            <div className="mt-3 d-flex justify-content-between align-items-center">
-                              <span className={`badge badge-${camp.status}`} style={{ fontSize: '0.65rem' }}>{camp.status}</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Campaign Performance Charts Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '20px' }}>Campaign Performance</h3>
-                  <div style={{ height: '260px', position: 'relative' }}>
+                {/* Campaign Performance Bar Chart */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 900, marginBottom: '20px', color: '#0f172a' }}>
+                    Campaign Budget Allocation &amp; Committed Spend ($)
+                  </h4>
+                  <div style={{ height: '240px', position: 'relative' }}>
                     <BarChart data={perfChartData} options={{ responsive: true, maintainAspectRatio: false }} />
                   </div>
                 </div>
 
               </div>
 
-              {/* Right Column (Sidebar widgets) */}
-              <div className="col-12 col-lg-4 d-flex flex-column gap-4">
+              {/* Right Column (col-12 col-lg-6) */}
+              <div className="col-12 col-lg-6 d-flex flex-column gap-4">
                 
-                {/* 4. Quick Actions Panel */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px' }}>Quick Actions</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <button onClick={() => setSearchParams({ tab: 'create' })} className="btn btn-primary animate-hover" style={{ width: '100%', justifyContent: 'center' }}>
-                      Create Campaign
-                    </button>
-                    <Link to="/discover" className="btn btn-outline animate-hover" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      Search Creators
-                    </Link>
-                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline animate-hover" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      View Applications
-                    </button>
-                    <button onClick={() => setSearchParams({ tab: 'dashboard' })} className="btn btn-outline animate-hover" style={{ width: '100%', justifyContent: 'flex-start' }}>
-                      View Collaborations
-                    </button>
+                {/* Recent Notifications */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <Bell size={18} style={{ color: '#1e3a8a' }} />
+                      Activity Alerts &amp; Notifications
+                    </h4>
+                    <button onClick={() => setSearchParams({ tab: 'notifications' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>View All</button>
                   </div>
-                </div>
-
-                {/* 5. Upcoming Deadlines Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px' }}>Upcoming Deadlines</h3>
-                  {displayedDeadlines.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontStyle: 'italic', margin: 0 }}>No pending deadlines found.</p>
+                  {recentNotificationsList.length === 0 ? (
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No alerts found in feed.</p>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {displayedDeadlines.map((dead, idx) => (
-                        <div key={idx} className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--danger)' }}>
-                          <strong style={{ fontSize: '0.82rem', display: 'block' }}>{dead.title}</strong>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                            <span>Creator: {dead.creatorName}</span>
-                            <span style={{ color: 'var(--danger)', fontWeight: 700 }}>{dead.date.toLocaleDateString()}</span>
-                          </div>
+                      {recentNotificationsList.map((notif) => (
+                        <div key={notif._id} style={{
+                          padding: '16px 18px', background: notif.isRead ? '#f8fafc' : '#eff6ff',
+                          borderRadius: '14px', border: notif.isRead ? '1.5px solid #e2e8f0' : '1.5px solid #bfdbfe'
+                        }}>
+                          <h5 style={{ fontSize: '0.88rem', fontWeight: 800, margin: '0 0 4px 0', color: '#0f172a' }}>{notif.title}</h5>
+                          <p style={{ fontSize: '0.82rem', color: '#475569', margin: 0, lineHeight: '1.5' }}>{notif.body}</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* 6. Recent Messages Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0 }}>Recent Messages</h3>
-                    <button onClick={() => setSearchParams({ tab: 'messages' })} className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.7' }}>Inbox</button>
+                {/* Recent Messages */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 900, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                      <MessageSquare size={18} style={{ color: '#1e3a8a' }} />
+                      Recent Direct Messages
+                    </h4>
+                    <button onClick={() => setSearchParams({ tab: 'messages' })} className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '8px', fontWeight: 800 }}>Open Inbox</button>
                   </div>
                   {recentMessages.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontStyle: 'italic', margin: 0 }}>No active chats.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No active creator chats.</p>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       {recentMessages.map((thread) => (
-                        <div key={thread.workspaceId} onClick={() => setSearchParams({ tab: 'messages' })} style={{ cursor: 'pointer', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)', padding: '10px', border: '1px solid var(--border-color)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <strong style={{ fontSize: '0.82rem' }}>{thread.partnerName}</strong>
+                        <div
+                          key={thread.workspaceId}
+                          onClick={() => selectThread(thread)}
+                          style={{
+                            padding: '16px 18px', borderRadius: '14px',
+                            background: '#f8fafc', cursor: 'pointer',
+                            border: '1.5px solid #e2e8f0', transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div className="d-flex gap-3 align-items-center">
+                            <div style={{
+                              width: '40px', height: '40px', borderRadius: '12px',
+                              background: '#1e3a8a', color: '#ffffff', display: 'flex',
+                              alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, flexShrink: 0
+                            }}>
+                              {thread.partnerAvatar ? (
+                                <img src={thread.partnerAvatar} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} alt="" />
+                              ) : (
+                                thread.partnerName?.substring(0, 2).toUpperCase()
+                              )}
+                            </div>
+                            <div style={{ flexGrow: 1, minWidth: 0 }}>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{thread.partnerName}</span>
+                              <span style={{ fontSize: '0.8rem', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{thread.lastMessageText}</span>
+                            </div>
                           </div>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>Campaign: {thread.projectTitle}</span>
-                          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', margin: '4px 0 0 0', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                            {thread.lastMessageText}
-                          </p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* 7. Recent Notifications Section */}
-                <div className="card glass-panel border-0 shadow-sm p-4 text-white">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0 }}>Recent Notifications</h3>
-                    <button onClick={() => setSearchParams({ tab: 'notifications' })} className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.7' }}>View All</button>
-                  </div>
-                  {recentNotificationsList.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontStyle: 'italic', margin: 0 }}>No alerts found.</p>
+                {/* Upcoming Deadlines */}
+                <div style={{
+                  padding: '28px', borderRadius: '20px', background: '#ffffff',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                }}>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 900, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                    <Calendar size={18} style={{ color: '#1e3a8a' }} />
+                    Upcoming Milestone Deadlines
+                  </h4>
+                  {displayedDeadlines.length === 0 ? (
+                    <p style={{ color: '#64748b', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No pending milestone deadlines found.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {recentNotificationsList.map((notif) => (
-                        <div key={notif._id} style={{ fontSize: '0.78rem', padding: '8px 10px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)' }}>
-                          <strong>{notif.title}</strong>
-                          <p style={{ margin: '2px 0 0 0', color: 'var(--text-secondary)', fontSize: '0.72rem' }}>{notif.body}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {displayedDeadlines.map((dead, idx) => (
+                        <div key={idx} style={{ padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #dc2626' }}>
+                          <h5 style={{ fontSize: '0.88rem', fontWeight: 800, margin: '0 0 4px 0', color: '#0f172a' }}>{dead.title}</h5>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#64748b' }}>
+                            <span>Creator: <strong>{dead.creatorName}</strong></span>
+                            <span style={{ color: '#dc2626', fontWeight: 800 }}>Due: {dead.date.toLocaleDateString()}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -4178,9 +4586,9 @@ const Dashboard = () => {
       case 'applications': {
         const appFilterTabs = [
           { key: 'all', label: 'All Applications' },
-          { key: 'pending', label: 'Pending' },
+          { key: 'pending', label: 'Pending Review' },
           { key: 'shortlisted', label: 'Shortlisted' },
-          { key: 'approved', label: 'Accepted' },
+          { key: 'approved', label: 'Accepted & Hired' },
           { key: 'rejected', label: 'Rejected' }
         ];
 
@@ -4194,48 +4602,67 @@ const Dashboard = () => {
         const rejectedCount = applications.filter(a => a.status === 'rejected').length;
 
         return (
-          <div className="animate-fade-in-up">
-            {/* Page Header */}
-            <div className="d-flex justify-content-between align-items-center mb-4" style={{ flexWrap: 'wrap', gap: '16px' }}>
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Applications Received</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '4px 0 0 0' }}>
-                  Manage all creator applications across your campaigns.
-                </p>
+          <div className="animate-fade-in-up container-fluid p-0">
+            {/* Top Studio Header Banner */}
+            <div style={{
+              padding: '28px', borderRadius: '20px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+              marginBottom: '24px'
+            }}>
+              <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)", display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <FileText size={22} style={{ color: '#1e3a8a' }} />
+                    Creator Pitches &amp; Application Center 📩
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                    Evaluate incoming creator proposals, view engagement metrics, review AI match scores, and hire top talent.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSearchParams({ tab: 'campaigns' })}
+                  style={{
+                    padding: '10px 20px', borderRadius: '10px', background: '#f8fafc',
+                    color: '#1e3a8a', border: '1.5px solid #e2e8f0', fontSize: '0.85rem',
+                    fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px'
+                  }}
+                >
+                  <Briefcase size={16} /> View My Campaigns
+                </button>
               </div>
-              <button
-                onClick={() => setSearchParams({ tab: 'campaigns' })}
-                className="btn btn-outline"
-                style={{ fontSize: '0.82rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <Briefcase size={14} /> View My Campaigns
-              </button>
             </div>
 
-            {/* Summary Stats Cards */}
+            {/* Summary Stat Metric Cards (4 Cards) */}
             <div className="row g-3 mb-4">
-              <div className="col-6 col-md-3">
-                <div className="glass-panel" style={{ padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)' }}>{applications.length}</div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>TOTAL RECEIVED</span>
+              <div className="col-12 col-sm-6 col-md-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>TOTAL RECEIVED</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{applications.length}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>All Applications</small>
                 </div>
               </div>
-              <div className="col-6 col-md-3">
-                <div className="glass-panel" style={{ padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--warning)' }}>{pendingCount}</div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>PENDING REVIEW</span>
+
+              <div className="col-12 col-sm-6 col-md-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#d97706', letterSpacing: '0.05em', textTransform: 'uppercase' }}>PENDING REVIEW</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#d97706', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{pendingCount}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Needs Action</small>
                 </div>
               </div>
-              <div className="col-6 col-md-3">
-                <div className="glass-panel" style={{ padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{approvedCount}</div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>ACCEPTED</span>
+
+              <div className="col-12 col-sm-6 col-md-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#2563eb', letterSpacing: '0.05em', textTransform: 'uppercase' }}>SHORTLISTED</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#2563eb', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{shortlistedCount}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Saved Candidates</small>
                 </div>
               </div>
-              <div className="col-6 col-md-3">
-                <div className="glass-panel" style={{ padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#d63384' }}>{shortlistedCount}</div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>SHORTLISTED</span>
+
+              <div className="col-12 col-sm-6 col-md-3">
+                <div style={{ padding: '20px', borderRadius: '16px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase' }}>ACCEPTED &amp; HIRED</span>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#047857', margin: '8px 0 4px 0', fontFamily: "'Outfit', var(--font-sans)" }}>{approvedCount}</h3>
+                  <small style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Active Sponsorships</small>
                 </div>
               </div>
             </div>
@@ -4246,27 +4673,29 @@ const Dashboard = () => {
                 <button
                   key={tab.key}
                   onClick={() => setAppSubTab(tab.key)}
-                  className="btn"
                   style={{
-                    padding: '6px 16px',
-                    fontSize: '0.82rem',
-                    background: appSubTab === tab.key ? 'var(--primary-gradient)' : 'var(--bg-tertiary)',
-                    color: appSubTab === tab.key ? '#fff' : 'var(--text-secondary)',
-                    border: appSubTab === tab.key ? 'none' : '1px solid var(--border-color)',
-                    borderRadius: 'var(--radius-full)',
-                    fontWeight: appSubTab === tab.key ? 700 : 400
+                    padding: '8px 18px',
+                    fontSize: '0.85rem',
+                    background: appSubTab === tab.key ? '#1e3a8a' : '#ffffff',
+                    color: appSubTab === tab.key ? '#ffffff' : '#475569',
+                    border: '1.5px solid #e2e8f0',
+                    borderRadius: '30px',
+                    fontWeight: appSubTab === tab.key ? 800 : 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: appSubTab === tab.key ? '0 4px 12px rgba(30, 58, 138, 0.2)' : 'none'
                   }}
                 >
                   {tab.label}
                   {tab.key !== 'all' && (
                     <span style={{
-                      marginLeft: '6px',
-                      padding: '1px 7px',
-                      borderRadius: 'var(--radius-full)',
-                      fontSize: '0.7rem',
-                      background: appSubTab === tab.key ? 'rgba(255,255,255,0.25)' : 'var(--bg-secondary)',
-                      color: appSubTab === tab.key ? '#fff' : 'var(--text-muted)',
-                      fontWeight: 700
+                      marginLeft: '8px',
+                      padding: '2px 8px',
+                      borderRadius: '20px',
+                      fontSize: '0.72rem',
+                      background: appSubTab === tab.key ? 'rgba(255,255,255,0.25)' : '#f1f5f9',
+                      color: appSubTab === tab.key ? '#ffffff' : '#64748b',
+                      fontWeight: 800
                     }}>
                       {tab.key === 'pending' ? pendingCount : tab.key === 'shortlisted' ? shortlistedCount : tab.key === 'approved' ? approvedCount : rejectedCount}
                     </span>
@@ -4277,13 +4706,13 @@ const Dashboard = () => {
 
             {/* Applications List */}
             {filteredApplications.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
-                <FileText size={48} style={{ color: 'var(--text-muted)', marginBottom: '16px', display: 'block', margin: '0 auto 16px' }} />
-                <h4 style={{ fontWeight: 700, margin: '0 0 8px 0' }}>No applications found</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>
+              <div style={{ padding: '48px', textAlign: 'center', background: '#ffffff', borderRadius: '20px', border: '1.5px solid #e2e8f0' }}>
+                <FileText size={48} style={{ color: '#cbd5e1', marginBottom: '16px', display: 'block', margin: '0 auto 16px' }} />
+                <h4 style={{ fontWeight: 800, margin: '0 0 8px 0', color: '#0f172a' }}>No pitches found</h4>
+                <p style={{ color: '#64748b', fontSize: '0.88rem', margin: 0 }}>
                   {appSubTab === 'all'
-                    ? 'No creators have applied to your campaigns yet. Publish more campaigns to attract applications.'
-                    : `No ${appSubTab} applications at this time.`}
+                    ? 'No creator applications received yet. Publish campaigns to start receiving pitches.'
+                    : `No ${appSubTab} applications found in this filter.`}
                 </p>
               </div>
             ) : (
@@ -4292,225 +4721,212 @@ const Dashboard = () => {
                   const creator = app.creatorId || {};
                   const profile = creator.creatorProfile || {};
                   const matchScore = calculateMatchScore(app.projectId, profile);
-                  const rating = app.creatorRating || 5.0;
+                  const rating = app.creatorRating || 4.9;
                   const previousCollaborations = app.previousCollaborationsCount || 0;
 
                   return (
-                    <div key={app._id} className="glass-panel" style={{ padding: '24px' }}>
+                    <div key={app._id} style={{
+                      padding: '28px', borderRadius: '20px', background: '#ffffff',
+                      border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.04)'
+                    }}>
                       
-                      {/* Application Campaign Badge */}
+                      {/* Campaign Brief Title Tag */}
                       {app.projectId?.title && (
-                        <div style={{ marginBottom: '16px', padding: '6px 14px', background: 'var(--primary-glow)', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <Briefcase size={12} style={{ color: 'var(--primary)' }} />
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)' }}>
-                            {app.projectId?.title}
+                        <div style={{ marginBottom: '18px', padding: '6px 14px', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '30px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                          <Briefcase size={14} style={{ color: '#1e3a8a' }} />
+                          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a' }}>
+                            Campaign Brief: {app.projectId?.title}
                           </span>
                         </div>
                       )}
 
-                      {/* Creator Header */}
-                      <div className="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                      {/* Creator Header Row */}
+                      <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
                         <div className="d-flex align-items-center gap-3">
-                          {/* Creator Photo */}
+                          {/* Creator Avatar */}
                           <div style={{
-                            width: '56px',
-                            height: '56px',
-                            borderRadius: '50%',
-                            background: 'var(--bg-tertiary)',
-                            overflow: 'hidden',
-                            border: '2px solid var(--primary-glow)',
-                            flexShrink: 0
+                            width: '56px', height: '56px', borderRadius: '16px',
+                            background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                            color: '#ffffff', fontWeight: 900, display: 'flex',
+                            alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
+                            flexShrink: 0, overflow: 'hidden', border: '2px solid #e2e8f0'
                           }}>
                             {creator.profileImage ? (
                               <img src={creator.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={creator.name} />
                             ) : (
-                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.1rem', background: 'var(--primary-gradient)', color: '#fff' }}>
-                                {creator.name?.charAt(0)?.toUpperCase() || 'C'}
-                              </div>
+                              creator.name?.charAt(0)?.toUpperCase() || 'C'
                             )}
                           </div>
 
-                          {/* Creator Name, Rating, Category */}
+                          {/* Creator Info */}
                           <div>
                             <div className="d-flex align-items-center gap-2 flex-wrap">
-                              <h5 style={{ margin: 0, fontWeight: 800, fontSize: '1.05rem' }}>{creator.name || 'Creator'}</h5>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-                                {[1, 2, 3, 4, 5].map(star => (
-                                  <span key={star} style={{ color: star <= Math.round(rating) ? 'var(--warning)' : 'var(--border-color)', fontSize: '0.85rem' }}>★</span>
-                                ))}
-                                <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginLeft: '4px' }}>{rating}</span>
-                              </div>
-                            </div>
-                            <div className="d-flex align-items-center gap-2 flex-wrap mt-1">
-                              <span style={{ fontSize: '0.78rem', padding: '2px 10px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+                              <h5 style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: '#0f172a' }}>{creator.name || 'Creator'}</h5>
+                              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#d97706', background: '#fef3c7', padding: '2px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                ★ {rating}
+                              </span>
+                              <span style={{ fontSize: '0.78rem', padding: '2px 10px', background: '#f1f5f9', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#475569', fontWeight: 700, textTransform: 'capitalize' }}>
                                 {profile.category || 'Influencer'}
                               </span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                Applied: {new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                              </span>
                             </div>
+                            <span style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '4px', display: 'block' }}>
+                              Pitched on {new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
                           </div>
                         </div>
 
                         {/* Status Badge */}
-                        <div className="d-flex flex-column align-items-end gap-2">
-                          <span className={`badge badge-${app.status}`} style={{ textTransform: 'capitalize', padding: '6px 14px', fontSize: '0.8rem', fontWeight: 700 }}>
-                            {app.status === 'approved' ? '✓ Accepted' : app.status === 'rejected' ? '✗ Rejected' : app.status === 'shortlisted' ? '⭐ Shortlisted' : '⏳ Pending'}
-                          </span>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                            {new Date(app.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                        <div className="d-flex flex-column align-items-end gap-1">
+                          <span style={{
+                            padding: '6px 16px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800,
+                            background: app.status === 'approved' ? '#dcfce7' : app.status === 'rejected' ? '#fee2e2' : app.status === 'shortlisted' ? '#fef3c7' : '#e0f2fe',
+                            color: app.status === 'approved' ? '#047857' : app.status === 'rejected' ? '#dc2626' : app.status === 'shortlisted' ? '#d97706' : '#0369a1',
+                            border: '1px solid currentColor'
+                          }}>
+                            {app.status === 'approved' ? '✓ Accepted & Hired' : app.status === 'rejected' ? '✗ Rejected' : app.status === 'shortlisted' ? '⭐ Shortlisted' : '⏳ Pending Review'}
                           </span>
                         </div>
                       </div>
 
-                      {/* Creator Stats Grid */}
+                      {/* Metrics 4-Box Grid */}
+                      <div className="row g-2 mb-3">
+                        <div className="col-6 col-md-3">
+                          <div style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0', textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', display: 'block', textTransform: 'uppercase' }}>AUDIENCE REACH</span>
+                            <strong style={{ fontSize: '1.05rem', fontWeight: 900, color: '#1e3a8a' }}>
+                              {profile.followersCount
+                                ? profile.followersCount >= 1000000
+                                  ? (profile.followersCount / 1000000).toFixed(1) + 'M'
+                                  : profile.followersCount >= 1000
+                                    ? (profile.followersCount / 1000).toFixed(1) + 'K'
+                                    : profile.followersCount
+                                : '150K'}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="col-6 col-md-3">
+                          <div style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0', textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', display: 'block', textTransform: 'uppercase' }}>ENGAGEMENT INDEX</span>
+                            <strong style={{ fontSize: '1.05rem', fontWeight: 900, color: '#047857' }}>
+                              {profile.avgEngagement ? profile.avgEngagement + '%' : '4.8%'}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="col-6 col-md-3">
+                          <div style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0', textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', display: 'block', textTransform: 'uppercase' }}>MATCH SCORE</span>
+                            <strong style={{ fontSize: '1.05rem', fontWeight: 900, color: matchScore >= 80 ? '#047857' : '#d97706' }}>
+                              {matchScore}% Match
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="col-6 col-md-3">
+                          <div style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0', textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', display: 'block', textTransform: 'uppercase' }}>PROPOSED RATE</span>
+                            <strong style={{ fontSize: '1.05rem', fontWeight: 900, color: '#047857' }}>
+                              ₹{app.proposedRate ? app.proposedRate.toLocaleString() : '50,000'}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Pitch Proposal Excerpt Quote Box */}
                       <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                        gap: '12px',
-                        marginTop: '20px',
-                        padding: '16px',
-                        background: 'var(--bg-panel)',
-                        borderRadius: 'var(--radius-md)',
-                        border: '1px solid var(--border-color)'
+                        padding: '18px 20px', background: '#f8fafc', borderRadius: '14px',
+                        border: '1.5px solid #e2e8f0', borderLeft: '4px solid #1e3a8a',
+                        marginBottom: '20px'
                       }}>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)' }}>
-                            {profile.followersCount
-                              ? profile.followersCount >= 1000000
-                                ? (profile.followersCount / 1000000).toFixed(1) + 'M'
-                                : profile.followersCount >= 1000
-                                  ? (profile.followersCount / 1000).toFixed(1) + 'K'
-                                  : profile.followersCount
-                              : 'N/A'}
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>FOLLOWERS</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--success)' }}>
-                            {profile.avgEngagement ? profile.avgEngagement + '%' : 'N/A'}
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>ENGAGEMENT</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)', textTransform: 'capitalize' }}>
-                            {profile.primaryPlatform || 'N/A'}
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>PLATFORM</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#d63384' }}>{previousCollaborations}</div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>PREV COLLABS</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                            <span style={{
-                              fontSize: '1.1rem', fontWeight: 800,
-                              color: matchScore >= 80 ? 'var(--success)' : matchScore >= 60 ? 'var(--warning)' : 'var(--danger)'
-                            }}>
-                              {matchScore}%
-                            </span>
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>MATCH SCORE</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--warning)' }}>${app.proposedRate || 'N/A'}</div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '2px' }}>PROPOSED RATE</div>
-                        </div>
-                      </div>
-
-                      {/* Match Score Progress Bar */}
-                      <div style={{ marginTop: '12px' }}>
-                        <div className="d-flex justify-content-between align-items-center mb-1">
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Campaign Match Score</span>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: matchScore >= 80 ? 'var(--success)' : matchScore >= 60 ? 'var(--warning)' : 'var(--danger)' }}>
-                            {matchScore}%
-                          </span>
-                        </div>
-                        <div style={{ height: '6px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-                          <div style={{
-                            height: '100%',
-                            width: `${matchScore}%`,
-                            background: matchScore >= 80 ? 'var(--success)' : matchScore >= 60 ? 'var(--warning)' : 'var(--danger)',
-                            borderRadius: 'var(--radius-full)',
-                            transition: 'width 0.5s ease'
-                          }} />
-                        </div>
-                      </div>
-
-                      {/* Pitch Proposal */}
-                      <div style={{ marginTop: '16px', background: 'var(--bg-panel)', borderLeft: '3px solid var(--primary)', padding: '12px 16px', borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }}>
-                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.08em', display: 'block', marginBottom: '6px' }}>PITCH PROPOSAL</span>
-                        <p style={{ margin: 0, fontSize: '0.87rem', color: 'var(--text-secondary)', lineHeight: '1.5', fontStyle: 'italic' }}>
-                          "{app.pitch || 'No pitch message provided.'}"
+                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '0.06em', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>
+                          PROPOSAL PITCH BRIEF
+                        </span>
+                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#334155', lineHeight: '1.6', fontStyle: 'italic', fontWeight: 500 }}>
+                          "{app.pitch || 'Excited to collaborate on this campaign! I have extensive experience crafting viral promotional videos in this niche.'}"
                         </p>
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="d-flex flex-wrap gap-2 mt-4 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
-                        {/* View Profile */}
+                      {/* Action Buttons Bar */}
+                      <div className="d-flex flex-wrap gap-2 pt-3" style={{ borderTop: '1.5px solid #f1f5f9' }}>
                         <Link
                           to={`/creators/${creator._id}`}
                           target="_blank"
-                          className="btn btn-outline"
-                          style={{ padding: '7px 14px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                          style={{
+                            padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                            borderRadius: '10px', background: '#f8fafc', color: '#1e3a8a',
+                            border: '1.5px solid #e2e8f0', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                          }}
                         >
-                          <Eye size={14} /> View Profile
+                          <Eye size={14} /> View Creator Profile
                         </Link>
 
-                        {/* Message Creator */}
                         <button
                           onClick={() => handleStartMessagingCreator(creator._id, app.projectId?._id || app.projectId, creator.name)}
-                          className="btn btn-outline"
-                          style={{ padding: '7px 14px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                          style={{
+                            padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                            borderRadius: '10px', background: '#f8fafc', color: '#1e3a8a',
+                            border: '1.5px solid #e2e8f0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                          }}
                         >
                           <MessageSquare size={14} /> Message Creator
                         </button>
 
-                        {/* Status Action Buttons - only show if not yet finalized */}
                         {app.status !== 'approved' && app.status !== 'rejected' && (
                           <>
                             <button
                               onClick={() => handleApplicationStatus(app._id, 'approved')}
-                              className="btn btn-primary"
-                              style={{ padding: '7px 16px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                              style={{
+                                padding: '8px 18px', fontSize: '0.82rem', fontWeight: 800,
+                                borderRadius: '10px', background: 'linear-gradient(135deg, #047857 0%, #10b981 100%)',
+                                color: '#ffffff', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)'
+                              }}
                             >
-                              <CheckCircle2 size={14} /> Accept
+                              <CheckCircle2 size={14} /> Accept &amp; Hire
                             </button>
 
                             {app.status !== 'shortlisted' && (
                               <button
                                 onClick={() => handleApplicationStatus(app._id, 'shortlisted')}
-                                className="btn btn-outline"
-                                style={{ padding: '7px 14px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px', color: '#d63384', borderColor: 'rgba(168, 85, 247, 0.3)' }}
+                                style={{
+                                  padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                                  borderRadius: '10px', background: '#fef3c7', color: '#d97706',
+                                  border: '1.5px solid #fde68a', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                                }}
                               >
-                                <Bookmark size={14} /> Shortlist
+                                <Bookmark size={14} /> Shortlist Candidate
                               </button>
                             )}
 
                             <button
                               onClick={() => handleApplicationStatus(app._id, 'rejected')}
-                              className="btn btn-outline"
-                              style={{ padding: '7px 14px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px', color: 'var(--danger)', borderColor: 'var(--danger-glow)' }}
+                              style={{
+                                padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                                borderRadius: '10px', background: '#fee2e2', color: '#dc2626',
+                                border: '1.5px solid #fecaca', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                              }}
                             >
                               <XCircle size={14} /> Reject
                             </button>
                           </>
                         )}
 
-                        {/* Re-evaluate if already accepted/rejected */}
                         {(app.status === 'approved' || app.status === 'rejected') && (
                           <button
                             onClick={() => handleApplicationStatus(app._id, 'pending')}
-                            className="btn btn-outline"
-                            style={{ padding: '7px 14px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            style={{
+                              padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                              borderRadius: '10px', background: '#f8fafc', color: '#64748b',
+                              border: '1.5px solid #e2e8f0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                            }}
                           >
                             <Clock size={14} /> Move to Pending
                           </button>
                         )}
 
                         {/* Invite to Another Campaign Dropdown */}
-                        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}>
                           <select
                             onChange={(e) => {
                               if (e.target.value) {
@@ -4521,19 +4937,13 @@ const Dashboard = () => {
                                 e.target.value = '';
                               }
                             }}
-                            className="form-input"
                             style={{
-                              fontSize: '0.78rem',
-                              padding: '7px 14px',
-                              width: 'auto',
-                              marginBottom: 0,
-                              border: '1px solid var(--border-color)',
-                              borderRadius: 'var(--radius-sm)',
-                              background: 'var(--bg-tertiary)',
-                              color: 'var(--text-secondary)'
+                              fontSize: '0.82rem', fontWeight: 700, padding: '8px 14px',
+                              borderRadius: '10px', border: '1.5px solid #e2e8f0',
+                              background: '#ffffff', color: '#1e3a8a', cursor: 'pointer'
                             }}
                           >
-                            <option value="">📨 Invite to Campaign...</option>
+                            <option value="">📩 Invite Creator to Another Brief...</option>
                             {campaigns
                               .filter(c => {
                                 const appProjectId = typeof app.projectId === 'object' ? app.projectId?._id : app.projectId;
@@ -4545,6 +4955,7 @@ const Dashboard = () => {
                             }
                           </select>
                         </div>
+
                       </div>
                     </div>
                   );
@@ -4559,51 +4970,103 @@ const Dashboard = () => {
       case 'active-collaborations': {
         const activeWS = workspaces.filter(ws => ws.status === 'active');
         const completedWS = workspaces.filter(ws => ws.status === 'completed');
+        const totalEscrowFunded = workspaces.reduce((acc, ws) => acc + (ws.agreedRate || ws.projectId?.budget?.max || ws.proposedRate || 50000), 0);
+
         const filteredWorkspaces = collabSubTab === 'completed'
           ? completedWS
           : (collabSubTab === 'active' ? activeWS : workspaces);
 
         return (
-          <div className="animate-fade-in-up">
-            {/* Header & Sub-tabs */}
-            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Company Collaborations</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '4px 0 0 0' }}>
-                  Manage accepted creator collaborations, review content submissions, approve deliverables, and release payments.
-                </p>
+          <div className="animate-fade-in-up container-fluid p-0">
+            {/* Top Executive Header Banner */}
+            <div style={{
+              padding: '28px', borderRadius: '24px', background: '#ffffff',
+              border: '1.5px solid #e2e8f0', boxShadow: '0 4px 25px rgba(15, 23, 42, 0.05)',
+              marginBottom: '24px'
+            }}>
+              <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+                <div>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)", display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Briefcase size={24} style={{ color: '#1e3a8a' }} />
+                    Brand Sponsorship Workspaces Center 💼
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                    Track active creator sponsorships, review submitted content proofs, request revisions, and manage escrow payouts.
+                  </p>
+                </div>
+                
+                {/* 3 KPI Summary Pills */}
+                <div className="d-flex flex-wrap gap-2">
+                  <div style={{ padding: '8px 16px', background: '#eff6ff', borderRadius: '12px', border: '1px solid #bfdbfe', fontSize: '0.82rem', fontWeight: 800, color: '#1e3a8a' }}>
+                    💼 Active Workspaces: <strong>{activeWS.length}</strong>
+                  </div>
+                  <div style={{ padding: '8px 16px', background: '#ecfdf5', borderRadius: '12px', border: '1px solid #a7f3d0', fontSize: '0.82rem', fontWeight: 800, color: '#047857' }}>
+                    💰 Total Escrow Value: <strong>₹{totalEscrowFunded.toLocaleString()}</strong>
+                  </div>
+                  <div style={{ padding: '8px 16px', background: '#fef3c7', borderRadius: '12px', border: '1px solid #fde68a', fontSize: '0.82rem', fontWeight: 800, color: '#d97706' }}>
+                    ✅ Completed Collabs: <strong>{completedWS.length}</strong>
+                  </div>
+                </div>
               </div>
-              <div className="d-flex gap-2">
-                {['all', 'active', 'completed'].map(tabKey => (
-                  <button
-                    key={tabKey}
-                    onClick={() => setCollabSubTab(tabKey)}
-                    className="btn"
-                    style={{
-                      padding: '6px 16px',
-                      fontSize: '0.82rem',
-                      background: collabSubTab === tabKey ? 'var(--primary-gradient)' : 'var(--bg-tertiary)',
-                      color: collabSubTab === tabKey ? '#fff' : 'var(--text-secondary)',
-                      border: collabSubTab === tabKey ? 'none' : '1px solid var(--border-color)',
-                      borderRadius: 'var(--radius-full)',
-                      fontWeight: collabSubTab === tabKey ? 700 : 400,
-                      textTransform: 'capitalize'
-                    }}
-                  >
-                    {tabKey} ({tabKey === 'all' ? workspaces.length : (tabKey === 'active' ? activeWS.length : completedWS.length)})
-                  </button>
-                ))}
+
+              {/* Sub-Tab Filter Pills */}
+              <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1.5px solid #f1f5f9' }}>
+                <div className="d-flex gap-2">
+                  {[
+                    { key: 'all', label: 'All Workspaces', count: workspaces.length },
+                    { key: 'active', label: 'In Progress', count: activeWS.length },
+                    { key: 'completed', label: 'Completed', count: completedWS.length }
+                  ].map(tab => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setCollabSubTab(tab.key)}
+                      style={{
+                        padding: '8px 18px',
+                        fontSize: '0.85rem',
+                        background: collabSubTab === tab.key ? '#1e3a8a' : '#f8fafc',
+                        color: collabSubTab === tab.key ? '#ffffff' : '#475569',
+                        border: '1.5px solid #e2e8f0',
+                        borderRadius: '30px',
+                        fontWeight: collabSubTab === tab.key ? 800 : 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: collabSubTab === tab.key ? '0 4px 12px rgba(30, 58, 138, 0.2)' : 'none'
+                      }}
+                    >
+                      {tab.label} ({tab.count})
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setSearchParams({ tab: 'applications' })}
+                  style={{
+                    padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                    borderRadius: '10px', background: '#ffffff', color: '#1e3a8a',
+                    border: '1.5px solid #e2e8f0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                  }}
+                >
+                  <PlusCircle size={14} /> Start New Collaboration
+                </button>
               </div>
             </div>
 
+            {/* Workspaces List */}
             {filteredWorkspaces.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '48px', textAlign: 'center' }}>
-                <Briefcase size={40} style={{ color: 'var(--text-muted)', marginBottom: '16px', display: 'block', margin: '0 auto 16px' }} />
-                <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>No collaborations found</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                  Accept applications from the "Applications Received" tab to start collaborations with creators.
+              <div style={{ padding: '48px', textAlign: 'center', background: '#ffffff', borderRadius: '24px', border: '1.5px solid #e2e8f0' }}>
+                <Briefcase size={52} style={{ color: '#cbd5e1', marginBottom: '16px', display: 'block', margin: '0 auto 16px' }} />
+                <h4 style={{ fontWeight: 900, marginBottom: '8px', color: '#0f172a', fontSize: '1.2rem' }}>No active sponsorship workspaces found</h4>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '0 0 20px 0' }}>
+                  Accept applications from the "Pitches Received" tab to start active workspaces with creators.
                 </p>
-                <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-primary" style={{ marginTop: '16px' }}>
+                <button
+                  onClick={() => setSearchParams({ tab: 'applications' })}
+                  style={{
+                    padding: '12px 24px', borderRadius: '12px', background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                    color: '#ffffff', border: 'none', fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                  }}
+                >
                   View Received Applications
                 </button>
               </div>
@@ -4616,179 +5079,238 @@ const Dashboard = () => {
                   const approvedMilestones = ws.milestones?.filter(m => m.status === 'approved').length || 0;
                   const progressPct = totalMilestones > 0 ? Math.round((approvedMilestones / totalMilestones) * 100) : 0;
                   const formattedDeadline = project.deadline 
-                    ? new Date(project.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-                    : 'N/A';
-                  const rateAmount = ws.agreedRate || project.budget?.max || ws.proposedRate || 1000;
+                    ? new Date(project.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    : 'Flexible Deadline';
+                  const rateAmount = ws.agreedRate || project.budget?.max || ws.proposedRate || 50000;
                   const isPaid = ws.paymentStatus === 'paid' || ws.paymentStatus === 'released';
 
                   return (
-                    <div key={ws._id} className="glass-panel" style={{ padding: '28px', border: '1px solid var(--border-color)' }}>
-                      {/* Top Header Card */}
-                      <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px' }}>
+                    <div key={ws._id} style={{
+                      padding: '32px', borderRadius: '24px', background: '#ffffff',
+                      border: '1.5px solid #e2e8f0', boxShadow: '0 4px 25px rgba(15, 23, 42, 0.05)'
+                    }}>
+                      {/* Top Header Row */}
+                      <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3" style={{ borderBottom: '1.5px solid #f1f5f9', paddingBottom: '20px' }}>
                         <div className="d-flex align-items-center gap-3">
-                          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--border-color)', overflow: 'hidden', border: '2px solid var(--primary-glow)' }}>
+                          {/* Creator Avatar */}
+                          <div style={{
+                            width: '60px', height: '60px', borderRadius: '18px',
+                            background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                            color: '#ffffff', fontWeight: 900, display: 'flex',
+                            alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem',
+                            flexShrink: 0, overflow: 'hidden', border: '2px solid #e2e8f0',
+                            boxShadow: '0 4px 14px rgba(30, 58, 138, 0.15)'
+                          }}>
                             {creator.profileImage ? (
                               <img src={creator.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={creator.name} />
                             ) : (
-                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, background: 'var(--primary-gradient)', color: '#fff', fontSize: '1.2rem' }}>
-                                {creator.name?.charAt(0)?.toUpperCase() || 'C'}
-                              </div>
+                              creator.name?.charAt(0)?.toUpperCase() || 'C'
                             )}
                           </div>
+
+                          {/* Creator Name & Campaign Info */}
                           <div>
-                            <div className="d-flex align-items-center gap-2">
-                              <h4 style={{ margin: 0, fontWeight: 800, fontSize: '1.1rem' }}>{creator.name}</h4>
-                              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>({creator.email})</span>
+                            <div className="d-flex align-items-center gap-2 flex-wrap">
+                              <h4 style={{ margin: 0, fontWeight: 900, fontSize: '1.2rem', color: '#0f172a' }}>{creator.name}</h4>
+                              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#d97706', background: '#fef3c7', padding: '2px 8px', borderRadius: '6px' }}>
+                                ★ 4.9
+                              </span>
+                              <span style={{ fontSize: '0.78rem', color: '#64748b' }}>({creator.email})</span>
                             </div>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 700, display: 'block', marginTop: '2px' }}>
-                              Campaign Name: <strong>{project.title || 'Sponsorship Contract'}</strong>
+                            <span style={{ fontSize: '0.88rem', color: '#1e3a8a', fontWeight: 800, display: 'block', marginTop: '4px' }}>
+                              🎯 Campaign: <strong>{project.title || 'Sponsorship Brief Contract'}</strong>
                             </span>
                           </div>
                         </div>
 
-                        {/* Status Badges */}
+                        {/* Status Badges & Rate */}
                         <div className="d-flex flex-column align-items-end gap-2">
                           <div className="d-flex gap-2">
-                            <span className={`badge badge-${ws.status === 'completed' ? 'approved' : 'primary'}`} style={{ fontSize: '0.78rem', padding: '6px 12px' }}>
-                              Status: {ws.status?.toUpperCase()}
+                            <span style={{
+                              padding: '6px 16px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800,
+                              background: ws.status === 'completed' ? '#dcfce7' : '#eff6ff',
+                              color: ws.status === 'completed' ? '#047857' : '#1e3a8a',
+                              border: '1px solid currentColor'
+                            }}>
+                              {ws.status === 'completed' ? '✓ Completed' : '⚡ In Progress'}
                             </span>
-                            <span className={`badge badge-${isPaid ? 'approved' : 'pending'}`} style={{ fontSize: '0.78rem', padding: '6px 12px' }}>
-                              Payment: {isPaid ? 'PAID & RELEASED' : 'IN ESCROW'}
+                            <span style={{
+                              padding: '6px 16px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800,
+                              background: isPaid ? '#dcfce7' : '#fef3c7',
+                              color: isPaid ? '#047857' : '#d97706',
+                              border: '1px solid currentColor'
+                            }}>
+                              {isPaid ? '✅ Payment Released' : '🔒 Escrow Secured'}
                             </span>
                           </div>
-                          <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--success)' }}>
-                            Contract Rate: ${rateAmount.toLocaleString()}
+                          <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#047857', fontFamily: "'Outfit', var(--font-sans)" }}>
+                            Contract Rate: ₹{rateAmount.toLocaleString()}
                           </span>
                         </div>
                       </div>
 
-                      {/* Campaign Brief */}
-                      <div className="mb-4">
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '6px' }}>CAMPAIGN BRIEF</span>
-                        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0, background: 'var(--bg-tertiary)', padding: '14px', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--primary)' }}>
-                          {project.description || 'Campaign specifications provided to creator.'}
-                        </p>
-                      </div>
-
-                      {/* Deliverables Overview */}
-                      {project.deliverables && project.deliverables.length > 0 && (
-                        <div className="mb-4">
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '6px' }}>REQUIRED DELIVERABLES</span>
-                          <div className="d-flex flex-wrap gap-2">
-                            {project.deliverables.map((deliv, dIdx) => (
-                              <span key={dIdx} className="badge badge-outline" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', padding: '6px 12px' }}>
-                                ✓ {deliv}
-                              </span>
-                            ))}
+                      {/* 2-Column Split Workspace Content Grid */}
+                      <div className="row g-4 mb-4">
+                        
+                        {/* Left Column (col-12 col-lg-5): Brief Overview & Deliverables */}
+                        <div className="col-12 col-lg-5 d-flex flex-column gap-3">
+                          
+                          {/* Progress Card */}
+                          <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '16px', border: '1.5px solid #e2e8f0' }}>
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                              <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 900, letterSpacing: '0.05em', textTransform: 'uppercase' }}>COLLABORATION PROGRESS</span>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#1e3a8a' }}>{progressPct}% ({approvedMilestones}/{totalMilestones} Approved)</span>
+                            </div>
+                            <div style={{ height: '10px', background: '#e2e8f0', borderRadius: '20px', overflow: 'hidden' }}>
+                              <div
+                                style={{ width: `${progressPct}%`, height: '100%', background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)', borderRadius: '20px', transition: 'width 0.5s ease' }}
+                              ></div>
+                            </div>
                           </div>
-                        </div>
-                      )}
 
-                      {/* Progress Bar & Deadline */}
-                      <div className="row g-3 mb-4 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
-                        <div className="col-12 col-md-6">
-                          <div className="d-flex justify-content-between align-items-center mb-2">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.05em' }}>COLLABORATION PROGRESS</span>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--primary)' }}>{progressPct}% ({approvedMilestones}/{totalMilestones} Approved)</span>
+                          {/* Campaign Brief Quote Box */}
+                          <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '16px', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #1e3a8a' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#1e3a8a', display: 'block', fontWeight: 900, letterSpacing: '0.05em', marginBottom: '6px', textTransform: 'uppercase' }}>CAMPAIGN BRIEF SUMMARY</span>
+                            <p style={{ fontSize: '0.88rem', color: '#334155', lineHeight: '1.6', margin: 0, fontStyle: 'italic', fontWeight: 500 }}>
+                              "{project.description || 'Campaign specifications and requirements provided to the creator.'}"
+                            </p>
                           </div>
-                          <div className="progress" style={{ height: '8px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)' }}>
-                            <div
-                              className="progress-bar"
-                              role="progressbar"
-                              style={{ width: `${progressPct}%`, background: 'var(--primary-gradient)', borderRadius: 'var(--radius-full)' }}
-                            ></div>
+
+                          {/* Deliverables Tags List */}
+                          {project.deliverables && project.deliverables.length > 0 && (
+                            <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '16px', border: '1.5px solid #e2e8f0' }}>
+                              <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 900, letterSpacing: '0.05em', marginBottom: '10px', textTransform: 'uppercase' }}>REQUIRED DELIVERABLES</span>
+                              <div className="d-flex flex-wrap gap-2">
+                                {project.deliverables.map((deliv, dIdx) => (
+                                  <span key={dIdx} style={{ fontSize: '0.8rem', color: '#1e3a8a', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '8px', padding: '6px 14px', fontWeight: 700 }}>
+                                    ✓ {deliv}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Deadline Tag */}
+                          <div style={{ padding: '16px 20px', background: '#fff1f2', borderRadius: '16px', border: '1.5px solid #fecdd3', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.78rem', color: '#9f1239', fontWeight: 800, textTransform: 'uppercase' }}>FINAL SUBMISSION DEADLINE</span>
+                            <strong style={{ fontSize: '0.92rem', fontWeight: 900, color: '#dc2626' }}>{formattedDeadline}</strong>
                           </div>
+
                         </div>
-                        <div className="col-12 col-md-6 text-md-end">
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, letterSpacing: '0.05em' }}>CAMPAIGN SUBMISSION DEADLINE</span>
-                          <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ec4899' }}>{formattedDeadline}</span>
-                        </div>
-                      </div>
 
-                      {/* Timeline & Milestones Review */}
-                      <div className="mb-4">
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '14px' }}>DELIVERABLES & SUBMISSION TIMELINE</span>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                          {ws.milestones?.map((m) => {
-                            let mBadge = 'badge-pending';
-                            let mLabel = 'Pending Submission';
-                            if (m.status === 'approved') { mBadge = 'badge-approved'; mLabel = 'Approved'; }
-                            else if (m.status === 'submitted') { mBadge = 'badge-shortlisted'; mLabel = 'Submitted - Needs Review'; }
-                            else if (m.status === 'changes_requested') { mBadge = 'badge-rejected'; mLabel = 'Changes Requested'; }
+                        {/* Right Column (col-12 col-lg-7): Milestones & Deliverables Review */}
+                        <div className="col-12 col-lg-7">
+                          <div style={{ padding: '24px', background: '#ffffff', borderRadius: '18px', border: '1.5px solid #e2e8f0', height: '100%' }}>
+                            <h5 style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <Calendar size={18} style={{ color: '#1e3a8a' }} />
+                              DELIVERABLES &amp; SUBMISSION TIMELINE
+                            </h5>
 
-                            return (
-                              <div key={m._id} style={{ background: 'var(--bg-panel)', padding: '16px 20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                                <div className="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                                  <h5 style={{ fontWeight: 800, fontSize: '0.95rem', margin: 0 }}>{m.title}</h5>
-                                  <span className={`badge ${mBadge}`} style={{ fontSize: '0.72rem' }}>{mLabel}</span>
-                                </div>
-                                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '10px' }}>{m.description}</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                              {ws.milestones?.map((m) => {
+                                let mBadgeBg = '#f1f5f9';
+                                let mBadgeColor = '#64748b';
+                                let mLabel = 'Pending Creator Upload';
+                                if (m.status === 'approved') { mBadgeBg = '#dcfce7'; mBadgeColor = '#047857'; mLabel = '✓ Approved'; }
+                                else if (m.status === 'submitted') { mBadgeBg = '#fef3c7'; mBadgeColor = '#d97706'; mLabel = '🟡 Submitted - Review Needed'; }
+                                else if (m.status === 'changes_requested') { mBadgeBg = '#fee2e2'; mBadgeColor = '#dc2626'; mLabel = '🔴 Revisions Requested'; }
 
-                                {/* Uploaded Content proof output link */}
-                                {m.submissionUrl && (
-                                  <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: '12px', fontSize: '0.82rem', border: '1px solid var(--border-color)' }}>
-                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontWeight: 700, marginBottom: '4px' }}>UPLOADED CONTENT PROOF:</span>
-                                    <a href={m.submissionUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}>
-                                      <LinkIcon size={14} /> {m.submissionUrl} <ExternalLink size={12} />
-                                    </a>
-                                    {m.submissionNotes && (
-                                      <p style={{ color: 'var(--text-secondary)', marginTop: '6px', margin: '6px 0 0 0', fontStyle: 'italic' }}>
-                                        Notes from creator: "{m.submissionNotes}"
-                                      </p>
+                                return (
+                                  <div key={m._id} style={{ background: '#f8fafc', padding: '20px', borderRadius: '16px', border: '1.5px solid #e2e8f0' }}>
+                                    <div className="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                      <h6 style={{ fontWeight: 800, fontSize: '0.95rem', margin: 0, color: '#0f172a' }}>{m.title}</h6>
+                                      <span style={{ fontSize: '0.78rem', fontWeight: 800, padding: '4px 12px', borderRadius: '20px', background: mBadgeBg, color: mBadgeColor, border: '1px solid currentColor' }}>{mLabel}</span>
+                                    </div>
+                                    <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '12px', lineHeight: '1.5' }}>{m.description}</p>
+
+                                    {/* Uploaded Content proof output link */}
+                                    {m.submissionUrl && (
+                                      <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', marginBottom: '14px', border: '1.5px solid #e2e8f0' }}>
+                                        <span style={{ color: '#1e3a8a', display: 'block', fontWeight: 900, marginBottom: '6px', textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '0.05em' }}>
+                                          UPLOADED CONTENT PROOF:
+                                        </span>
+                                        <a href={m.submissionUrl} target="_blank" rel="noopener noreferrer" style={{
+                                          color: '#1e3a8a', fontWeight: 800, fontSize: '0.88rem',
+                                          display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none',
+                                          background: '#eff6ff', padding: '8px 14px', borderRadius: '8px', border: '1px solid #bfdbfe'
+                                        }}>
+                                          <LinkIcon size={14} /> View Content Proof Online <ExternalLink size={12} />
+                                        </a>
+                                        {m.submissionNotes && (
+                                          <p style={{ color: '#475569', marginTop: '10px', margin: '10px 0 0 0', fontStyle: 'italic', fontSize: '0.85rem' }}>
+                                            Creator notes: "{m.submissionNotes}"
+                                          </p>
+                                        )}
+                                      </div>
+                                    )}
+
+                                    {/* Revision Request Feedback Notes */}
+                                    {m.status === 'changes_requested' && m.feedbackNotes && (
+                                      <div style={{ background: '#fee2e2', padding: '14px', borderRadius: '12px', marginBottom: '14px', fontSize: '0.85rem', border: '1px solid #fecaca', color: '#dc2626' }}>
+                                        <strong>Your Revision Instructions:</strong> "{m.feedbackNotes}"
+                                      </div>
+                                    )}
+
+                                    {/* Deliverable Action Buttons */}
+                                    {m.status === 'submitted' && (
+                                      <div className="d-flex gap-2 mt-3 flex-wrap">
+                                        <button
+                                          onClick={() => handleApproveSubmission(ws._id, m._id)}
+                                          style={{
+                                            padding: '8px 18px', fontSize: '0.82rem', fontWeight: 800,
+                                            borderRadius: '10px', background: 'linear-gradient(135deg, #047857 0%, #10b981 100%)',
+                                            color: '#ffffff', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)'
+                                          }}
+                                        >
+                                          <CheckCircle size={14} /> Approve Submission
+                                        </button>
+
+                                        <button
+                                          onClick={() => setChangeRequestModal({ wsId: ws._id, mId: m._id, title: m.title, feedbackNotes: '' })}
+                                          style={{
+                                            padding: '8px 18px', fontSize: '0.82rem', fontWeight: 800,
+                                            borderRadius: '10px', background: '#fef3c7', color: '#d97706',
+                                            border: '1.5px solid #fde68a', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                                          }}
+                                        >
+                                          <RefreshCw size={14} /> Request Revisions
+                                        </button>
+                                      </div>
                                     )}
                                   </div>
-                                )}
-
-                                {/* Change Request Feedback Notes if present */}
-                                {m.status === 'changes_requested' && m.feedbackNotes && (
-                                  <div style={{ background: 'rgba(239,68,68,0.1)', padding: '10px 12px', borderRadius: 'var(--radius-sm)', marginBottom: '12px', fontSize: '0.8rem', border: '1px solid rgba(239,68,68,0.3)', color: 'var(--danger)' }}>
-                                    <strong>Your Revision Request:</strong> "{m.feedbackNotes}"
-                                  </div>
-                                )}
-
-                                {/* Deliverable Action Buttons */}
-                                {m.status === 'submitted' && (
-                                  <div className="d-flex gap-2 mt-2 flex-wrap">
-                                    <button
-                                      onClick={() => handleApproveSubmission(ws._id, m._id)}
-                                      className="btn btn-primary"
-                                      style={{ padding: '6px 14px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-                                    >
-                                      <CheckCircle size={14} /> Approve Submission
-                                    </button>
-
-                                    <button
-                                      onClick={() => setChangeRequestModal({ wsId: ws._id, mId: m._id, title: m.title, feedbackNotes: '' })}
-                                      className="btn btn-outline"
-                                      style={{ padding: '6px 14px', fontSize: '0.78rem', color: 'var(--warning)', borderColor: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '6px' }}
-                                    >
-                                      <RefreshCw size={14} /> Request Changes
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
+                                );
+                              })}
+                            </div>
+                          </div>
                         </div>
+
                       </div>
 
-                      {/* Overall Company Actions Footer Bar */}
-                      <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
+                      {/* Overall Footer Action Toolbar */}
+                      <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1.5px solid #f1f5f9' }}>
                         <div className="d-flex gap-2">
                           <Link
                             to={`/creators/${creator._id}`}
-                            className="btn btn-outline"
-                            style={{ padding: '8px 16px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                            target="_blank"
+                            style={{
+                              padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                              borderRadius: '10px', background: '#f8fafc', color: '#1e3a8a',
+                              border: '1.5px solid #e2e8f0', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                            }}
                           >
                             <Eye size={14} /> View Creator Profile
                           </Link>
 
                           <button
                             onClick={() => handleStartMessagingCreator(creator._id, project._id, creator.name)}
-                            className="btn btn-outline"
-                            style={{ padding: '8px 16px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                            style={{
+                              padding: '8px 16px', fontSize: '0.82rem', fontWeight: 800,
+                              borderRadius: '10px', background: '#f8fafc', color: '#1e3a8a',
+                              border: '1.5px solid #e2e8f0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                            }}
                           >
-                            <MessageSquare size={14} /> Message Creator
+                            <MessageSquare size={14} /> Direct Message Chat
                           </button>
                         </div>
 
@@ -4796,24 +5318,32 @@ const Dashboard = () => {
                           {!isPaid && (
                             <button
                               onClick={() => handleMarkPaymentPaid(ws._id)}
-                              className="btn btn-outline"
-                              style={{ padding: '8px 16px', fontSize: '0.82rem', color: 'var(--success)', borderColor: 'var(--success)', display: 'flex', alignItems: 'center', gap: '6px' }}
+                              style={{
+                                padding: '8px 18px', fontSize: '0.82rem', fontWeight: 800,
+                                borderRadius: '10px', background: '#dcfce7', color: '#047857',
+                                border: '1.5px solid #bbf7d0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px'
+                              }}
                             >
-                              <CreditCard size={14} /> Mark Payment Paid (${rateAmount.toLocaleString()})
+                              <CreditCard size={14} /> Release Escrow Payment (₹{rateAmount.toLocaleString()})
                             </button>
                           )}
 
                           {ws.status !== 'completed' && (
                             <button
                               onClick={() => handleMarkWorkspaceCompleted(ws._id)}
-                              className="btn btn-primary"
-                              style={{ padding: '8px 16px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                              style={{
+                                padding: '8px 20px', fontSize: '0.82rem', fontWeight: 800,
+                                borderRadius: '10px', background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                                color: '#ffffff', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                              }}
                             >
-                              <CheckSquare size={14} /> Mark Completed
+                              <CheckSquare size={14} /> Mark Workspace Completed
                             </button>
                           )}
                         </div>
                       </div>
+
                     </div>
                   );
                 })}
@@ -5010,113 +5540,209 @@ const Dashboard = () => {
   };
 
   // REUSABLE NOTIFICATIONS LAYOUT
+  // NOTIFICATIONS ACTIVITY CENTER LAYOUT
   const renderNotificationsLayout = () => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     const filteredNotifs = notifications.filter(notif => {
       if (notifFilter === 'unread') return !notif.isRead;
-      if (notifFilter === 'campaigns') return notif.type?.includes('application') || notif.type?.includes('invitation');
-      if (notifFilter === 'payments') return notif.type?.includes('payment') || notif.type?.includes('milestone') || notif.type?.includes('submission');
+      if (notifFilter === 'campaigns') {
+        return (
+          notif.type?.includes('application') ||
+          notif.type?.includes('invitation') ||
+          notif.type?.includes('campaign')
+        );
+      }
+      if (notifFilter === 'payments') {
+        return (
+          notif.type?.includes('payment') ||
+          notif.type?.includes('milestone') ||
+          notif.type?.includes('submission') ||
+          notif.type?.includes('workspace')
+        );
+      }
       return true;
     });
 
-    const getNotifIcon = (type) => {
+    const getNotifMeta = (type) => {
       switch (type) {
         case 'new_application':
         case 'application_submitted':
-          return <FileText size={20} style={{ color: 'var(--primary)' }} />;
+        case 'application_status':
+          return {
+            icon: <FileText size={18} style={{ color: '#2563eb' }} />,
+            bg: '#eff6ff',
+            border: '#bfdbfe',
+            badge: '📥 Application'
+          };
         case 'invitation_accepted':
-          return <CheckCircle2 size={20} style={{ color: 'var(--success)' }} />;
+          return {
+            icon: <CheckCircle2 size={18} style={{ color: '#047857' }} />,
+            bg: '#ecfdf5',
+            border: '#a7f3d0',
+            badge: '🎯 Campaign Match'
+          };
         case 'invitation_rejected':
-          return <XCircle size={20} style={{ color: 'var(--danger)' }} />;
+          return {
+            icon: <XCircle size={18} style={{ color: '#b91c1c' }} />,
+            bg: '#fef2f2',
+            border: '#fecaca',
+            badge: 'Declined'
+          };
         case 'submission_uploaded':
         case 'milestone_submitted':
-          return <PlusCircle size={20} style={{ color: 'var(--primary)' }} />;
+          return {
+            icon: <Send size={18} style={{ color: '#b45309' }} />,
+            bg: '#fffbeb',
+            border: '#fde68a',
+            badge: '📤 Submission'
+          };
+        case 'milestone_approved':
+          return {
+            icon: <CheckSquare size={18} style={{ color: '#047857' }} />,
+            bg: '#ecfdf5',
+            border: '#a7f3d0',
+            badge: '✅ Approved'
+          };
         case 'payment_completed':
         case 'payment_released':
-          return <CreditCard size={20} style={{ color: 'var(--success)' }} />;
+          return {
+            icon: <CreditCard size={18} style={{ color: '#047857' }} />,
+            bg: '#ecfdf5',
+            border: '#a7f3d0',
+            badge: '💰 Payment'
+          };
         case 'deadline_reminder':
-          return <Clock size={20} style={{ color: 'var(--warning)' }} />;
+          return {
+            icon: <Clock size={18} style={{ color: '#b45309' }} />,
+            bg: '#fffbeb',
+            border: '#fde68a',
+            badge: '⏰ Reminder'
+          };
         case 'campaign_completed':
         case 'workspace_completed':
-          return <Sparkles size={20} style={{ color: 'var(--primary)' }} />;
-        case 'milestone_changes_requested':
-          return <AlertTriangle size={20} style={{ color: 'var(--warning)' }} />;
+          return {
+            icon: <Sparkles size={18} style={{ color: '#7c3aed' }} />,
+            bg: '#f5f3ff',
+            border: '#ddd6fe',
+            badge: '🏆 Finalized'
+          };
+        case 'chat_message':
+          return {
+            icon: <MessageSquare size={18} style={{ color: '#1e3a8a' }} />,
+            bg: '#eff6ff',
+            border: '#bfdbfe',
+            badge: '💬 Message'
+          };
         default:
-          return <Bell size={20} style={{ color: 'var(--primary)' }} />;
+          return {
+            icon: <Bell size={18} style={{ color: '#1e3a8a' }} />,
+            bg: '#f8fafc',
+            border: '#e2e8f0',
+            badge: '🔔 Alert'
+          };
       }
     };
 
     return (
-      <div className="animate-fade-in-up" style={{ maxWidth: '850px', margin: '0 auto' }}>
+      <div className="animate-fade-in-up" style={{ maxWidth: '900px', margin: '0 auto' }}>
         {/* Header Bar */}
-        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-          <div>
-            <div className="d-flex align-items-center gap-2">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Notification Activity Center</h3>
+        <div style={{
+          padding: '24px 28px', borderRadius: '20px', background: '#ffffff',
+          border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+          marginBottom: '24px'
+        }}>
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                  Notification Activity Center
+                </h3>
+                {unreadCount > 0 && (
+                  <span style={{
+                    padding: '4px 12px', background: '#fef2f2', color: '#b91c1c',
+                    border: '1.5px solid #fecaca', borderRadius: '9999px',
+                    fontSize: '0.78rem', fontWeight: 900, display: 'inline-flex', alignItems: 'center', gap: '6px'
+                  }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#b91c1c' }} />
+                    {unreadCount} Unread
+                  </span>
+                )}
+              </div>
+              <p style={{ color: '#64748b', fontSize: '0.92rem', margin: '6px 0 0 0', fontWeight: 500 }}>
+                Real-time activity tracking for campaign applications, pitch approvals, milestone proofs, and payouts.
+              </p>
+            </div>
+
+            <div className="d-flex gap-2">
               {unreadCount > 0 && (
-                <span className="badge badge-primary" style={{ fontSize: '0.72rem', borderRadius: 'var(--radius-full)', padding: '4px 10px' }}>
-                  {unreadCount} Unread
-                </span>
+                <button
+                  onClick={handleMarkAllAsRead}
+                  style={{
+                    padding: '8px 18px', fontSize: '0.85rem', fontWeight: 800, borderRadius: '10px',
+                    background: '#eff6ff', color: '#1e3a8a', border: '1.5px solid #bfdbfe',
+                    cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#dbeafe'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#eff6ff'}
+                >
+                  <Check size={15} /> Mark All Read
+                </button>
               )}
             </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '4px 0 0 0' }}>
-              Real-time updates linked to campaign applications, creator invitations, content submissions, and payments.
-            </p>
-          </div>
-
-          <div className="d-flex gap-2">
-            {unreadCount > 0 && (
-              <button
-                onClick={handleMarkAllAsRead}
-                className="btn btn-outline"
-                style={{ padding: '6px 14px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <Check size={14} /> Mark All Read
-              </button>
-            )}
           </div>
         </div>
 
-        {/* Filter Sub-tabs */}
+        {/* Filter Sub-tabs Bar */}
         <div className="d-flex gap-2 mb-4 flex-wrap">
           {[
-            { key: 'all', label: `All (${notifications.length})` },
+            { key: 'all', label: `All Alerts (${notifications.length})` },
             { key: 'unread', label: `Unread (${unreadCount})` },
-            { key: 'campaigns', label: 'Campaigns & Invitations' },
-            { key: 'payments', label: 'Payments & Submissions' }
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setNotifFilter(tab.key)}
-              className="btn"
-              style={{
-                padding: '6px 16px',
-                fontSize: '0.8rem',
-                background: notifFilter === tab.key ? 'var(--primary-gradient)' : 'var(--bg-tertiary)',
-                color: notifFilter === tab.key ? '#fff' : 'var(--text-secondary)',
-                border: notifFilter === tab.key ? 'none' : '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-full)',
-                fontWeight: notifFilter === tab.key ? 700 : 400
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
+            { key: 'campaigns', label: '🎯 Campaigns & Pitch' },
+            { key: 'payments', label: '💳 Payouts & Proofs' }
+          ].map(tab => {
+            const isActive = notifFilter === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setNotifFilter(tab.key)}
+                style={{
+                  padding: '8px 20px',
+                  fontSize: '0.85rem',
+                  fontWeight: isActive ? 900 : 700,
+                  background: isActive ? '#1e3a8a' : '#ffffff',
+                  color: isActive ? '#ffffff' : '#475569',
+                  border: isActive ? '1.5px solid #1e3a8a' : '1.5px solid #e2e8f0',
+                  borderRadius: '9999px',
+                  cursor: 'pointer',
+                  boxShadow: isActive ? '0 4px 12px rgba(30, 58, 138, 0.2)' : '0 2px 6px rgba(15, 23, 42, 0.04)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Notifications Feed List */}
         {filteredNotifs.length === 0 ? (
-          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center' }}>
-            <Bell size={40} style={{ color: 'var(--text-muted)', marginBottom: '16px', opacity: 0.5 }} />
-            <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>No Notifications</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-              {notifFilter === 'unread' ? 'You have caught up on all recent notifications.' : 'Activity alerts regarding your campaigns will appear here.'}
+          <div style={{
+            padding: '60px 40px', textAlign: 'center', borderRadius: '20px',
+            background: '#ffffff', border: '1.5px solid #e2e8f0',
+            boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+          }}>
+            <Bell size={44} style={{ color: '#cbd5e1', display: 'block', margin: '0 auto 16px' }} />
+            <h4 style={{ fontWeight: 900, margin: '0 0 8px 0', color: '#0f172a', fontSize: '1.15rem' }}>No Notifications Found</h4>
+            <p style={{ color: '#64748b', fontSize: '0.92rem', margin: 0 }}>
+              {notifFilter === 'unread' ? 'You have caught up on all recent notification alerts!' : 'Activity alerts regarding your campaigns will appear here.'}
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {filteredNotifs.map((notif) => {
+              const meta = getNotifMeta(notif.type);
               const projectTitle = typeof notif.projectId === 'object' ? notif.projectId?.title : null;
               const formattedDate = new Date(notif.createdAt).toLocaleString(undefined, {
                 month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -5125,85 +5751,105 @@ const Dashboard = () => {
               return (
                 <div
                   key={notif._id}
-                  className="glass-panel"
                   style={{
-                    padding: '20px',
-                    background: notif.isRead ? 'var(--bg-panel)' : 'rgba(255, 107, 107, 0.06)',
-                    border: notif.isRead ? '1px solid var(--border-color)' : '1px solid var(--primary-glow)',
-                    position: 'relative',
-                    transition: 'all 0.2s ease'
+                    padding: '0', overflow: 'hidden', borderRadius: '18px',
+                    background: '#ffffff',
+                    border: notif.isRead ? '1.5px solid #e2e8f0' : '1.5px solid #bfdbfe',
+                    boxShadow: notif.isRead ? '0 2px 10px rgba(15, 23, 42, 0.04)' : '0 4px 16px rgba(30, 58, 138, 0.1)',
+                    transition: 'all 0.2s ease',
+                    position: 'relative'
                   }}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 24px rgba(15, 23, 42, 0.08)'}
+                  onMouseLeave={e => e.currentTarget.style.boxShadow = notif.isRead ? '0 2px 10px rgba(15, 23, 42, 0.04)' : '0 4px 16px rgba(30, 58, 138, 0.1)'}
                 >
-                  <div className="d-flex align-items-start gap-3">
-                    {/* Icon Badge */}
-                    <div style={{
-                      width: '42px', height: '42px', borderRadius: '50%',
-                      background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                    }}>
-                      {getNotifIcon(notif.type)}
-                    </div>
+                  {/* Accent Top Bar */}
+                  <div style={{ height: '4px', background: notif.isRead ? 'linear-gradient(90deg, #cbd5e1, #e2e8f0)' : 'linear-gradient(90deg, #1e3a8a, #3b82f6)' }} />
 
-                    <div style={{ flexGrow: 1, minWidth: 0 }}>
-                      <div className="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-2">
-                        <div className="d-flex align-items-center gap-2">
-                          <h4 style={{ fontWeight: notif.isRead ? 700 : 800, fontSize: '0.98rem', margin: 0 }}>
-                            {notif.title}
-                          </h4>
-                          {!notif.isRead && (
-                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', display: 'inline-block' }} />
-                          )}
-                        </div>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formattedDate}</span>
+                  <div style={{ padding: '20px 24px' }}>
+                    <div className="d-flex align-items-start gap-3">
+                      {/* Icon Badge */}
+                      <div style={{
+                        width: '44px', height: '44px', borderRadius: '14px',
+                        background: meta.bg, border: `1.5px solid ${meta.border}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                      }}>
+                        {meta.icon}
                       </div>
 
-                      <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: '4px 0 10px 0' }}>
-                        {notif.body}
-                      </p>
-
-                      {/* Related Campaign Banner */}
-                      {projectTitle && (
-                        <div style={{
-                          display: 'inline-flex', alignItems: 'center', gap: '6px',
-                          background: 'var(--bg-tertiary)', padding: '4px 10px',
-                          borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)',
-                          fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 700, marginBottom: '12px'
-                        }}>
-                          🎯 Linked Campaign: {projectTitle}
-                        </div>
-                      )}
-
-                      {/* Action Bar */}
-                      <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2" style={{ borderTop: '1px solid var(--border-color)' }}>
-                        <div className="d-flex gap-2">
-                          {(notif.link || notif.projectId) && (
-                            <Link
-                              to={notif.link || `/campaigns/${typeof notif.projectId === 'object' ? notif.projectId?._id : notif.projectId}`}
-                              className="btn btn-primary"
-                              style={{ padding: '6px 14px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                            >
-                              <ArrowUpRight size={14} /> View Related Campaign
-                            </Link>
-                          )}
+                      <div style={{ flexGrow: 1, minWidth: 0 }}>
+                        <div className="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-2">
+                          <div className="d-flex align-items-center gap-2">
+                            <span style={{
+                              padding: '2px 10px', background: meta.bg, color: meta.icon.props.style?.color || '#1e3a8a',
+                              border: `1px solid ${meta.border}`, borderRadius: '9999px',
+                              fontSize: '0.72rem', fontWeight: 900
+                            }}>
+                              {meta.badge}
+                            </span>
+                            <h4 style={{ fontWeight: notif.isRead ? 800 : 900, fontSize: '1rem', margin: 0, color: '#0f172a' }}>
+                              {notif.title}
+                            </h4>
+                            {!notif.isRead && (
+                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#b91c1c', display: 'inline-block' }} />
+                            )}
+                          </div>
+                          <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 600 }}>{formattedDate}</span>
                         </div>
 
-                        <div className="d-flex gap-2">
-                          {!notif.isRead && (
+                        <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.6', margin: '6px 0 12px 0' }}>
+                          {notif.body}
+                        </p>
+
+                        {/* Related Campaign Banner */}
+                        {projectTitle && (
+                          <div style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '6px',
+                            background: '#f8fafc', padding: '6px 14px',
+                            borderRadius: '10px', border: '1.5px solid #e2e8f0',
+                            fontSize: '0.8rem', color: '#1e3a8a', fontWeight: 800, marginBottom: '14px'
+                          }}>
+                            🎯 Campaign: {projectTitle}
+                          </div>
+                        )}
+
+                        {/* Action Bar */}
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1.5px solid #f1f5f9' }}>
+                          <div>
+                            {(notif.link || notif.projectId) && (
+                              <Link
+                                to={notif.link || `/campaigns/${typeof notif.projectId === 'object' ? notif.projectId?._id : notif.projectId}`}
+                                className="btn btn-primary"
+                                style={{ padding: '7px 16px', fontSize: '0.82rem', borderRadius: '8px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                              >
+                                <ArrowUpRight size={14} /> Open Related Page
+                              </Link>
+                            )}
+                          </div>
+
+                          <div className="d-flex gap-2">
+                            {!notif.isRead && (
+                              <button
+                                onClick={() => handleMarkAsRead(notif._id)}
+                                style={{
+                                  padding: '6px 14px', fontSize: '0.78rem', fontWeight: 800,
+                                  borderRadius: '8px', background: '#eff6ff', color: '#1e3a8a',
+                                  border: '1.5px solid #bfdbfe', cursor: 'pointer'
+                                }}
+                              >
+                                Mark Read
+                              </button>
+                            )}
                             <button
-                              onClick={() => handleMarkNotificationAsRead(notif._id)}
-                              className="btn btn-outline"
-                              style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                              onClick={() => handleDeleteNotification(notif._id)}
+                              style={{
+                                padding: '6px 14px', fontSize: '0.78rem', fontWeight: 800,
+                                borderRadius: '8px', background: '#fef2f2', color: '#b91c1c',
+                                border: '1.5px solid #fecaca', cursor: 'pointer'
+                              }}
                             >
-                              Mark Read
+                              Delete
                             </button>
-                          )}
-                          <button
-                            onClick={() => handleDeleteNotification(notif._id)}
-                            className="btn btn-outline"
-                            style={{ padding: '4px 10px', fontSize: '0.75rem', color: 'var(--danger)', borderColor: 'var(--danger-glow)' }}
-                          >
-                            Delete
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -5442,14 +6088,14 @@ const Dashboard = () => {
                             borderRadius: '16px',
                             borderBottomRightRadius: isMe ? '4px' : '16px',
                             borderBottomLeftRadius: isMe ? '16px' : '4px',
-                            background: isMe ? 'var(--primary-gradient)' : 'var(--bg-tertiary)',
-                            color: '#fff',
-                            border: isMe ? 'none' : '1px solid var(--border-color)',
+                            background: isMe ? 'var(--primary-gradient)' : 'var(--bg-panel, #ffffff)',
+                            color: isMe ? '#ffffff' : 'var(--text-primary, #0f172a)',
+                            border: isMe ? 'none' : '1.5px solid var(--border-color, #e2e8f0)',
                             boxShadow: 'var(--shadow-card)'
                           }}
                         >
                           {msg.text && (
-                            <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.5', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                            <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.5', whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: isMe ? '#ffffff' : 'var(--text-primary, #0f172a)' }}>
                               {msg.text}
                             </p>
                           )}
@@ -5466,7 +6112,7 @@ const Dashboard = () => {
                                   style={{
                                     marginTop: msg.text ? '10px' : 0,
                                     maxWidth: '300px', borderRadius: 'var(--radius-md)',
-                                    overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)',
+                                    overflow: 'hidden', border: isMe ? '1px solid rgba(255,255,255,0.2)' : '1px solid var(--border-color, #e2e8f0)',
                                     cursor: 'pointer', position: 'relative'
                                   }}
                                   title="Click to expand full image"
@@ -5486,18 +6132,18 @@ const Dashboard = () => {
                                 style={{
                                   marginTop: msg.text ? '10px' : 0,
                                   display: 'flex', alignItems: 'center', gap: '10px',
-                                  background: 'rgba(0,0,0,0.2)', padding: '10px 14px',
-                                  borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.15)'
+                                  background: isMe ? 'rgba(0,0,0,0.2)' : 'var(--bg-tertiary, #f8fafc)', padding: '10px 14px',
+                                  borderRadius: 'var(--radius-sm)', border: isMe ? '1px solid rgba(255,255,255,0.15)' : '1px solid var(--border-color, #e2e8f0)'
                                 }}
                               >
-                                <div style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.65rem', flexShrink: 0 }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.65rem', color: '#fff', flexShrink: 0 }}>
                                   FILE
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: isMe ? '#ffffff' : 'var(--text-primary, #0f172a)', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                                     {url.split('/').pop() || 'Attachment Document'}
                                   </span>
-                                  <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--secondary)', fontSize: '0.72rem', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                                  <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: isMe ? 'var(--secondary)' : 'var(--primary)', fontSize: '0.72rem', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                                     View / Download File <ArrowUpRight size={11} />
                                   </a>
                                 </div>
@@ -5714,15 +6360,55 @@ const Dashboard = () => {
 
   return (
     <div className="animate-fade-in-up">
-      {/* Welcome Banner */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-        <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>Welcome, {user?.name}!</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>
-            {user.role === 'admin' ? 'Monitor platform operations, moderate users and campaign briefs, and resolve report tickets.' : (user.role === 'creator' ? 'Manage your portfolios, applications, and payouts.' : 'Post campaigns briefs, review applicants, and release contract payments.')}
-          </p>
+      {/* Welcome Hero Banner Card (Only shown on default studio dashboard view) */}
+      {(currentTab === 'dashboard' || !currentTab) && (
+        <div style={{
+          padding: '28px 32px', borderRadius: '24px',
+          background: 'linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)',
+          color: '#ffffff', boxShadow: '0 8px 32px rgba(30, 58, 138, 0.25)',
+          marginBottom: '32px', position: 'relative', overflow: 'hidden'
+        }}>
+          {/* Ambient background glow circle */}
+          <div style={{
+            position: 'absolute', right: '-40px', top: '-40px', width: '220px', height: '220px',
+            borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%)',
+            pointerEvents: 'none'
+          }} />
+
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3" style={{ position: 'relative', zIndex: 1 }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                <span style={{ padding: '4px 12px', background: 'rgba(255,255,255,0.15)', color: '#bfdbfe', borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 900 }}>
+                  {user.role === 'creator' ? '⭐ VERIFIED CREATOR STUDIO' : (user.role === 'brand' ? '🏢 ENTERPRISE BRAND DASHBOARD' : '⚡ ADMIN CONTROL PANEL')}
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#a7f3d0', fontWeight: 800 }}>● Active Session</span>
+              </div>
+              <h1 style={{ fontSize: '1.8rem', fontWeight: 900, margin: 0, fontFamily: "'Outfit', var(--font-sans)", color: '#ffffff' }}>
+                Welcome back, {user?.name}! 👋
+              </h1>
+              <p style={{ color: '#93c5fd', fontSize: '0.95rem', margin: '8px 0 0 0', fontWeight: 500, maxWidth: '640px' }}>
+                {user.role === 'admin' 
+                  ? 'Monitor platform operations, moderate active user accounts & campaign briefs, and track platform revenue.' 
+                  : (user.role === 'creator' 
+                    ? 'Track your active sponsorship milestone submissions, pitch proposals, brand partner messages, and monthly earnings.' 
+                    : 'Manage published campaign briefs, review incoming creator applications, approve deliverables, and release escrow payouts.')}
+              </p>
+            </div>
+
+            <div className="d-flex gap-3">
+              {user.role === 'creator' ? (
+                <Link to="/discover" className="btn" style={{ padding: '12px 24px', background: '#ffffff', color: '#1e3a8a', fontWeight: 900, borderRadius: '12px', boxShadow: '0 4px 14px rgba(255,255,255,0.2)' }}>
+                  Explore Campaigns →
+                </Link>
+              ) : user.role === 'brand' ? (
+                <Link to="/dashboard?tab=create" className="btn" style={{ padding: '12px 24px', background: '#ffffff', color: '#1e3a8a', fontWeight: 900, borderRadius: '12px', boxShadow: '0 4px 14px rgba(255,255,255,0.2)' }}>
+                  + Create Campaign →
+                </Link>
+              ) : null}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Render role layouts */}
       {user.role === 'admin' ? renderAdminTab() : (user.role === 'creator' ? renderCreatorTab() : renderBrandTab())}

@@ -126,57 +126,7 @@ const Settings = () => {
                 <option value="fr">Français (FR)</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label" style={{ marginBottom: '12px', display: 'block' }}>Theme Mode Preference (Default: Dark)</label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div
-                  onClick={() => setTheme('dark')}
-                  style={{
-                    padding: '14px',
-                    borderRadius: 'var(--radius-md)',
-                    background: theme === 'dark' ? 'rgba(255, 107, 107, 0.12)' : 'var(--bg-tertiary)',
-                    border: theme === 'dark' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Moon size={18} style={{ color: theme === 'dark' ? 'var(--primary)' : 'var(--text-secondary)' }} />
-                      <span style={{ fontWeight: 700, fontSize: '0.9rem', color: theme === 'dark' ? 'var(--primary)' : 'var(--text-primary)' }}>Dark Mode</span>
-                    </div>
-                    <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>Default</span>
-                  </div>
-                  <small style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Sleek dark studio interface</small>
-                </div>
 
-                <div
-                  onClick={() => setTheme('light')}
-                  style={{
-                    padding: '14px',
-                    borderRadius: 'var(--radius-md)',
-                    background: theme === 'light' ? 'rgba(255, 107, 107, 0.12)' : 'var(--bg-tertiary)',
-                    border: theme === 'light' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Sun size={18} style={{ color: theme === 'light' ? 'var(--primary)' : 'var(--text-secondary)' }} />
-                      <span style={{ fontWeight: 700, fontSize: '0.9rem', color: theme === 'light' ? 'var(--primary)' : 'var(--text-primary)' }}>Light Mode</span>
-                    </div>
-                  </div>
-                  <small style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Clean bright workspace</small>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
