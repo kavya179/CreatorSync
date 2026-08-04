@@ -12,7 +12,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
-  Globe,
   Bookmark,
   BookmarkCheck,
   Plus,
@@ -24,10 +23,10 @@ import {
   Eye
 } from 'lucide-react';
 
-const Discover = ({ forcedTab }) => {
+const Discover = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState(forcedTab || 'projects');
+  const [activeTab, setActiveTab] = useState('projects');
   const [search, setSearch] = useState('');
   const [showFilters, setShowFilters] = useState(true);
 
@@ -56,7 +55,7 @@ const Discover = ({ forcedTab }) => {
   // Creator action states
   const [savedCreators, setSavedCreators] = useState({});
   const [savingId, setSavingId] = useState(null);
-  const [inviteModal, setInviteModal] = useState(null);
+  const [inviteModal, setInviteModal] = useState(null); // creatorUserId
   const [inviteModalName, setInviteModalName] = useState('');
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState('');
@@ -104,6 +103,7 @@ const Discover = ({ forcedTab }) => {
     fetchDiscoverResults();
   }, [fetchDiscoverResults]);
 
+  // Load brand campaigns for invite
   useEffect(() => {
     if (user?.role === 'brand') {
       api.get('/campaigns/me').then(res => setCampaigns(res.data || [])).catch(() => {});
@@ -157,7 +157,7 @@ const Discover = ({ forcedTab }) => {
   };
 
   const formatNumber = (n) => {
-    if (!n) return 'N/A';
+    if (!n) return '0';
     if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
     if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
     return n.toLocaleString();
@@ -165,280 +165,810 @@ const Discover = ({ forcedTab }) => {
 
   const getPartnerAvatarInitials = (name) => name ? name.substring(0, 2).toUpperCase() : 'CS';
 
-  const activeFiltersCount = [category, skill, minFollowers, platform, country, language, availability, minEngagement].filter(Boolean).length;
+  const activeFiltersCount = [category, skill, minFollowers, platform, country, language, availability, minEngagement, minBudget].filter(Boolean).length;
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '80px' }} className="animate-fade-in-up">
+    <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '16px 0 80px 0' }} className="animate-fade-in-up">
 
+      {/* Invite Success Toast */}
       {inviteSuccess && (
         <div style={{
-          position: 'fixed', top: '80px', right: '24px', zIndex: 9999,
-          background: 'var(--success)', color: '#fff', padding: '14px 20px',
-          borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-card)',
-          display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 600, fontSize: '0.88rem'
+          position: 'fixed', top: '90px', right: '28px', zIndex: 9999,
+          background: '#eff6ff', color: '#1e3a8a', padding: '16px 24px',
+          borderRadius: '14px', border: '1.5px solid #bfdbfe',
+          boxShadow: '0 8px 30px rgba(30, 58, 138, 0.15)',
+          display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 800, fontSize: '0.92rem'
         }}>
-          <CheckCircle size={18} /> {inviteSuccess}
+          <CheckCircle size={22} style={{ color: '#3b82f6' }} /> {inviteSuccess}
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+      {/* Page Title & Navigation Tabs Bar */}
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>Explore CreatorSync</h1>
-          <p style={{ color: 'var(--text-secondary)', margin: '6px 0 0' }}>Discover talented creators, brands, and active sponsorship campaigns</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+            Explore CreatorSync Ecosystem
+          </h1>
+          <p style={{ color: '#64748b', fontSize: '1rem', margin: '4px 0 0 0', fontWeight: 500 }}>
+            Discover top-tier creators, verified brands, and lucrative sponsorship campaign briefs.
+          </p>
         </div>
 
-        <div className="glass-panel" style={{ display: 'flex', padding: '4px', gap: '4px' }}>
-          <button onClick={() => setActiveTab('projects')} className={`btn ${activeTab === 'projects' ? 'btn-primary' : 'btn-outline'}`} style={{ border: 'none', padding: '10px 18px', fontSize: '0.85rem' }}>
-            <Briefcase size={16} style={{ marginRight: '8px' }} />Discover Briefs
+        {/* Tab Switcher */}
+        <div style={{
+          display: 'flex',
+          background: '#ffffff',
+          padding: '6px',
+          borderRadius: '14px',
+          border: '1.5px solid #e2e8f0',
+          boxShadow: '0 4px 16px rgba(15, 23, 42, 0.04)',
+          gap: '6px'
+        }}>
+          <button
+            onClick={() => setActiveTab('projects')}
+            style={{
+              padding: '12px 24px',
+              borderRadius: '10px',
+              border: 'none',
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease',
+              background: activeTab === 'projects' ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' : 'transparent',
+              color: activeTab === 'projects' ? '#ffffff' : '#64748b',
+              boxShadow: activeTab === 'projects' ? '0 4px 14px rgba(30, 58, 138, 0.25)' : 'none'
+            }}
+          >
+            <Briefcase size={18} /> Discover Briefs
           </button>
-          <button onClick={() => setActiveTab('creators')} className={`btn ${activeTab === 'creators' ? 'btn-primary' : 'btn-outline'}`} style={{ border: 'none', padding: '10px 18px', fontSize: '0.85rem' }}>
-            <Users size={16} style={{ marginRight: '8px' }} />Find Creators
+
+          <button
+            onClick={() => setActiveTab('creators')}
+            style={{
+              padding: '12px 24px',
+              borderRadius: '10px',
+              border: 'none',
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease',
+              background: activeTab === 'creators' ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' : 'transparent',
+              color: activeTab === 'creators' ? '#ffffff' : '#64748b',
+              boxShadow: activeTab === 'creators' ? '0 4px 14px rgba(30, 58, 138, 0.25)' : 'none'
+            }}
+          >
+            <Users size={18} /> Find Creators
           </button>
-          <button onClick={() => setActiveTab('brands')} className={`btn ${activeTab === 'brands' ? 'btn-primary' : 'btn-outline'}`} style={{ border: 'none', padding: '10px 18px', fontSize: '0.85rem' }}>
-            <Building size={16} style={{ marginRight: '8px' }} />Find Brands
+
+          <button
+            onClick={() => setActiveTab('brands')}
+            style={{
+              padding: '12px 24px',
+              borderRadius: '10px',
+              border: 'none',
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease',
+              background: activeTab === 'brands' ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' : 'transparent',
+              color: activeTab === 'brands' ? '#ffffff' : '#64748b',
+              boxShadow: activeTab === 'brands' ? '0 4px 14px rgba(30, 58, 138, 0.25)' : 'none'
+            }}
+          >
+            <Building size={18} /> Find Brands
           </button>
         </div>
       </div>
 
-      {/* CREATOR SEARCH TAB */}
+      {/* ━━━━━ CREATOR SEARCH TAB ━━━━━ */}
       {activeTab === 'creators' && (
         <>
-          <div className="glass-panel" style={{ padding: '20px 24px', marginBottom: '24px' }}>
+          {/* Search Bar & Horizontal Controls Bar */}
+          <div className="glass-panel" style={{ padding: '24px 28px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
             <div className="d-flex gap-3 flex-wrap align-items-center">
-              <div style={{ position: 'relative', flex: '1', minWidth: '240px' }}>
-                <Search size={16} style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              {/* Search Input */}
+              <div style={{ position: 'relative', flex: '1 1 300px' }}>
+                <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                 <input
                   type="text"
-                  placeholder="Search by name or keyword..."
+                  placeholder="Search creators by name, handle, or keywords..."
                   className="form-input"
-                  style={{ paddingLeft: '40px', marginBottom: 0 }}
+                  style={{ paddingLeft: '46px', paddingRight: '16px', paddingHeight: '14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', marginBottom: 0, fontSize: '0.95rem' }}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
               </div>
 
+              {/* Sort By Dropdown */}
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
-                className="form-input"
-                style={{ marginBottom: 0, width: 'auto', minWidth: '160px' }}
+                className="form-select"
+                style={{ marginBottom: 0, width: 'auto', minWidth: '170px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.9rem', fontWeight: 700 }}
               >
                 <option value="newest">Newest First</option>
                 <option value="followers">Most Followers</option>
                 <option value="engagement">Best Engagement</option>
               </select>
 
+              {/* Filter Toggle */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="btn btn-outline"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', position: 'relative', padding: '10px 16px' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 800, position: 'relative' }}
               >
-                <Filter size={15} />
-                Filters
+                <Filter size={16} /> Filters
                 {activeFiltersCount > 0 && (
                   <span style={{
                     position: 'absolute', top: '-6px', right: '-6px',
-                    width: '18px', height: '18px', borderRadius: '50%',
-                    background: 'var(--primary)', color: '#fff',
-                    fontSize: '0.68rem', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    width: '20px', height: '20px', borderRadius: '50%',
+                    background: '#1e3a8a', color: '#ffffff',
+                    fontSize: '0.72rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}>{activeFiltersCount}</span>
                 )}
               </button>
 
+              {/* Clear Filters */}
               {activeFiltersCount > 0 && (
-                <button onClick={handleClearFilters} className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', color: 'var(--danger)', borderColor: 'var(--danger)' }}>
-                  <X size={14} /> Clear
+                <button onClick={handleClearFilters} className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', color: '#ef4444', borderColor: '#fecaca', fontWeight: 800 }}>
+                  <X size={16} /> Reset
                 </button>
               )}
             </div>
 
+            {/* Expandable Filter Grid */}
             {showFilters && (
-              <div className="row g-3" style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+              <div className="row g-3" style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                  <label style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Category / Niche</label>
-                  <select className="form-input" style={{ marginBottom: 0 }} value={category} onChange={e => setCategory(e.target.value)}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category / Niche</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={category} onChange={e => setCategory(e.target.value)}>
                     <option value="">All Categories</option>
-                    <option value="Tech">Technology</option>
-                    <option value="Lifestyle">Lifestyle</option>
-                    <option value="Fitness">Fitness & Health</option>
-                    <option value="Gaming">Gaming</option>
-                    <option value="Beauty">Beauty & Fashion</option>
-                    <option value="Finance">Finance</option>
+                    <option value="Tech">Tech & Gadgets</option>
+                    <option value="Comedy & Entertainment">Comedy & Entertainment</option>
+                    <option value="Gaming & Esports">Gaming & Esports</option>
+                    <option value="Finance & Fintech">Finance & Fintech</option>
+                    <option value="Lifestyle & Vlog">Lifestyle & Vlog</option>
+                    <option value="Fitness & Health">Fitness & Health</option>
+                    <option value="Fashion & Beauty">Fashion & Beauty</option>
                   </select>
                 </div>
+
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                  <label style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Platform</label>
-                  <select className="form-input" style={{ marginBottom: 0 }} value={platform} onChange={e => setPlatform(e.target.value)}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Platform</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={platform} onChange={e => setPlatform(e.target.value)}>
                     <option value="">All Platforms</option>
                     <option value="youtube">YouTube</option>
                     <option value="instagram">Instagram</option>
-                    <option value="tiktok">TikTok</option>
                     <option value="twitter">X (Twitter)</option>
+                    <option value="linkedin">LinkedIn</option>
                   </select>
                 </div>
+
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                  <label style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Min Followers</label>
-                  <select className="form-input" style={{ marginBottom: 0 }} value={minFollowers} onChange={e => setMinFollowers(e.target.value)}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Min Followers</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={minFollowers} onChange={e => setMinFollowers(e.target.value)}>
                     <option value="">Any Reach</option>
                     <option value="1000">1K+</option>
                     <option value="10000">10K+</option>
                     <option value="50000">50K+</option>
+                    <option value="100000">100K+</option>
+                    <option value="500000">500K+</option>
+                    <option value="1000000">1M+</option>
                   </select>
                 </div>
+
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                  <label style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Country</label>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Min Engagement (%)</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={minEngagement} onChange={e => setMinEngagement(e.target.value)}>
+                    <option value="">Any Rate</option>
+                    <option value="1">1%+</option>
+                    <option value="3">3%+</option>
+                    <option value="5">5%+</option>
+                    <option value="8">8%+</option>
+                  </select>
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Country</label>
                   <input
                     type="text"
-                    placeholder="e.g. USA, India..."
+                    placeholder="e.g. India, USA..."
                     className="form-input"
-                    style={{ marginBottom: 0 }}
+                    style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '0.88rem' }}
                     value={country}
                     onChange={e => setCountry(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Language</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={language} onChange={e => setLanguage(e.target.value)}>
+                    <option value="">Any Language</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                  </select>
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Availability</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={availability} onChange={e => setAvailability(e.target.value)}>
+                    <option value="">Any Status</option>
+                    <option value="Available">Available</option>
+                    <option value="Busy">Busy</option>
+                  </select>
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Skill Tag</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Video Editing..."
+                    className="form-input"
+                    style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '0.88rem' }}
+                    value={skill}
+                    onChange={e => setSkill(e.target.value)}
                   />
                 </div>
               </div>
             )}
           </div>
 
+          {/* Results Count Header */}
+          {!loading && (
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0, fontWeight: 600 }}>
+                {totalItems > 0 ? <>Showing <strong style={{ color: '#0f172a', fontWeight: 900 }}>{totalItems}</strong> verified creator{totalItems !== 1 ? 's' : ''}</> : 'No creators found'}
+              </p>
+            </div>
+          )}
+
+          {/* Creator Cards Grid */}
           {loading ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', flexDirection: 'column', gap: '16px' }}>
-              <div className="spinner-border" style={{ width: '36px', height: '36px', borderWidth: '3px', color: 'var(--primary)' }} />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Searching creator database...</p>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '320px', flexDirection: 'column', gap: '16px' }}>
+              <div className="spinner-border text-primary" style={{ width: '40px', height: '40px', borderWidth: '3.5px' }} />
+              <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: 700 }}>Searching creator directory...</p>
             </div>
           ) : results.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '60px', textAlign: 'center' }}>
-              <Search size={48} style={{ color: 'var(--text-muted)', display: 'block', margin: '0 auto 16px' }} />
-              <h4 style={{ fontWeight: 800, margin: '0 0 8px' }}>No creators found</h4>
-              <button onClick={handleClearFilters} className="btn btn-outline" style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <RefreshCw size={14} /> Reset Filters
+            <div className="glass-panel" style={{ padding: '60px 40px', textAlign: 'center', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0' }}>
+              <Search size={48} style={{ color: '#94a3b8', display: 'block', margin: '0 auto 16px' }} />
+              <h4 style={{ fontWeight: 900, margin: '0 0 8px 0', color: '#0f172a' }}>No creators match your filters</h4>
+              <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>Try clearing filters or broadening your search query.</p>
+              <button onClick={handleClearFilters} className="btn btn-outline" style={{ marginTop: '20px', padding: '10px 24px', borderRadius: '10px', fontWeight: 800 }}>
+                <RefreshCw size={16} /> Reset Filters
               </button>
             </div>
           ) : (
-            <div className="row g-4 mb-4">
-              {results.map((c) => {
-                const u = c.userId || {};
-                const isSaved = savedCreators[u._id] ?? false;
-                const isCurrentlySaving = savingId === u._id;
+            <>
+              <div className="row g-4 mb-4">
+                {results.map((c) => {
+                  const u = c.userId || {};
+                  const isSaved = savedCreators[u._id] ?? false;
+                  const isCurrentlySaving = savingId === u._id;
 
-                return (
-                  <div key={c._id} className="col-12 col-md-6 col-lg-4">
-                    <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ position: 'relative', height: '80px', background: 'var(--primary-gradient)' }}>
-                        <div style={{
-                          position: 'absolute', bottom: '-28px', left: '20px',
-                          width: '56px', height: '56px', borderRadius: '50%',
-                          border: '3px solid var(--bg-primary)',
-                          background: 'var(--bg-secondary)',
-                          overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#fff'
-                        }}>
-                          {u.profileImage ? <img src={u.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : getPartnerAvatarInitials(u.name)}
+                  return (
+                    <div key={c._id} className="col-12 col-md-6 col-lg-4">
+                      <div className="glass-panel" style={{
+                        padding: '0', overflow: 'hidden', height: '100%',
+                        borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0',
+                        display: 'flex', flexDirection: 'column',
+                        boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                      }}
+                        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(30, 58, 138, 0.12)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 23, 42, 0.05)'; }}
+                      >
+                        {/* Card Top: Gradient Banner + Avatar */}
+                        <div style={{ position: 'relative', height: '96px', background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' }}>
+                          {/* Availability Badge */}
+                          {c.availability && (
+                            <span style={{
+                              position: 'absolute', top: '12px', right: '12px',
+                              padding: '4px 12px',
+                              background: c.availability === 'Available' ? '#ecfdf5' : '#fffbeb',
+                              color: c.availability === 'Available' ? '#047857' : '#b45309',
+                              border: c.availability === 'Available' ? '1px solid #a7f3d0' : '1px solid #fde68a',
+                              borderRadius: '9999px',
+                              fontSize: '0.75rem', fontWeight: 800
+                            }}>
+                              ● {c.availability}
+                            </span>
+                          )}
+
+                          {/* Avatar */}
+                          <div style={{
+                            position: 'absolute', bottom: '-30px', left: '20px',
+                            width: '64px', height: '64px', borderRadius: '50%',
+                            border: '4px solid #ffffff',
+                            background: '#ffffff',
+                            overflow: 'hidden', boxShadow: '0 6px 18px rgba(15, 23, 42, 0.15)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                          }}>
+                            {u.profileImage
+                              ? <img src={u.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={u.name} />
+                              : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, background: '#1e3a8a', color: '#ffffff', fontSize: '1.2rem' }}>
+                                  {getPartnerAvatarInitials(u.name)}
+                                </div>
+                            }
+                          </div>
                         </div>
-                      </div>
 
-                      <div style={{ padding: '36px 20px 16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <h5 style={{ fontWeight: 800, fontSize: '1rem', margin: 0 }}>{u.name || 'Creator'}</h5>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '12px' }}>{c.category || 'Content Creator'}</p>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px', padding: '12px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
-                          <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--primary)' }}>{formatNumber(c.followersCount)}</div>
-                            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Followers</div>
+                        {/* Card Body */}
+                        <div style={{ padding: '40px 24px 20px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                          {/* Name + Category */}
+                          <div style={{ marginBottom: '14px' }}>
+                            <div className="d-flex align-items-center gap-2 flex-wrap">
+                              <h5 style={{ fontWeight: 900, fontSize: '1.1rem', margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>{u.name || 'Creator'}</h5>
+                            </div>
+                            <div className="d-flex align-items-center gap-2 flex-wrap mt-1">
+                              {c.category && (
+                                <span style={{ fontSize: '0.75rem', padding: '3px 10px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e3a8a', borderRadius: '9999px', fontWeight: 800 }}>
+                                  {c.category}
+                                </span>
+                              )}
+                              {c.primaryPlatform && (
+                                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'capitalize' }}>
+                                  📱 {c.primaryPlatform}
+                                </span>
+                              )}
+                              {u.country && (
+                                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <MapPin size={12} /> {u.country}
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          <div style={{ textAlign: 'center', borderLeft: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)' }}>
-                            <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--success)' }}>{c.avgEngagement ? `${c.avgEngagement}%` : 'N/A'}</div>
-                            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Engagement</div>
+
+                          {/* Star Rating */}
+                          <div className="d-flex align-items-center gap-2 mb-3">
+                            <div style={{ display: 'flex', gap: '3px' }}>
+                              {[1, 2, 3, 4, 5].map(star => (
+                                <Star key={star} size={14}
+                                  fill={star <= Math.round(c.avgRating || 0) ? '#f59e0b' : 'none'}
+                                  style={{ color: '#f59e0b' }}
+                                />
+                              ))}
+                            </div>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#d97706' }}>
+                              {c.avgRating > 0 ? c.avgRating : 'New Creator'}
+                            </span>
                           </div>
-                          <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#d63384' }}>{c.completedCampaigns || 0}</div>
-                            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Done</div>
+
+                          {/* Stats Grid */}
+                          <div style={{
+                            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                            gap: '8px', marginBottom: '20px',
+                            padding: '12px', background: '#f8fafc',
+                            borderRadius: '14px', border: '1.5px solid #e2e8f0'
+                          }}>
+                            <div style={{ textAlign: 'center' }}>
+                              <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1e3a8a' }}>{formatNumber(c.followersCount)}</div>
+                              <div style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Followers</div>
+                            </div>
+                            <div style={{ textAlign: 'center', borderLeft: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>
+                              <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#059669' }}>
+                                {c.avgEngagement ? `${c.avgEngagement}%` : 'N/A'}
+                              </div>
+                              <div style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Engagement</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                              <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#7c3aed' }}>{c.completedCampaigns || 0}</div>
+                              <div style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Projects</div>
+                            </div>
+                          </div>
+
+                          {/* Niche Tags */}
+                          {c.niche?.length > 0 && (
+                            <div className="d-flex flex-wrap gap-1 mb-3">
+                              {c.niche.slice(0, 3).map((n, i) => (
+                                <span key={i} style={{ fontSize: '0.72rem', padding: '3px 10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '9999px', color: '#475569', fontWeight: 700 }}>{n}</span>
+                              ))}
+                              {c.niche.length > 3 && <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700 }}>+{c.niche.length - 3}</span>}
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {/* Primary: View Profile */}
+                            <Link
+                              to={`/creators/${u._id}`}
+                              className="btn btn-primary"
+                              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.9rem', padding: '12px', borderRadius: '10px', fontWeight: 800 }}
+                            >
+                              <Eye size={16} /> View Creator Profile
+                            </Link>
+
+                            {/* Secondary row: Invite + Save */}
+                            {user?.role === 'brand' && (
+                              <div className="d-flex gap-2">
+                                <button
+                                  onClick={() => { setInviteModal(u._id); setInviteModalName(u.name); }}
+                                  className="btn btn-outline"
+                                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.85rem', padding: '10px', borderRadius: '10px', fontWeight: 800 }}
+                                >
+                                  <Plus size={15} /> Invite
+                                </button>
+                                <button
+                                  onClick={() => handleToggleSave(u._id)}
+                                  disabled={isCurrentlySaving}
+                                  className="btn"
+                                  style={{
+                                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                    fontSize: '0.85rem', padding: '10px', borderRadius: '10px', fontWeight: 800,
+                                    background: isSaved ? '#fce7f3' : '#f8fafc',
+                                    color: isSaved ? '#be185d' : '#475569',
+                                    border: isSaved ? '1px solid #fbcfe8' : '1px solid #e2e8f0'
+                                  }}
+                                >
+                                  {isSaved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+                                  {isSaved ? 'Saved' : 'Save'}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
-
-                        <Link to={`/creators/${u._id}`} className="btn btn-primary w-100" style={{ fontSize: '0.83rem', padding: '9px' }}>
-                          <Eye size={14} style={{ marginRight: '6px' }} /> View Profile
-                        </Link>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '36px' }}>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === 1}>
+                    <ChevronLeft size={18} /> Previous
+                  </button>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e3a8a' }}>Page {page} of {totalPages}</span>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === totalPages}>
+                    Next <ChevronRight size={18} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
 
-      {/* BRANDS TAB */}
+      {/* ━━━━━ BRANDS TAB ━━━━━ */}
       {activeTab === 'brands' && (
-        <div className="row g-4">
-          {results.map((b) => (
-            <div key={b._id} className="col-12 col-md-6 col-lg-4">
-              <div className="glass-panel" style={{ padding: '24px' }}>
-                <h5 style={{ fontWeight: 800, fontSize: '1rem', margin: '0 0 4px' }}>{b.companyName}</h5>
-                <span className="badge badge-primary mb-3">{b.industry}</span>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>{b.description || 'Verified Sponsor'}</p>
-                <Link to={`/brands/${b.userId?._id}`} className="btn btn-outline w-100">View Brand Details</Link>
+        <>
+          {/* Search Bar & Horizontal Controls Bar */}
+          <div className="glass-panel" style={{ padding: '24px 28px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+            <div className="d-flex gap-3 flex-wrap align-items-center">
+              {/* Search Input */}
+              <div style={{ position: 'relative', flex: '1 1 300px' }}>
+                <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  placeholder="Search brands by company name, industry, or keywords..."
+                  className="form-input"
+                  style={{ paddingLeft: '46px', paddingRight: '16px', paddingHeight: '14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', marginBottom: 0, fontSize: '0.95rem' }}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
               </div>
+
+              {/* Filter Toggle */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="btn btn-outline"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 800, position: 'relative' }}
+              >
+                <Filter size={16} /> Filters
+                {activeFiltersCount > 0 && (
+                  <span style={{
+                    position: 'absolute', top: '-6px', right: '-6px',
+                    width: '20px', height: '20px', borderRadius: '50%',
+                    background: '#1e3a8a', color: '#ffffff',
+                    fontSize: '0.72rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>{activeFiltersCount}</span>
+                )}
+              </button>
+
+              {/* Clear Filters */}
+              {activeFiltersCount > 0 && (
+                <button onClick={handleClearFilters} className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', color: '#ef4444', borderColor: '#fecaca', fontWeight: 800 }}>
+                  <X size={16} /> Reset
+                </button>
+              )}
             </div>
-          ))}
-        </div>
+
+            {/* Expandable Filter Grid */}
+            {showFilters && (
+              <div className="row g-3" style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
+                <div className="col-12 col-md-6">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Industry</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={category} onChange={e => setCategory(e.target.value)}>
+                    <option value="">All Industries</option>
+                    <option value="Tech">Technology</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Fashion">Fashion & Apparel</option>
+                    <option value="Beauty">Beauty & Personal Care</option>
+                    <option value="Food">Food & Beverage</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Brands Result Grid */}
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', height: '280px', alignItems: 'center' }}>
+              <p style={{ color: '#64748b', fontWeight: 700 }}>Searching sponsor brands...</p>
+            </div>
+          ) : results.length === 0 ? (
+            <div className="glass-panel" style={{ padding: '60px 40px', textAlign: 'center', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0' }}>
+              <Search size={40} style={{ color: '#94a3b8', marginBottom: '16px' }} />
+              <h4 style={{ fontWeight: 900, color: '#0f172a' }}>No brands found</h4>
+              <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Try clearing your filters or search keywords.</p>
+            </div>
+          ) : (
+            <>
+              <div className="row g-4 mb-4">
+                {results.map((b) => {
+                  const u = b.userId || {};
+                  return (
+                    <div key={b._id} className="col-12 col-md-6 col-lg-4">
+                      <div className="glass-panel glass-panel-hover" style={{ padding: '28px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '260px', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+                        <div>
+                          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '18px' }}>
+                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#eff6ff', border: '1.5px solid #bfdbfe', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#1e3a8a', fontSize: '1.2rem', flexShrink: 0 }}>
+                              {u.profileImage ? <img src={u.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : getPartnerAvatarInitials(b.companyName)}
+                            </div>
+                            <div>
+                              <span style={{ fontWeight: 900, fontSize: '1.1rem', color: '#0f172a', display: 'block', fontFamily: "'Outfit', var(--font-sans)" }}>{b.companyName || u.name}</span>
+                              {b.industry && (
+                                <span style={{ fontSize: '0.78rem', padding: '3px 10px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e3a8a', borderRadius: '9999px', fontWeight: 800, marginTop: '4px', display: 'inline-block' }}>
+                                  {b.industry}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <p style={{ fontSize: '0.9rem', color: '#475569', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', lineHeight: '1.6', marginBottom: '20px' }}>
+                            {b.description || 'Verified brand sponsor on CreatorSync platform.'}
+                          </p>
+                        </div>
+                        <Link to={`/brands/${u._id}`} className="btn btn-outline" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', fontSize: '0.9rem', padding: '12px', borderRadius: '10px', fontWeight: 800 }}>
+                          View Brand Profile <ExternalLink size={16} />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {totalPages > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '32px' }}>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === 1}><ChevronLeft size={18} /> Previous</button>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e3a8a' }}>Page {page} of {totalPages}</span>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === totalPages}>Next <ChevronRight size={18} /></button>
+                </div>
+              )}
+            </>
+          )}
+        </>
       )}
 
-      {/* PROJECTS TAB */}
+      {/* ━━━━━ PROJECTS/CAMPAIGNS TAB ━━━━━ */}
       {activeTab === 'projects' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '20px' }}>
-          {results.map((p) => {
-            const bUser = p.brandId || {};
-            const formattedDeadline = p.deadline ? new Date(p.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
-            return (
-              <div key={p._id} className="card glass-panel glass-panel-hover border-0 shadow-sm" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <div className="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
-                    <div className="d-flex align-items-center gap-3">
-                      <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'var(--primary-gradient)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 800, color: '#fff' }}>
-                        {bUser.profileImage ? <img src={bUser.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : getPartnerAvatarInitials(bUser.name)}
-                      </div>
-                      <div>
-                        <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)', display: 'block' }}>{bUser.name || 'Sponsor Brand'}</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Location: {p.location || 'Global'}</span>
-                      </div>
-                    </div>
-                    <span style={{ fontWeight: 800, color: 'var(--success)', fontSize: '0.95rem', background: 'var(--success-glow)', padding: '4px 10px', borderRadius: 'var(--radius-full)', border: '1px solid rgba(0, 229, 160, 0.2)' }}>
-                      ${p.budget?.min?.toLocaleString()} - ${p.budget?.max?.toLocaleString()}
-                    </span>
-                  </div>
+        <>
+          {/* Search Bar & Horizontal Controls Bar */}
+          <div className="glass-panel" style={{ padding: '24px 28px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+            <div className="d-flex gap-3 flex-wrap align-items-center">
+              {/* Search Input */}
+              <div style={{ position: 'relative', flex: '1 1 300px' }}>
+                <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  placeholder="Search campaign briefs by title, brand, or keywords..."
+                  className="form-input"
+                  style={{ paddingLeft: '46px', paddingRight: '16px', paddingHeight: '14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', marginBottom: 0, fontSize: '0.95rem' }}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
 
-                  <div className="mb-2">
-                    <h4 style={{ fontWeight: 800, fontSize: '1.1rem', marginTop: '4px', marginBottom: '8px', color: 'var(--text-primary)' }}>{p.title}</h4>
-                    <div className="d-flex flex-wrap gap-1 mb-3">
-                      {p.niche?.map((n, idx) => (
-                        <span key={idx} className="badge badge-primary">{n}</span>
-                      ))}
-                    </div>
-                  </div>
+              {/* Sort By Dropdown */}
+              <select
+                value={sortBy}
+                onChange={e => setSortBy(e.target.value)}
+                className="form-select"
+                style={{ marginBottom: 0, width: 'auto', minWidth: '170px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.9rem', fontWeight: 700 }}
+              >
+                <option value="newest">Newest First</option>
+                <option value="highest-budget">Highest Budget</option>
+                <option value="deadline">Upcoming Deadline</option>
+              </select>
 
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '16px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
-                    {p.description}
-                  </p>
+              {/* Filter Toggle */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="btn btn-outline"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 800, position: 'relative' }}
+              >
+                <Filter size={16} /> Filters
+                {activeFiltersCount > 0 && (
+                  <span style={{
+                    position: 'absolute', top: '-6px', right: '-6px',
+                    width: '20px', height: '20px', borderRadius: '50%',
+                    background: '#1e3a8a', color: '#ffffff',
+                    fontSize: '0.72rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>{activeFiltersCount}</span>
+                )}
+              </button>
+
+              {/* Clear Filters */}
+              {activeFiltersCount > 0 && (
+                <button onClick={handleClearFilters} className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '12px 20px', borderRadius: '10px', fontSize: '0.9rem', color: '#ef4444', borderColor: '#fecaca', fontWeight: 800 }}>
+                  <X size={16} /> Reset
+                </button>
+              )}
+            </div>
+
+            {/* Expandable Filter Grid */}
+            {showFilters && (
+              <div className="row g-3" style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Niche / Category</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={category} onChange={e => setCategory(e.target.value)}>
+                    <option value="">All Niches</option>
+                    <option value="Tech">Technology</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Finance">Finance</option>
+                  </select>
                 </div>
 
-                <div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'var(--bg-tertiary)', padding: '12px 14px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
-                    <div>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700 }}>CREATORS REQUIRED</span>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>{p.creatorsRequired || 1} Creator(s)</span>
-                    </div>
-                    <div>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700 }}>DEADLINE</span>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--primary)' }}>{formattedDeadline}</span>
-                    </div>
-                  </div>
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Target Channels</label>
+                  <select className="form-select" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.88rem' }} value={platform} onChange={e => setPlatform(e.target.value)}>
+                    <option value="">All Channels</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="twitter">X (Twitter)</option>
+                    <option value="linkedin">LinkedIn</option>
+                  </select>
+                </div>
 
-                  <Link to={`/campaigns/${p._id}`} className="btn btn-primary w-100" style={{ display: 'flex', justifyContent: 'center', fontWeight: 700 }}>
-                    Apply Now <ExternalLink size={15} style={{ marginLeft: '6px' }} />
-                  </Link>
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Min Budget ($)</label>
+                  <input type="number" placeholder="e.g. 500" className="form-input" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '0.88rem' }} value={minBudget} onChange={e => setMinBudget(e.target.value)} />
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Target Country</label>
+                  <input type="text" placeholder="e.g. United States" className="form-input" style={{ marginBottom: 0, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '0.88rem' }} value={country} onChange={e => setCountry(e.target.value)} />
                 </div>
               </div>
-            );
-          })}
+            )}
+          </div>
+
+          {/* Campaign Briefs Result Grid */}
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '280px' }}>
+              <p style={{ color: '#64748b', fontWeight: 700 }}>Loading campaign briefs...</p>
+            </div>
+          ) : results.length === 0 ? (
+            <div className="glass-panel" style={{ padding: '60px 40px', textAlign: 'center', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0' }}>
+              <Search size={40} style={{ color: '#94a3b8', marginBottom: '16px' }} />
+              <h4 style={{ fontWeight: 900, color: '#0f172a' }}>No campaign briefs matched</h4>
+              <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Try clearing filters or checking your search parameters.</p>
+            </div>
+          ) : (
+            <>
+              <div className="row g-4 mb-4">
+                {results.map((p) => {
+                  const bUser = p.brandId || {};
+                  const formattedDeadline = p.deadline ? new Date(p.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+                  return (
+                    <div key={p._id} className="col-12 col-md-6 col-lg-4">
+                      <div className="glass-panel glass-panel-hover" style={{ padding: '28px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+                        <div>
+                          <div className="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+                            <div className="d-flex align-items-center gap-3">
+                              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#1e3a8a', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 900, color: '#ffffff', flexShrink: 0 }}>
+                                {bUser.profileImage ? <img src={bUser.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : getPartnerAvatarInitials(bUser.name)}
+                              </div>
+                              <div>
+                                <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a', display: 'block' }}>{bUser.name || 'Sponsor Brand'}</span>
+                                <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>Location: {p.location || 'Global'} {p.isRemote && '(Remote)'}</span>
+                              </div>
+                            </div>
+                            <span style={{ fontWeight: 900, color: '#047857', fontSize: '0.95rem', background: '#ecfdf5', padding: '6px 14px', borderRadius: '9999px', border: '1.5px solid #a7f3d0' }}>
+                              ${p.budget?.min?.toLocaleString()} - ${p.budget?.max?.toLocaleString()}
+                            </span>
+                          </div>
+
+                          <div className="mb-3">
+                            <h4 style={{ fontWeight: 900, fontSize: '1.2rem', marginTop: '6px', marginBottom: '10px', color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>{p.title}</h4>
+                            <div className="d-flex flex-wrap gap-1 mb-3">
+                              {p.niche?.map((n, idx) => (
+                                <span key={idx} style={{ padding: '3px 10px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e3a8a', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800 }}>{n}</span>
+                              ))}
+                              {p.targetPlatforms?.map((plat, idx) => (
+                                <span key={idx} style={{ padding: '3px 10px', background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#475569', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 800 }}>{plat}</span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.6', marginBottom: '20px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                            {p.description}
+                          </p>
+                        </div>
+
+                        <div>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: '#f8fafc', padding: '14px 16px', borderRadius: '14px', marginBottom: '20px', border: '1.5px solid #e2e8f0' }}>
+                            <div>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>SLOTS OPEN</span>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#0f172a' }}>{p.creatorsRequired || 1} Creator(s)</span>
+                            </div>
+                            <div>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>DEADLINE</span>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#1e3a8a' }}>{formattedDeadline}</span>
+                            </div>
+                          </div>
+
+                          <Link to={`/campaigns/${p._id}`} className="btn btn-primary w-100" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', padding: '12px', borderRadius: '10px', fontWeight: 800, fontSize: '0.92rem' }}>
+                            Apply For Brief <ExternalLink size={16} />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {totalPages > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '32px' }}>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === 1}><ChevronLeft size={18} /> Previous</button>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e3a8a' }}>Page {page} of {totalPages}</span>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} className="btn btn-outline" style={{ padding: '10px 16px', borderRadius: '10px' }} disabled={page === totalPages}>Next <ChevronRight size={18} /></button>
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
+
+      {/* ━━━━━ INVITE MODAL ━━━━━ */}
+      {inviteModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.75)', zIndex: 10000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backdropFilter: 'blur(4px)'
+        }}>
+          <div className="glass-panel" style={{ padding: '36px', maxWidth: '460px', width: '100%', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 12px 40px rgba(15, 23, 42, 0.2)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 900, marginBottom: '8px', color: '#0f172a' }}>Invite Creator to Campaign</h3>
+            <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '24px' }}>
+              Select an active campaign brief to send a direct invitation to <strong>{inviteModalName}</strong>:
+            </p>
+            {campaigns.filter(c => c.status === 'active').length === 0 ? (
+              <p style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.9rem', marginBottom: '24px' }}>No active campaigns available. Please create a campaign brief first.</p>
+            ) : (
+              <select value={selectedCampaign} onChange={e => setSelectedCampaign(e.target.value)} className="form-select" style={{ marginBottom: '24px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#ffffff', fontSize: '0.9rem', fontWeight: 700 }}>
+                <option value="">— Select Campaign —</option>
+                {campaigns.filter(c => c.status === 'active').map(c => (
+                  <option key={c._id} value={c._id}>{c.title}</option>
+                ))}
+              </select>
+            )}
+            <div className="d-flex gap-3">
+              <button onClick={handleInvite} disabled={!selectedCampaign || inviting} className="btn btn-primary" style={{ flex: 1, padding: '12px', borderRadius: '10px', fontWeight: 800 }}>
+                {inviting ? 'Sending...' : 'Send Invitation'}
+              </button>
+              <button onClick={() => { setInviteModal(null); setSelectedCampaign(''); }} className="btn btn-outline" style={{ flex: 1, padding: '12px', borderRadius: '10px', fontWeight: 800 }}>Cancel</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

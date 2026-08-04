@@ -78,6 +78,10 @@ const workspaceSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  proposedRate: {
+    type: Number,
+    default: 0
+  },
   status: {
     type: String,
     enum: ['active', 'completed', 'disputed'],

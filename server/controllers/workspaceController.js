@@ -14,7 +14,7 @@ export const getWorkspaces = async (req, res, next) => {
       : { brandId: req.user._id };
 
     const workspaces = await Workspace.find(query)
-      .populate('projectId', 'title description budget deliverables targetPlatforms deadline location requirements isRemote')
+      .populate('projectId', 'title description budget deliverables targetPlatforms deadline location requirements isRemote niche')
       .populate('brandId', 'name email profileImage')
       .populate('creatorId', 'name email profileImage')
       .sort({ updatedAt: -1 });

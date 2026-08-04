@@ -1624,19 +1624,19 @@ const Dashboard = () => {
         return (
           <div className="animate-fade-in-up container-fluid px-0">
             {/* 8 Overview cards */}
-            <div className="row g-4 mb-4">
+            <div className="row g-4 gy-4" style={{ rowGap: '28px', marginBottom: '44px' }}>
               
               {/* Card 1: Active Campaigns */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>ACTIVE CAMPAIGNS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{activeCampaignsCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Ongoing projects</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>ACTIVE CAMPAIGNS</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>{activeCampaignsCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Ongoing projects</small>
                     </div>
-                    <div style={{ background: 'var(--primary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Briefcase size={20} style={{ color: 'var(--primary)' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <Briefcase size={22} style={{ color: '#1e3a8a' }} />
                     </div>
                   </div>
                 </div>
@@ -1644,15 +1644,15 @@ const Dashboard = () => {
 
               {/* Card 2: Pending Applications */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--warning)', letterSpacing: '0.05em' }}>PENDING PITCHES</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--warning)' }}>{pendingAppsCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Awaiting review</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#d97706', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>PENDING PITCHES</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#d97706', fontFamily: "'Outfit', var(--font-sans)" }}>{pendingAppsCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Awaiting review</small>
                     </div>
-                    <div style={{ background: 'var(--warning-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Clock size={20} style={{ color: 'var(--warning)' }} />
+                    <div style={{ background: '#fffbe8', padding: '12px', borderRadius: '12px', border: '1px solid #fef3c7', flexShrink: 0 }}>
+                      <Clock size={22} style={{ color: '#d97706' }} />
                     </div>
                   </div>
                 </div>
@@ -1660,15 +1660,15 @@ const Dashboard = () => {
 
               {/* Card 3: Accepted Applications */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--success)', letterSpacing: '0.05em' }}>ACCEPTED PITCHES</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{acceptedAppsCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Hired / approved</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>ACCEPTED PITCHES</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#3b82f6', fontFamily: "'Outfit', var(--font-sans)" }}>{acceptedAppsCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Hired / approved</small>
                     </div>
-                    <div style={{ background: 'var(--success-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <CheckCircle2 size={20} style={{ color: 'var(--success)' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <CheckCircle2 size={22} style={{ color: '#3b82f6' }} />
                     </div>
                   </div>
                 </div>
@@ -1676,15 +1676,15 @@ const Dashboard = () => {
 
               {/* Card 4: Completed Campaigns */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>COMPLETED</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#d63384' }}>{completedCampaignsCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Successfully closed</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>COMPLETED</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#1e3a8a', fontFamily: "'Outfit', var(--font-sans)" }}>{completedCampaignsCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Successfully closed</small>
                     </div>
-                    <div style={{ background: 'rgba(214, 51, 132, 0.1)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <CheckSquare size={20} style={{ color: '#d63384' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <CheckSquare size={22} style={{ color: '#1e3a8a' }} />
                     </div>
                   </div>
                 </div>
@@ -1692,15 +1692,15 @@ const Dashboard = () => {
 
               {/* Card 5: Total Earnings */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--success)', letterSpacing: '0.05em' }}>TOTAL EARNINGS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>${totalEarningsVal.toLocaleString()}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Platform payouts</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>TOTAL EARNINGS</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>₹{totalEarningsVal.toLocaleString()}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Platform payouts</small>
                     </div>
-                    <div style={{ background: 'var(--success-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <DollarSign size={20} style={{ color: 'var(--success)' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <DollarSign size={22} style={{ color: '#3b82f6' }} />
                     </div>
                   </div>
                 </div>
@@ -1708,15 +1708,15 @@ const Dashboard = () => {
 
               {/* Card 6: Notifications Alert */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>NOTIFICATIONS</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: unreadNotificationsCount > 0 ? 'var(--warning)' : 'var(--text-primary)' }}>{unreadNotificationsCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Unread alerts</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>NOTIFICATIONS</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: unreadNotificationsCount > 0 ? '#d97706' : '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>{unreadNotificationsCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Unread alerts</small>
                     </div>
-                    <div style={{ background: 'var(--primary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Bell size={20} style={{ color: 'var(--primary)' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <Bell size={22} style={{ color: '#1e3a8a' }} />
                     </div>
                   </div>
                 </div>
@@ -1724,15 +1724,15 @@ const Dashboard = () => {
 
               {/* Card 7: Direct Messages */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--secondary)', letterSpacing: '0.05em' }}>MESSAGES</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--secondary)' }}>{totalUnreadMessages}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Unread texts</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>MESSAGES</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#3b82f6', fontFamily: "'Outfit', var(--font-sans)" }}>{totalUnreadMessages}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Unread texts</small>
                     </div>
-                    <div style={{ background: 'var(--secondary-glow)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <MessageSquare size={20} style={{ color: 'var(--secondary)' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <MessageSquare size={22} style={{ color: '#3b82f6' }} />
                     </div>
                   </div>
                 </div>
@@ -1740,15 +1740,15 @@ const Dashboard = () => {
 
               {/* Card 8: Milestones Pending */}
               <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '20px' }}>
-                  <div className="card-body p-0 d-flex justify-content-between align-items-center">
+                <div className="card glass-panel glass-panel-hover border-0 shadow-sm h-100" style={{ padding: '24px 26px', background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px' }}>
+                  <div className="card-body p-0 d-flex justify-content-between align-items-center" style={{ gap: '16px' }}>
                     <div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>DEADLINES</span>
-                      <h3 className="mt-2 mb-0" style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{upcomingDeadlinesCount}</h3>
-                      <small style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Pending milestones</small>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1e3a8a', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>DEADLINES</span>
+                      <h3 style={{ fontSize: '1.9rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>{upcomingDeadlinesCount}</h3>
+                      <small style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginTop: '4px', display: 'block' }}>Pending milestones</small>
                     </div>
-                    <div style={{ background: 'rgba(236, 72, 153, 0.1)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-                      <Calendar size={20} style={{ color: '#ec4899' }} />
+                    <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '12px', border: '1px solid #bfdbfe', flexShrink: 0 }}>
+                      <Calendar size={22} style={{ color: '#1e3a8a' }} />
                     </div>
                   </div>
                 </div>
@@ -1757,7 +1757,7 @@ const Dashboard = () => {
             </div>
 
             {/* Sections Content Area */}
-            <div className="row g-4">
+            <div className="row g-4 gy-4" style={{ rowGap: '36px' }}>
               
               {/* Left Side: Profile, Recommendations, Pitches, Deadlines, Activity */}
               <div className="col-12 col-lg-8 d-flex flex-column gap-4">
@@ -1794,28 +1794,28 @@ const Dashboard = () => {
                 </div>
 
                 {/* 2. Recent Campaign Recommendations */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Compass size={18} style={{ color: 'var(--primary)' }} />
+                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
+                      <Compass size={20} style={{ color: '#1e3a8a' }} />
                       Campaign Recommendations
                     </h4>
-                    <Link to="/discover" className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>Browse Opportunities</Link>
+                    <Link to="/discover" className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Browse Opportunities</Link>
                   </div>
                   {displayInvitations.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No campaigns matching your niches currently active.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No campaigns matching your niches currently active.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                       {displayInvitations.map((camp) => (
-                        <div key={camp._id} className="p-3 d-flex justify-content-between align-items-center" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
-                          <div>
-                            <span className="badge badge-primary mb-1">{camp.targetPlatforms?.join(', ')}</span>
-                            <h5 style={{ fontSize: '0.9rem', fontWeight: 800, margin: '4px 0 2px 0' }}>{camp.title}</h5>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Budget: ${camp.budget?.min} - ${camp.budget?.max}</span>
+                        <div key={camp._id} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+                          <div style={{ flex: '1 1 300px', minWidth: '240px' }}>
+                            <span className="badge badge-primary" style={{ fontSize: '0.78rem', marginBottom: '8px', display: 'inline-block' }}>{camp.targetPlatforms?.join(', ')}</span>
+                            <h5 style={{ fontSize: '1rem', fontWeight: 800, margin: '6px 0 6px 0', color: '#0f172a' }}>{camp.title}</h5>
+                            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Budget: ₹{camp.budget?.min ? camp.budget.min.toLocaleString() : '1,00,000'} - ₹{camp.budget?.max ? camp.budget.max.toLocaleString() : '5,00,000'}</span>
                           </div>
-                          <Link to={`/campaigns/${camp._id}`} className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>
+                          <Link to={`/campaigns/${camp._id}`} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.84rem', flexShrink: 0, textDecoration: 'none', borderRadius: '8px', fontWeight: 800 }}>
                             Pitch Opportunity
-                            <ArrowUpRight size={14} />
+                            <ArrowUpRight size={16} style={{ marginLeft: '6px' }} />
                           </Link>
                         </div>
                       ))}
@@ -1824,27 +1824,27 @@ const Dashboard = () => {
                 </div>
 
                 {/* 3. Recent Applications Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FileText size={18} style={{ color: 'var(--primary)' }} />
+                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
+                      <FileText size={20} style={{ color: '#1e3a8a' }} />
                       Recent Applications Status
                     </h4>
-                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>Full History</button>
+                    <button onClick={() => setSearchParams({ tab: 'applications' })} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Full History</button>
                   </div>
                   {recentApplications.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>You haven't pitched to any campaigns yet.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>You haven't pitched to any campaigns yet.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                       {recentApplications.map((app) => (
-                        <div key={app._id} className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
-                          <div className="d-flex justify-content-between align-items-center mb-2">
-                            <h5 style={{ fontSize: '0.88rem', fontWeight: 800, margin: 0 }}>{app.campaignId?.title || app.projectId?.title || 'Campaign Pitch'}</h5>
-                            <span className={`badge badge-${app.status}`} style={{ fontSize: '0.75rem' }}>{app.status}</span>
+                        <div key={app._id} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0' }}>
+                          <div className="d-flex justify-content-between align-items-center mb-2" style={{ flexWrap: 'wrap', gap: '12px' }}>
+                            <h5 style={{ fontSize: '0.98rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{app.campaignId?.title || app.projectId?.title || 'Campaign Pitch'}</h5>
+                            <span className={`badge badge-${app.status}`} style={{ fontSize: '0.78rem', padding: '4px 12px' }}>{app.status}</span>
                           </div>
-                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0' }}>"{app.pitch?.substring(0, 80)}..."</p>
-                          <div className="d-flex justify-content-between align-items-center mt-2" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            <span>Proposed rate: ${app.proposedRate}</span>
+                          <p style={{ fontSize: '0.88rem', color: '#475569', margin: '8px 0 14px 0', lineHeight: '1.6' }}>"{app.pitch?.substring(0, 95)}..."</p>
+                          <div className="d-flex justify-content-between align-items-center mt-2" style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600, paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
+                            <span>Proposed rate: <strong style={{ color: '#0f172a' }}>₹{app.proposedRate ? app.proposedRate.toLocaleString() : '50,000'}</strong></span>
                             <span>{new Date(app.createdAt).toLocaleDateString()}</span>
                           </div>
                         </div>
@@ -1854,29 +1854,29 @@ const Dashboard = () => {
                 </div>
 
                 {/* 4. Upcoming Deadlines Section */}
-                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '24px' }}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Calendar size={18} style={{ color: 'var(--primary)' }} />
+                <div className="card glass-panel border-0 shadow-sm" style={{ padding: '32px 36px', borderRadius: '18px', background: '#ffffff', border: '1.5px solid #e2e8f0', marginBottom: '28px' }}>
+                  <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#0f172a' }}>
+                      <Calendar size={20} style={{ color: '#1e3a8a' }} />
                       Upcoming Deadlines
                     </h4>
-                    <button onClick={() => setSearchParams({ tab: 'active-collaborations' })} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.75rem' }}>Track Workspaces</button>
+                    <button onClick={() => setSearchParams({ tab: 'active-collaborations' })} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.82rem', borderRadius: '8px' }}>Track Workspaces</button>
                   </div>
                   {displayDeadlines.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>No pending milestone deadlines.</p>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No pending milestone deadlines.</p>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                       {displayDeadlines.map((dl, idx) => (
-                        <div key={idx} className="p-3 d-flex justify-content-between align-items-center" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--warning)' }}>
-                          <div>
-                            <h5 style={{ fontSize: '0.85rem', fontWeight: 800, margin: 0 }}>{dl.title}</h5>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Project: {dl.projectTitle}</span>
+                        <div key={idx} style={{ padding: '22px 26px', background: '#f8fafc', borderRadius: '14px', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #d97706', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+                          <div style={{ flex: '1 1 260px', minWidth: '220px' }}>
+                            <h5 style={{ fontSize: '0.98rem', fontWeight: 800, margin: '0 0 6px 0', color: '#0f172a' }}>{dl.title}</h5>
+                            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Project: {dl.projectTitle}</span>
                           </div>
-                          <div className="text-end">
-                            <span style={{ fontSize: '0.78rem', color: 'var(--warning)', fontWeight: 700, display: 'block' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
+                            <span style={{ fontSize: '0.82rem', color: '#d97706', fontWeight: 800, display: 'block', background: '#fffbe8', padding: '4px 12px', borderRadius: '6px', border: '1px solid #fef3c7' }}>
                               Due: {new Date(dl.dueDate).toLocaleDateString()}
                             </span>
-                            <Link to={`/workspaces/${dl.workspaceId}`} style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700 }}>Workspace Details →</Link>
+                            <Link to={`/workspaces/${dl.workspaceId}`} style={{ fontSize: '0.8rem', color: '#1e3a8a', fontWeight: 800, textDecoration: 'none' }}>Workspace Details →</Link>
                           </div>
                         </div>
                       ))}
@@ -2081,11 +2081,36 @@ const Dashboard = () => {
         const activeWS = workspaces.filter(ws => ws.status !== 'completed');
         return (
           <div className="animate-fade-in-up">
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '24px' }}>Active Collaborations</h3>
+            {/* Section Header */}
+            <div style={{ marginBottom: '32px' }}>
+              <div className="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 6px 0', color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                    Active Collaborations
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0, fontWeight: 500 }}>
+                    Track ongoing sponsorship projects, milestones &amp; deliverables in real-time.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ background: '#ecfdf5', color: '#047857', padding: '8px 18px', borderRadius: '12px', border: '1.5px solid #a7f3d0', fontSize: '0.88rem', fontWeight: 800 }}>
+                    {activeWS.length} Active Project{activeWS.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {activeWS.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
-                <Briefcase size={32} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
-                <p style={{ color: 'var(--text-secondary)' }}>No active campaigns in collaboration.</p>
+              <div style={{
+                padding: '80px 40px', textAlign: 'center', borderRadius: '20px',
+                background: '#ffffff', border: '1.5px solid #e2e8f0',
+                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+              }}>
+                <Briefcase size={48} style={{ color: '#94a3b8', display: 'block', margin: '0 auto 16px' }} />
+                <h4 style={{ fontWeight: 900, margin: '0 0 8px 0', color: '#0f172a', fontSize: '1.15rem' }}>No active collaborations</h4>
+                <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>
+                  Your accepted campaign collaborations will appear here once started.
+                </p>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -2096,6 +2121,7 @@ const Dashboard = () => {
                   // Compute progress stats
                   const totalMilestones = ws.milestones?.length || 0;
                   const approvedMilestones = ws.milestones?.filter(m => m.status === 'approved').length || 0;
+                  const submittedMilestones = ws.milestones?.filter(m => m.status === 'submitted').length || 0;
                   const progressPct = totalMilestones > 0 ? Math.round((approvedMilestones / totalMilestones) * 100) : 0;
 
                   const formattedDeadline = project.deadline 
@@ -2103,39 +2129,107 @@ const Dashboard = () => {
                     : 'N/A';
 
                   return (
-                    <div key={ws._id} className="card glass-panel text-white border-0 shadow-sm" style={{ padding: '24px' }}>
-                      <div className="card-body p-0">
-                        {/* Header: Title, Brand name, Rate */}
-                        <div className="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                              SPONSOR COMPANY: {brandUser.name || 'Brand Partner'}
-                            </span>
-                            <h4 style={{ fontWeight: 800, fontSize: '1.25rem', margin: '4px 0 0 0' }}>{project.title || 'Sponsorship Contract'}</h4>
+                    <div
+                      key={ws._id}
+                      style={{
+                        padding: '0', overflow: 'hidden',
+                        borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0',
+                        boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(30, 58, 138, 0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 23, 42, 0.05)'; }}
+                    >
+                      {/* Status Color Top Bar */}
+                      <div style={{ height: '5px', background: 'linear-gradient(90deg, #047857, #10b981, #34d399)' }} />
+
+                      <div style={{ padding: '28px 32px' }}>
+                        {/* Row 1: Brand + Title + Rate Badge */}
+                        <div className="d-flex justify-content-between align-items-start flex-wrap gap-3" style={{ marginBottom: '24px' }}>
+                          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                            {/* Brand Avatar */}
+                            <div style={{
+                              width: '52px', height: '52px', borderRadius: '14px',
+                              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              color: '#ffffff', fontWeight: 900, fontSize: '1rem', flexShrink: 0,
+                              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.2)'
+                            }}>
+                              {brandUser.profileImage
+                                ? <img src={brandUser.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '14px' }} alt="" />
+                                : (brandUser.name ? brandUser.name.substring(0, 2).toUpperCase() : 'CS')
+                              }
+                            </div>
+                            <div>
+                              <span style={{
+                                fontSize: '0.78rem', color: '#1e3a8a', fontWeight: 800,
+                                textTransform: 'uppercase', letterSpacing: '0.05em',
+                                display: 'flex', alignItems: 'center', gap: '6px'
+                              }}>
+                                <Building size={13} /> {brandUser.name || 'Brand Partner'}
+                              </span>
+                              <h4 style={{
+                                fontWeight: 900, fontSize: '1.25rem', margin: '4px 0 0 0',
+                                color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)",
+                                lineHeight: '1.35'
+                              }}>
+                                {project.title || 'Sponsorship Contract'}
+                              </h4>
+                            </div>
                           </div>
-                          <div className="text-end">
-                            <span style={{ fontWeight: 800, color: 'var(--success)', fontSize: '1.1rem', display: 'block' }}>
-                              Rate: ${ws.proposedRate || 1500}
+
+                          <div style={{ textAlign: 'right' }}>
+                            <span style={{
+                              fontWeight: 900, color: '#047857', fontSize: '1.15rem', display: 'block',
+                              background: '#ecfdf5', padding: '8px 18px', borderRadius: '12px',
+                              border: '1.5px solid #a7f3d0'
+                            }}>
+                              ${ws.proposedRate?.toLocaleString() || '1,500'}
                             </span>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Payment: Escrow Secured</span>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, marginTop: '4px', display: 'block' }}>
+                              💳 Escrow Secured
+                            </span>
                           </div>
                         </div>
 
-                        {/* Campaign Brief Summary */}
-                        <div className="mb-4">
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, marginBottom: '4px' }}>CAMPAIGN BRIEF Overview</span>
-                          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
+                        {/* Row 2: Campaign Brief */}
+                        <div style={{
+                          background: '#f8fafc', borderRadius: '14px',
+                          padding: '18px 22px', marginBottom: '24px',
+                          borderLeft: '4px solid #047857', border: '1.5px solid #e2e8f0',
+                          borderLeftWidth: '4px', borderLeftColor: '#047857'
+                        }}>
+                          <span style={{
+                            fontWeight: 800, display: 'block', fontSize: '0.75rem',
+                            color: '#047857', marginBottom: '8px',
+                            textTransform: 'uppercase', letterSpacing: '0.05em'
+                          }}>
+                            📋 Campaign Brief Overview
+                          </span>
+                          <p style={{
+                            fontSize: '0.92rem', color: '#334155',
+                            lineHeight: '1.7', margin: 0
+                          }}>
                             {project.description || 'Campaign specifications provided by sponsor.'}
                           </p>
                         </div>
 
-                        {/* Deliverables summary */}
+                        {/* Row 3: Deliverables Tags */}
                         {project.deliverables && project.deliverables.length > 0 && (
-                          <div className="mb-4">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, marginBottom: '6px' }}>REQUIRED DELIVERABLES</span>
-                            <div className="d-flex flex-wrap gap-1">
+                          <div style={{ marginBottom: '24px' }}>
+                            <span style={{
+                              fontSize: '0.75rem', color: '#1e3a8a', display: 'block', fontWeight: 800,
+                              marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}>
+                              🎯 Required Deliverables
+                            </span>
+                            <div className="d-flex flex-wrap gap-2">
                               {project.deliverables.map((deliv, dIdx) => (
-                                <span key={dIdx} className="badge badge-outline" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', padding: '4px 8px' }}>
+                                <span key={dIdx} style={{
+                                  padding: '5px 14px', background: '#eff6ff',
+                                  border: '1px solid #bfdbfe', color: '#1e3a8a',
+                                  borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 800
+                                }}>
                                   {deliv}
                                 </span>
                               ))}
@@ -2143,89 +2237,141 @@ const Dashboard = () => {
                           </div>
                         )}
 
-                        {/* Progress Bar & Deadline */}
-                        <div className="row g-3 mb-4 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
-                          <div className="col-12 col-md-6">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700 }}>COLLABORATION PROGRESS</span>
-                              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)' }}>{progressPct}% ({approvedMilestones}/{totalMilestones})</span>
+                        {/* Row 4: Stats Grid — Progress + Deadline */}
+                        <div style={{
+                          display: 'grid', gridTemplateColumns: '1fr 1fr',
+                          gap: '20px', marginBottom: '24px',
+                          padding: '20px 24px', background: '#f8fafc',
+                          borderRadius: '14px', border: '1.5px solid #e2e8f0'
+                        }}>
+                          <div>
+                            <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '10px' }}>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                Collaboration Progress
+                              </span>
+                              <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1e3a8a' }}>
+                                {progressPct}% ({approvedMilestones}/{totalMilestones})
+                              </span>
                             </div>
-                            <div className="progress" style={{ height: '6px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)' }}>
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{
-                                  width: `${progressPct}%`,
-                                  background: 'var(--primary-gradient)',
-                                  borderRadius: 'var(--radius-full)'
-                                }}
-                                aria-valuenow={progressPct}
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
+                            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '9999px', overflow: 'hidden' }}>
+                              <div style={{
+                                width: `${progressPct}%`,
+                                height: '100%',
+                                background: 'linear-gradient(90deg, #1e3a8a, #3b82f6)',
+                                borderRadius: '9999px',
+                                transition: 'width 0.5s ease'
+                              }} />
                             </div>
                           </div>
-                          <div className="col-12 col-md-6 text-md-end">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700 }}>CAMPAIGN DEADLINE</span>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#ec4899' }}>{formattedDeadline}</span>
+                          <div style={{ textAlign: 'right' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Campaign Deadline
+                            </span>
+                            <span style={{ fontSize: '1.05rem', fontWeight: 900, color: '#b91c1c' }}>{formattedDeadline}</span>
                           </div>
                         </div>
 
-                        {/* Milestone Progression Vertical Timeline */}
-                        <div className="mb-4">
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, marginBottom: '12px' }}>MILESTONES WORKFLOW TIMELINE</span>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', paddingLeft: '12px' }}>
+                        {/* Row 5: Milestones Timeline */}
+                        <div style={{ marginBottom: '24px' }}>
+                          <span style={{
+                            fontSize: '0.78rem', color: '#0f172a', display: 'block', fontWeight: 900,
+                            marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em'
+                          }}>
+                            🚀 Milestones Workflow Timeline
+                          </span>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0', position: 'relative', paddingLeft: '16px' }}>
                             {ws.milestones?.map((m, mIdx) => {
-                              let timelineColor = 'var(--text-muted)';
-                              if (m.status === 'approved') timelineColor = 'var(--success)';
-                              if (m.status === 'submitted') timelineColor = 'var(--warning)';
+                              const getMilestoneColor = (status) => {
+                                if (status === 'approved') return '#047857';
+                                if (status === 'submitted') return '#f59e0b';
+                                return '#94a3b8';
+                              };
+                              const getMilestoneBg = (status) => {
+                                if (status === 'approved') return '#ecfdf5';
+                                if (status === 'submitted') return '#fffbeb';
+                                return '#f8fafc';
+                              };
+                              const getMilestoneBorder = (status) => {
+                                if (status === 'approved') return '#a7f3d0';
+                                if (status === 'submitted') return '#fde68a';
+                                return '#e2e8f0';
+                              };
+                              const milestoneColor = getMilestoneColor(m.status);
 
                               return (
-                                <div key={m._id} className="d-flex gap-3 position-relative" style={{ paddingBottom: mIdx < ws.milestones.length - 1 ? '16px' : 0 }}>
+                                <div key={m._id} style={{ position: 'relative', paddingBottom: mIdx < ws.milestones.length - 1 ? '0' : 0 }}>
+                                  {/* Vertical Line */}
                                   {mIdx < ws.milestones.length - 1 && (
-                                    <div style={{ position: 'absolute', left: '4px', top: '14px', bottom: '-14px', width: '2px', background: 'var(--border-color)' }}></div>
+                                    <div style={{
+                                      position: 'absolute', left: '-10px', top: '18px', bottom: '0',
+                                      width: '2px', background: '#e2e8f0'
+                                    }} />
                                   )}
-                                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: timelineColor, marginTop: '6px', zIndex: 1 }}></div>
-                                  <div style={{ flexGrow: 1 }}>
-                                    <div className="d-flex align-items-center gap-2">
-                                      <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>{m.title}</span>
-                                      <span className={`badge badge-${m.status === 'approved' ? 'approved' : (m.status === 'submitted' ? 'pending' : 'primary')}`} style={{ fontSize: '0.65rem' }}>{m.status}</span>
+                                  {/* Dot */}
+                                  <div style={{
+                                    position: 'absolute', left: '-14px', top: '14px',
+                                    width: '12px', height: '12px', borderRadius: '50%',
+                                    background: milestoneColor, zIndex: 1,
+                                    border: '2px solid #ffffff',
+                                    boxShadow: `0 0 0 3px ${milestoneColor}33`
+                                  }} />
+
+                                  {/* Milestone Content Card */}
+                                  <div style={{
+                                    background: getMilestoneBg(m.status),
+                                    border: `1.5px solid ${getMilestoneBorder(m.status)}`,
+                                    borderRadius: '14px', padding: '16px 20px',
+                                    marginLeft: '8px', marginBottom: mIdx < ws.milestones.length - 1 ? '16px' : '0'
+                                  }}>
+                                    <div className="d-flex align-items-center gap-2 flex-wrap" style={{ marginBottom: '6px' }}>
+                                      <span style={{ fontSize: '0.92rem', fontWeight: 900, color: '#0f172a' }}>{m.title}</span>
+                                      <span style={{
+                                        padding: '3px 10px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 800,
+                                        background: getMilestoneBg(m.status),
+                                        color: milestoneColor,
+                                        border: `1px solid ${getMilestoneBorder(m.status)}`,
+                                        textTransform: 'capitalize'
+                                      }}>
+                                        {m.status === 'approved' ? '✅ Approved' : m.status === 'submitted' ? '⏳ Submitted' : '📌 Pending'}
+                                      </span>
                                     </div>
-                                    <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block' }}>{m.description}</span>
-                                    
-                                    {/* Brand feedback if present */}
+                                    {m.description && (
+                                      <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: '1.6', margin: '0 0 8px 0' }}>{m.description}</p>
+                                    )}
+
+                                    {/* Brand feedback if approved */}
                                     {m.status === 'approved' && (
-                                      <span style={{ fontSize: '0.72rem', color: 'var(--success)', display: 'block', marginTop: '4px' }}>
-                                        ✓ Deliverable approved. Budget escrow locked for milestone payout.
+                                      <span style={{ fontSize: '0.78rem', color: '#047857', display: 'block', fontWeight: 700 }}>
+                                        ✓ Deliverable approved — budget escrow locked for payout.
                                       </span>
                                     )}
 
                                     {/* Upload Link Form inside Milestone element */}
                                     {m.status === 'pending' && (
-                                      <div className="mt-2">
+                                      <div style={{ marginTop: '10px' }}>
                                         {submittingMilestoneId === m._id ? (
-                                          <div className="p-3" style={{ background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', maxWidth: '500px' }}>
-                                            <div className="form-group mb-2">
-                                              <label className="form-label" style={{ fontSize: '0.7rem' }}>Content URL proof</label>
+                                          <div style={{ background: '#ffffff', borderRadius: '12px', border: '1.5px solid #e2e8f0', padding: '16px', maxWidth: '500px' }}>
+                                            <div style={{ marginBottom: '12px' }}>
+                                              <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Content URL Proof</label>
                                               <input
                                                 type="url"
                                                 placeholder="https://..."
                                                 className="form-input"
                                                 value={submissionUrl}
                                                 onChange={(e) => setSubmissionUrl(e.target.value)}
-                                                style={{ padding: '8px 12px', fontSize: '0.8rem' }}
+                                                style={{ padding: '10px 14px', fontSize: '0.88rem', borderRadius: '8px', border: '1.5px solid #e2e8f0', marginBottom: 0 }}
                                                 required
                                               />
                                             </div>
-                                            <div className="form-group mb-3">
-                                              <label className="form-label" style={{ fontSize: '0.7rem' }}>Notes for sponsor</label>
+                                            <div style={{ marginBottom: '14px' }}>
+                                              <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1e3a8a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Notes for Sponsor</label>
                                               <textarea
                                                 placeholder="Provide review timestamps..."
                                                 rows="2"
                                                 className="form-input"
                                                 value={submissionNotes}
                                                 onChange={(e) => setSubmissionNotes(e.target.value)}
-                                                style={{ padding: '8px 12px', fontSize: '0.8rem' }}
+                                                style={{ padding: '10px 14px', fontSize: '0.88rem', borderRadius: '8px', border: '1.5px solid #e2e8f0', marginBottom: 0 }}
                                               />
                                             </div>
                                             <div className="d-flex gap-2">
@@ -2233,16 +2379,18 @@ const Dashboard = () => {
                                                 type="button"
                                                 onClick={() => handleSubmitMilestoneProof(ws._id, m._id)}
                                                 className="btn btn-primary"
-                                                style={{ padding: '6px 12px', fontSize: '0.75rem' }}
+                                                style={{ padding: '8px 18px', fontSize: '0.85rem', borderRadius: '10px', fontWeight: 800 }}
                                                 disabled={submissionLoading}
                                               >
-                                                {submissionLoading ? 'Submitting...' : 'Send Proof'}
+                                                {submissionLoading ? 'Submitting...' : '🚀 Send Proof'}
                                               </button>
                                               <button
                                                 type="button"
                                                 onClick={() => setSubmittingMilestoneId(null)}
-                                                className="btn btn-outline"
-                                                style={{ padding: '6px 12px', fontSize: '0.75rem' }}
+                                                style={{
+                                                  padding: '8px 18px', fontSize: '0.85rem', borderRadius: '10px', fontWeight: 800,
+                                                  background: '#f1f5f9', color: '#475569', border: '1.5px solid #e2e8f0', cursor: 'pointer'
+                                                }}
                                               >
                                                 Cancel
                                               </button>
@@ -2256,10 +2404,13 @@ const Dashboard = () => {
                                               setSubmissionUrl('');
                                               setSubmissionNotes('');
                                             }}
-                                            className="btn btn-outline"
-                                            style={{ padding: '4px 10px', fontSize: '0.72rem' }}
+                                            style={{
+                                              padding: '6px 16px', fontSize: '0.82rem', borderRadius: '8px', fontWeight: 800,
+                                              background: '#eff6ff', color: '#1e3a8a', border: '1.5px solid #bfdbfe', cursor: 'pointer',
+                                              transition: 'all 0.2s ease'
+                                            }}
                                           >
-                                            Submit Deliverable Proof
+                                            📤 Submit Deliverable Proof
                                           </button>
                                         )}
                                       </div>
@@ -2267,13 +2418,13 @@ const Dashboard = () => {
 
                                     {/* Submitted pending confirmation */}
                                     {m.status === 'submitted' && (
-                                      <div style={{ background: 'var(--bg-tertiary)', padding: '10px 12px', borderRadius: 'var(--radius-sm)', marginTop: '8px', fontSize: '0.75rem' }}>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontWeight: 600 }}>Submitted Verification URL:</span>
-                                        <a href={m.submissionUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--secondary)', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                                      <div style={{ background: '#ffffff', padding: '12px 16px', borderRadius: '10px', marginTop: '10px', fontSize: '0.82rem', border: '1.5px solid #e2e8f0' }}>
+                                        <span style={{ color: '#64748b', display: 'block', fontWeight: 800, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>Submitted Verification URL:</span>
+                                        <a href={m.submissionUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#1e3a8a', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', fontWeight: 700 }}>
                                           {m.submissionUrl}
                                         </a>
                                         {m.submissionNotes && (
-                                          <span style={{ color: 'var(--text-secondary)', display: 'block', marginTop: '4px' }}>Notes: {m.submissionNotes}</span>
+                                          <span style={{ color: '#475569', display: 'block', marginTop: '6px', fontSize: '0.82rem' }}>📝 Notes: {m.submissionNotes}</span>
                                         )}
                                       </div>
                                     )}
@@ -2284,28 +2435,46 @@ const Dashboard = () => {
                           </div>
                         </div>
 
-                        {/* Collapsible Messaging & Details link */}
-                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
+                        {/* Row 6: Action Buttons */}
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3" style={{ paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
                           <button
                             onClick={() => setActiveChatWsId(activeChatWsId === ws._id ? null : ws._id)}
-                            className="btn btn-outline"
-                            style={{ padding: '6px 16px', fontSize: '0.8rem' }}
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '8px',
+                              padding: '10px 22px', borderRadius: '10px',
+                              fontSize: '0.88rem', fontWeight: 800,
+                              background: activeChatWsId === ws._id ? '#eff6ff' : '#f8fafc',
+                              color: activeChatWsId === ws._id ? '#1e3a8a' : '#475569',
+                              border: activeChatWsId === ws._id ? '1.5px solid #bfdbfe' : '1.5px solid #e2e8f0',
+                              cursor: 'pointer', transition: 'all 0.2s ease'
+                            }}
                           >
-                            <MessageSquare size={14} /> Messages ({ws.messages?.length || 0})
+                            <MessageSquare size={15} /> Messages ({ws.messages?.length || 0})
                           </button>
                           
-                          <Link to={`/workspaces/${ws._id}`} className="btn btn-outline" style={{ padding: '6px 16px', fontSize: '0.8rem' }}>
+                          <Link
+                            to={`/workspaces/${ws._id}`}
+                            className="btn btn-primary"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '8px',
+                              padding: '10px 22px', borderRadius: '10px',
+                              fontSize: '0.88rem', fontWeight: 800
+                            }}
+                          >
                             Open Workspace Details →
                           </Link>
                         </div>
 
-                        {/* Inline Messages board */}
+                        {/* Inline Messages Board */}
                         {activeChatWsId === ws._id && (
-                          <div className="card glass-panel border-0 mt-3" style={{ background: 'var(--bg-tertiary)', padding: '16px' }}>
-                            <div style={{ overflowY: 'auto', maxHeight: '160px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}>
+                          <div style={{
+                            marginTop: '20px', background: '#f8fafc', padding: '20px',
+                            borderRadius: '16px', border: '1.5px solid #e2e8f0'
+                          }}>
+                            <div style={{ overflowY: 'auto', maxHeight: '200px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
                               {ws.messages?.length === 0 ? (
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', fontStyle: 'italic', textAlign: 'center', margin: '20px 0' }}>
-                                  No activity logs or messages. Say hello to sponsor brand!
+                                <p style={{ color: '#94a3b8', fontSize: '0.88rem', fontStyle: 'italic', textAlign: 'center', margin: '24px 0' }}>
+                                  No messages yet. Say hello to your sponsor brand! 👋
                                 </p>
                               ) : (
                                 ws.messages.map((msg, mIdx) => {
@@ -2313,13 +2482,14 @@ const Dashboard = () => {
                                   return (
                                     <div key={mIdx} style={{
                                       alignSelf: isMe ? 'flex-end' : 'flex-start',
-                                      background: isMe ? 'var(--primary-glow)' : 'var(--bg-secondary)',
-                                      padding: '6px 12px',
-                                      borderRadius: 'var(--radius-sm)',
-                                      fontSize: '0.78rem',
-                                      maxWidth: '85%'
+                                      background: isMe ? '#eff6ff' : '#ffffff',
+                                      border: isMe ? '1.5px solid #bfdbfe' : '1.5px solid #e2e8f0',
+                                      padding: '10px 16px',
+                                      borderRadius: isMe ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
+                                      fontSize: '0.88rem',
+                                      maxWidth: '80%', color: '#0f172a'
                                     }}>
-                                      <span style={{ fontSize: '0.65rem', color: isMe ? 'var(--primary)' : 'var(--text-muted)', fontWeight: 700, display: 'block', marginBottom: '2px' }}>
+                                      <span style={{ fontSize: '0.72rem', color: isMe ? '#1e3a8a' : '#64748b', fontWeight: 800, display: 'block', marginBottom: '4px' }}>
                                         {isMe ? 'You' : brandUser.name}
                                       </span>
                                       <span>{msg.text}</span>
@@ -2336,16 +2506,16 @@ const Dashboard = () => {
                                 className="form-input"
                                 value={typedWsMessage}
                                 onChange={(e) => setTypedWsMessage(e.target.value)}
-                                style={{ fontSize: '0.8rem', padding: '6px 12px', marginBottom: 0 }}
+                                style={{ fontSize: '0.88rem', padding: '10px 16px', marginBottom: 0, borderRadius: '10px', border: '1.5px solid #e2e8f0' }}
                               />
                               <button
                                 type="button"
                                 onClick={() => handleSendWsMessage(ws._id)}
                                 className="btn btn-primary"
-                                style={{ padding: '6px 16px', fontSize: '0.8rem' }}
+                                style={{ padding: '10px 20px', fontSize: '0.88rem', borderRadius: '10px', fontWeight: 800 }}
                                 disabled={chatLoading}
                               >
-                                Send
+                                <Send size={15} />
                               </button>
                             </div>
                           </div>
@@ -2363,26 +2533,275 @@ const Dashboard = () => {
 
       case 'completed-collaborations': {
         const completedWS = workspaces.filter(ws => ws.status === 'completed');
+        const totalEarned = completedWS.reduce((acc, ws) => acc + (ws.proposedRate || 0), 0);
+
         return (
           <div className="animate-fade-in-up">
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '24px' }}>Completed Collaborations</h3>
+            {/* Section Header */}
+            <div style={{ marginBottom: '32px' }}>
+              <div className="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 6px 0', color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                    Completed Collaborations
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0, fontWeight: 500 }}>
+                    Past sponsorship projects that have been finalized and paid out.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ background: '#ecfdf5', color: '#047857', padding: '8px 18px', borderRadius: '12px', border: '1.5px solid #a7f3d0', fontSize: '0.88rem', fontWeight: 800 }}>
+                    💰 ${totalEarned.toLocaleString()} Earned
+                  </span>
+                  <span style={{ background: '#f0f9ff', color: '#0369a1', padding: '8px 18px', borderRadius: '12px', border: '1.5px solid #bae6fd', fontSize: '0.88rem', fontWeight: 800 }}>
+                    🏆 {completedWS.length} Completed
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {completedWS.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
-                <CheckSquare size={32} style={{ color: 'var(--text-muted)', marginBottom: '12px' }} />
-                <p style={{ color: 'var(--text-secondary)' }}>No completed project workspaces.</p>
+              <div style={{
+                padding: '80px 40px', textAlign: 'center', borderRadius: '20px',
+                background: '#ffffff', border: '1.5px solid #e2e8f0',
+                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+              }}>
+                <CheckSquare size={48} style={{ color: '#94a3b8', display: 'block', margin: '0 auto 16px' }} />
+                <h4 style={{ fontWeight: 900, margin: '0 0 8px 0', color: '#0f172a', fontSize: '1.15rem' }}>No completed projects yet</h4>
+                <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>
+                  Finalized collaborations will appear here once completed.
+                </p>
               </div>
             ) : (
-              <div className="grid-container" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-                {completedWS.map((ws) => (
-                  <div key={ws._id} className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <div>
-                      <span className="badge badge-approved" style={{ marginBottom: '12px' }}>{ws.status}</span>
-                      <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '8px' }}>{ws.projectId?.title || 'Collaboration Space'}</h4>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>Partner: {ws.brandId?.name}</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {completedWS.map((ws) => {
+                  const project = ws.projectId || {};
+                  const brandUser = ws.brandId || {};
+                  const totalM = ws.milestones?.length || 0;
+                  const approvedM = ws.milestones?.filter(m => m.status === 'approved').length || 0;
+
+                  const formattedDeadline = project.deadline
+                    ? new Date(project.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                    : 'N/A';
+
+                  return (
+                    <div
+                      key={ws._id}
+                      style={{
+                        padding: '0', overflow: 'hidden',
+                        borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0',
+                        boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(3, 105, 161, 0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 23, 42, 0.05)'; }}
+                    >
+                      {/* Status Color Top Bar */}
+                      <div style={{ height: '5px', background: 'linear-gradient(90deg, #0369a1, #38bdf8, #7dd3fc)' }} />
+
+                      <div style={{ padding: '28px 32px' }}>
+                        {/* Row 1: Brand + Title + Rate */}
+                        <div className="d-flex justify-content-between align-items-start flex-wrap gap-3" style={{ marginBottom: '24px' }}>
+                          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                            {/* Brand Avatar */}
+                            <div style={{
+                              width: '52px', height: '52px', borderRadius: '14px',
+                              background: 'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              color: '#ffffff', fontWeight: 900, fontSize: '1rem', flexShrink: 0,
+                              boxShadow: '0 4px 12px rgba(3, 105, 161, 0.2)'
+                            }}>
+                              {brandUser.profileImage
+                                ? <img src={brandUser.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '14px' }} alt="" />
+                                : (brandUser.name ? brandUser.name.substring(0, 2).toUpperCase() : 'CS')
+                              }
+                            </div>
+                            <div>
+                              <span style={{
+                                fontSize: '0.78rem', color: '#0369a1', fontWeight: 800,
+                                textTransform: 'uppercase', letterSpacing: '0.05em',
+                                display: 'flex', alignItems: 'center', gap: '6px'
+                              }}>
+                                <Building size={13} /> {brandUser.name || 'Brand Partner'}
+                              </span>
+                              <h4 style={{
+                                fontWeight: 900, fontSize: '1.25rem', margin: '4px 0 0 0',
+                                color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)",
+                                lineHeight: '1.35'
+                              }}>
+                                {project.title || 'Completed Sponsorship'}
+                              </h4>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                            <span style={{
+                              padding: '5px 14px', background: '#f0f9ff', color: '#0369a1',
+                              border: '1.5px solid #bae6fd', borderRadius: '9999px',
+                              fontSize: '0.78rem', fontWeight: 900, display: 'inline-flex',
+                              alignItems: 'center', gap: '6px'
+                            }}>
+                              🏆 Completed
+                            </span>
+                            <span style={{
+                              fontWeight: 900, color: '#047857', fontSize: '1.15rem',
+                              background: '#ecfdf5', padding: '6px 16px', borderRadius: '10px',
+                              border: '1.5px solid #a7f3d0'
+                            }}>
+                              ${ws.proposedRate?.toLocaleString() || '0'} Earned
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Row 2: Campaign Brief */}
+                        {project.description && (
+                          <div style={{
+                            background: '#f0f9ff', borderRadius: '14px',
+                            padding: '18px 22px', marginBottom: '24px',
+                            borderLeft: '4px solid #0369a1', border: '1.5px solid #bae6fd',
+                            borderLeftWidth: '4px', borderLeftColor: '#0369a1'
+                          }}>
+                            <span style={{
+                              fontWeight: 800, display: 'block', fontSize: '0.75rem',
+                              color: '#0369a1', marginBottom: '8px',
+                              textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}>
+                              📋 Campaign Brief
+                            </span>
+                            <p style={{
+                              fontSize: '0.92rem', color: '#334155',
+                              lineHeight: '1.7', margin: 0
+                            }}>
+                              {project.description}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Row 3: Deliverables Tags */}
+                        {project.deliverables && project.deliverables.length > 0 && (
+                          <div style={{ marginBottom: '24px' }}>
+                            <span style={{
+                              fontSize: '0.75rem', color: '#0369a1', display: 'block', fontWeight: 800,
+                              marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}>
+                              ✅ Delivered Content
+                            </span>
+                            <div className="d-flex flex-wrap gap-2">
+                              {project.deliverables.map((deliv, dIdx) => (
+                                <span key={dIdx} style={{
+                                  padding: '5px 14px', background: '#ecfdf5',
+                                  border: '1px solid #a7f3d0', color: '#047857',
+                                  borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 800,
+                                  display: 'inline-flex', alignItems: 'center', gap: '4px'
+                                }}>
+                                  ✓ {deliv}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Row 4: Stats Grid */}
+                        <div style={{
+                          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                          gap: '16px', marginBottom: '24px',
+                          padding: '18px 20px', background: '#f8fafc',
+                          borderRadius: '14px', border: '1.5px solid #e2e8f0'
+                        }}>
+                          <div style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Milestones
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#047857' }}>
+                              {approvedM}/{totalM} Approved
+                            </span>
+                          </div>
+                          <div style={{ textAlign: 'center', borderLeft: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Rate Paid
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#047857' }}>
+                              ${ws.proposedRate?.toLocaleString() || '0'}
+                            </span>
+                          </div>
+                          <div style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Deadline
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a' }}>
+                              {formattedDeadline}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Row 5: Milestones Summary */}
+                        {ws.milestones?.length > 0 && (
+                          <div style={{ marginBottom: '24px' }}>
+                            <span style={{
+                              fontSize: '0.78rem', color: '#0f172a', display: 'block', fontWeight: 900,
+                              marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}>
+                              🎯 Completed Milestones
+                            </span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {ws.milestones.map((m) => (
+                                <div key={m._id} style={{
+                                  display: 'flex', alignItems: 'center', gap: '12px',
+                                  background: '#ecfdf5', padding: '12px 18px', borderRadius: '12px',
+                                  border: '1px solid #a7f3d0'
+                                }}>
+                                  <CheckSquare size={18} style={{ color: '#047857', flexShrink: 0 }} />
+                                  <div style={{ flex: 1 }}>
+                                    <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#0f172a' }}>{m.title}</span>
+                                    {m.description && (
+                                      <span style={{ display: 'block', fontSize: '0.82rem', color: '#475569', marginTop: '2px' }}>{m.description}</span>
+                                    )}
+                                  </div>
+                                  <span style={{
+                                    padding: '3px 10px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 800,
+                                    background: '#d1fae5', color: '#047857', border: '1px solid #a7f3d0'
+                                  }}>
+                                    ✅ {m.status}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Row 6: Niche Tags */}
+                        {project.niche?.length > 0 && (
+                          <div className="d-flex flex-wrap gap-2" style={{ marginBottom: '20px' }}>
+                            {project.niche.map((n, idx) => (
+                              <span key={idx} style={{
+                                padding: '4px 12px', background: '#f0f9ff',
+                                border: '1px solid #bae6fd', color: '#0369a1',
+                                borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 800
+                              }}>{n}</span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Row 7: Action Button */}
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3" style={{ paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
+                          <Link
+                            to={`/workspaces/${ws._id}`}
+                            className="btn btn-primary"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '8px',
+                              padding: '10px 22px', borderRadius: '10px',
+                              fontSize: '0.88rem', fontWeight: 800
+                            }}
+                          >
+                            <Eye size={16} /> View Full Workspace
+                          </Link>
+                          <span style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: 600, fontStyle: 'italic' }}>
+                            Project finalized &amp; archived
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <Link to={`/workspaces/${ws._id}`} className="btn btn-outline" style={{ display: 'flex', justifyContent: 'center' }}>Open Collaboration Tracker</Link>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -2402,34 +2821,117 @@ const Dashboard = () => {
           return true;
         });
 
+        const getAppStatusStyle = (status) => {
+          switch (status) {
+            case 'pending':
+              return { background: '#fffbeb', color: '#b45309', border: '1.5px solid #fde68a' };
+            case 'shortlisted':
+              return { background: '#eff6ff', color: '#1e3a8a', border: '1.5px solid #bfdbfe' };
+            case 'approved':
+              return { background: '#ecfdf5', color: '#047857', border: '1.5px solid #a7f3d0' };
+            case 'rejected':
+              return { background: '#fef2f2', color: '#b91c1c', border: '1.5px solid #fecaca' };
+            case 'completed':
+              return { background: '#f0f9ff', color: '#0369a1', border: '1.5px solid #bae6fd' };
+            default:
+              return { background: '#f1f5f9', color: '#475569', border: '1.5px solid #e2e8f0' };
+          }
+        };
+
+        const getStatusIcon = (status) => {
+          switch (status) {
+            case 'pending': return '⏳';
+            case 'shortlisted': return '⭐';
+            case 'approved': return '✅';
+            case 'rejected': return '❌';
+            case 'completed': return '🏆';
+            default: return '📋';
+          }
+        };
+
         return (
           <div className="animate-fade-in-up">
-            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>My Applications Log</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>Track and manage your brand outreach submissions</p>
-              </div>
-
-              {/* Sub tabs switcher */}
-              <div className="glass-panel" style={{ display: 'flex', padding: '4px', gap: '4px', flexWrap: 'wrap' }}>
-                {['all', 'pending', 'shortlisted', 'approved', 'rejected', 'completed'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setAppSubTab(tab)}
-                    className={`btn ${appSubTab === tab ? 'btn-primary' : 'btn-outline'}`}
-                    style={{ border: 'none', padding: '6px 12px', fontSize: '0.78rem', textTransform: 'capitalize' }}
-                  >
-                    {tab === 'approved' ? 'accepted' : tab}
-                  </button>
-                ))}
+            {/* Section Header */}
+            <div style={{ marginBottom: '32px' }}>
+              <div className="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 6px 0', color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)" }}>
+                    My Applications Log
+                  </h3>
+                  <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0, fontWeight: 500 }}>
+                    Track and manage your brand outreach submissions &amp; pitch history.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ background: '#eff6ff', color: '#1e3a8a', padding: '8px 18px', borderRadius: '12px', border: '1.5px solid #bfdbfe', fontSize: '0.88rem', fontWeight: 800 }}>
+                    {applications.length} Total Application{applications.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
               </div>
             </div>
 
+            {/* Status Filter Tabs */}
+            <div style={{
+              display: 'flex', background: '#ffffff', padding: '6px',
+              borderRadius: '14px', border: '1.5px solid #e2e8f0',
+              boxShadow: '0 4px 16px rgba(15, 23, 42, 0.04)',
+              gap: '6px', flexWrap: 'wrap', marginBottom: '28px'
+            }}>
+              {['all', 'pending', 'shortlisted', 'approved', 'rejected', 'completed'].map((tab) => {
+                const isActive = appSubTab === tab;
+                const tabCount = tab === 'all'
+                  ? applications.length
+                  : tab === 'completed'
+                    ? applications.filter(a => workspaces.some(ws => ws.projectId?._id === a.projectId?._id && ws.status === 'completed')).length
+                    : applications.filter(a => a.status === tab).length;
+
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setAppSubTab(tab)}
+                    style={{
+                      padding: '10px 20px',
+                      borderRadius: '10px',
+                      border: 'none',
+                      fontWeight: 800,
+                      fontSize: '0.85rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s ease',
+                      textTransform: 'capitalize',
+                      background: isActive ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' : 'transparent',
+                      color: isActive ? '#ffffff' : '#64748b',
+                      boxShadow: isActive ? '0 4px 14px rgba(30, 58, 138, 0.25)' : 'none'
+                    }}
+                  >
+                    {getStatusIcon(tab === 'all' ? 'default' : tab)} {tab === 'approved' ? 'Accepted' : tab}
+                    <span style={{
+                      background: isActive ? 'rgba(255,255,255,0.25)' : '#f1f5f9',
+                      color: isActive ? '#ffffff' : '#64748b',
+                      padding: '2px 8px', borderRadius: '8px',
+                      fontSize: '0.75rem', fontWeight: 900, minWidth: '24px', textAlign: 'center'
+                    }}>
+                      {tabCount}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Applications List */}
             {filteredApps.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '60px', textAlign: 'center' }}>
-                <FileText size={36} style={{ color: 'var(--text-muted)', marginBottom: '16px' }} />
-                <h4 style={{ fontWeight: 800 }}>No applications found</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>No submissions matched the selected status tab filter.</p>
+              <div style={{
+                padding: '80px 40px', textAlign: 'center', borderRadius: '20px',
+                background: '#ffffff', border: '1.5px solid #e2e8f0',
+                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)'
+              }}>
+                <FileText size={48} style={{ color: '#94a3b8', display: 'block', margin: '0 auto 16px' }} />
+                <h4 style={{ fontWeight: 900, margin: '0 0 8px 0', color: '#0f172a', fontSize: '1.15rem' }}>No applications found</h4>
+                <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>
+                  No submissions match the "<strong>{appSubTab}</strong>" filter. Try another status tab.
+                </p>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -2445,63 +2947,184 @@ const Dashboard = () => {
                     : 'N/A';
 
                   const canWithdraw = currentStatus === 'pending' || currentStatus === 'shortlisted';
+                  const statusStyle = getAppStatusStyle(currentStatus);
 
                   return (
-                    <div key={app._id} className="card glass-panel text-white border-0 shadow-sm" style={{ padding: '24px' }}>
-                      <div className="card-body p-0">
-                        {/* Title, Brand Sponsor, Status Badge */}
-                        <div className="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                              Sponsor Brand: {brandUser.name || 'CreatorSync Partner'}
-                            </span>
-                            <h4 style={{ fontWeight: 800, fontSize: '1.15rem', margin: '4px 0 0 0' }}>{project.title || 'Sponsorship Brief Opportunity'}</h4>
+                    <div
+                      key={app._id}
+                      style={{
+                        padding: '0', overflow: 'hidden',
+                        borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0',
+                        boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(30, 58, 138, 0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 23, 42, 0.05)'; }}
+                    >
+                      {/* Status Color Top Bar */}
+                      <div style={{
+                        height: '5px',
+                        background: currentStatus === 'pending' ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                          : currentStatus === 'shortlisted' ? 'linear-gradient(90deg, #1e3a8a, #3b82f6)'
+                          : currentStatus === 'approved' ? 'linear-gradient(90deg, #047857, #10b981)'
+                          : currentStatus === 'rejected' ? 'linear-gradient(90deg, #b91c1c, #ef4444)'
+                          : currentStatus === 'completed' ? 'linear-gradient(90deg, #0369a1, #38bdf8)'
+                          : 'linear-gradient(90deg, #64748b, #94a3b8)'
+                      }} />
+
+                      <div style={{ padding: '28px 32px' }}>
+                        {/* Row 1: Brand + Title + Status Badge */}
+                        <div className="d-flex justify-content-between align-items-start flex-wrap gap-3" style={{ marginBottom: '20px' }}>
+                          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                            {/* Brand Avatar */}
+                            <div style={{
+                              width: '52px', height: '52px', borderRadius: '14px',
+                              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              color: '#ffffff', fontWeight: 900, fontSize: '1rem', flexShrink: 0,
+                              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.2)'
+                            }}>
+                              {brandUser.profileImage
+                                ? <img src={brandUser.profileImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '14px' }} alt="" />
+                                : (brandUser.name ? brandUser.name.substring(0, 2).toUpperCase() : 'CS')
+                              }
+                            </div>
+                            <div>
+                              <span style={{
+                                fontSize: '0.78rem', color: '#1e3a8a', fontWeight: 800,
+                                textTransform: 'uppercase', letterSpacing: '0.05em',
+                                display: 'flex', alignItems: 'center', gap: '6px'
+                              }}>
+                                <Building size={13} /> {brandUser.name || 'CreatorSync Partner'}
+                              </span>
+                              <h4 style={{
+                                fontWeight: 900, fontSize: '1.2rem', margin: '4px 0 0 0',
+                                color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)",
+                                lineHeight: '1.35'
+                              }}>
+                                {project.title || 'Sponsorship Brief Opportunity'}
+                              </h4>
+                            </div>
                           </div>
-                          <span className={`badge badge-${currentStatus === 'approved' ? 'approved' : currentStatus}`} style={{ padding: '6px 12px', fontSize: '0.75rem' }}>
-                            {currentStatus === 'approved' ? 'accepted' : currentStatus}
+
+                          {/* Status Badge */}
+                          <span style={{
+                            ...statusStyle,
+                            padding: '8px 18px', borderRadius: '12px',
+                            fontSize: '0.82rem', fontWeight: 900,
+                            textTransform: 'capitalize', display: 'inline-flex',
+                            alignItems: 'center', gap: '6px', whiteSpace: 'nowrap'
+                          }}>
+                            {getStatusIcon(currentStatus)} {currentStatus === 'approved' ? 'Accepted' : currentStatus}
                           </span>
                         </div>
 
-                        {/* Applied Pitch description */}
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', background: 'var(--bg-tertiary)', padding: '12px 16px', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--primary)', marginBottom: '16px' }}>
-                          <span style={{ fontWeight: 700, display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>YOUR PITCH</span>
-                          "{app.pitch}"
-                        </p>
+                        {/* Row 2: Your Pitch */}
+                        <div style={{
+                          background: '#f8fafc', borderRadius: '14px',
+                          padding: '18px 22px', marginBottom: '24px',
+                          borderLeft: '4px solid #1e3a8a', border: '1.5px solid #e2e8f0',
+                          borderLeftWidth: '4px', borderLeftColor: '#1e3a8a'
+                        }}>
+                          <span style={{
+                            fontWeight: 800, display: 'block', fontSize: '0.75rem',
+                            color: '#1e3a8a', marginBottom: '8px',
+                            textTransform: 'uppercase', letterSpacing: '0.05em'
+                          }}>
+                            📝 Your Pitch Message
+                          </span>
+                          <p style={{
+                            fontSize: '0.92rem', color: '#334155',
+                            lineHeight: '1.7', margin: 0, fontStyle: 'italic'
+                          }}>
+                            "{app.pitch}"
+                          </p>
+                        </div>
 
-                        {/* Metadata row: Applied Date, Proposed Rate, Budget, Deadline */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>APPLIED DATE</span>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>{formattedAppliedDate}</span>
+                        {/* Row 3: Metadata Stats Grid */}
+                        <div style={{
+                          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+                          gap: '16px', marginBottom: '24px',
+                          padding: '18px 20px', background: '#f8fafc',
+                          borderRadius: '14px', border: '1.5px solid #e2e8f0'
+                        }}>
+                          <div style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Applied Date
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a' }}>{formattedAppliedDate}</span>
                           </div>
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>PROPOSED RATE</span>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--success)' }}>${app.proposedRate}</span>
+                          <div style={{ textAlign: 'center', borderLeft: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Proposed Rate
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#047857' }}>${app.proposedRate?.toLocaleString()}</span>
                           </div>
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>ESTIMATED BUDGET</span>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>
-                              ${project.budget?.min?.toLocaleString()} - ${project.budget?.max?.toLocaleString()}
+                          <div style={{ textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Campaign Budget
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a' }}>
+                              ${project.budget?.min?.toLocaleString()} — ${project.budget?.max?.toLocaleString()}
                             </span>
                           </div>
-                          <div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>CAMPAIGN DEADLINE</span>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>{formattedDeadline}</span>
+                          <div style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                              Deadline
+                            </span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#1e3a8a' }}>{formattedDeadline}</span>
                           </div>
                         </div>
 
-                        {/* Actions: View Details, Withdraw Application */}
-                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
-                          <Link to={`/campaigns/${project._id}`} className="btn btn-outline" style={{ padding: '6px 16px', fontSize: '0.8rem' }}>
-                            <Search size={14} /> View Details
+                        {/* Row 4: Niche Tags if present */}
+                        {project.niche?.length > 0 && (
+                          <div className="d-flex flex-wrap gap-2" style={{ marginBottom: '20px' }}>
+                            {project.niche.map((n, idx) => (
+                              <span key={idx} style={{
+                                padding: '4px 12px', background: '#eff6ff',
+                                border: '1px solid #bfdbfe', color: '#1e3a8a',
+                                borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 800
+                              }}>{n}</span>
+                            ))}
+                            {project.targetPlatforms?.map((plat, idx) => (
+                              <span key={`p-${idx}`} style={{
+                                padding: '4px 12px', background: '#f1f5f9',
+                                border: '1px solid #e2e8f0', color: '#475569',
+                                borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 800
+                              }}>{plat}</span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Row 5: Action Buttons */}
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3" style={{ paddingTop: '20px', borderTop: '1.5px solid #f1f5f9' }}>
+                          <Link
+                            to={`/campaigns/${project._id}`}
+                            className="btn btn-primary"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '8px',
+                              padding: '10px 22px', borderRadius: '10px',
+                              fontSize: '0.88rem', fontWeight: 800
+                            }}
+                          >
+                            <Search size={15} /> View Campaign Details
                           </Link>
+
                           {canWithdraw && (
                             <button
                               onClick={() => handleWithdrawApplication(app._id)}
-                              className="btn btn-outline"
-                              style={{ padding: '6px 16px', fontSize: '0.8rem', color: 'var(--danger)', borderColor: 'var(--danger-glow)' }}
+                              style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                padding: '10px 22px', borderRadius: '10px',
+                                fontSize: '0.88rem', fontWeight: 800,
+                                background: '#fef2f2', color: '#b91c1c',
+                                border: '1.5px solid #fecaca', cursor: 'pointer',
+                                transition: 'all 0.2s ease'
+                              }}
+                              onMouseEnter={e => { e.currentTarget.style.background = '#fee2e2'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(185, 28, 28, 0.15)'; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.boxShadow = 'none'; }}
                             >
-                              <Trash2 size={14} /> Withdraw Application
+                              <Trash2 size={15} /> Withdraw Application
                             </button>
                           )}
                         </div>

@@ -121,16 +121,16 @@ const CreatorDashboard = () => {
     fetchCreatorDashboardData();
   }, []);
 
-  // Chart data setup
+  // Chart data setup — High Contrast Cobalt & Sky Blue Theme
   const monthlyEarningsData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
     datasets: [
       {
-        label: 'Monthly Earnings ($)',
-        data: [400, 750, 1200, 950, 1800, 2100, stats.totalEarnings || 1500],
+        label: 'Monthly Earnings (₹)',
+        data: [40000, 75000, 120000, 95000, 180000, 210000, stats.totalEarnings || 150000],
         fill: true,
-        borderColor: '#ec4899',
-        backgroundColor: 'rgba(236, 72, 153, 0.18)',
+        borderColor: '#1e3a8a',
+        backgroundColor: 'rgba(30, 58, 138, 0.12)',
         tension: 0.4
       }
     ]
@@ -142,7 +142,7 @@ const CreatorDashboard = () => {
       {
         label: 'Proposals Count',
         data: [applications.length || 5, stats.pendingPitches || 2, stats.activeCampaigns || 2, stats.completedCampaigns || 1],
-        backgroundColor: ['#8b5cf6', '#a855f7', '#d946ef', '#ec4899'],
+        backgroundColor: ['#1e3a8a', '#2563eb', '#3b82f6', '#60a5fa'],
         borderRadius: 6
       }
     ]
@@ -151,11 +151,11 @@ const CreatorDashboard = () => {
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#cbd5e1' } }
+      legend: { labels: { color: '#0f172a', font: { weight: 'bold', size: 13 } } }
     },
     scales: {
-      x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.06)' } },
-      y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.06)' } }
+      x: { ticks: { color: '#334155', font: { weight: '600' } }, grid: { color: '#e2e8f0' } },
+      y: { ticks: { color: '#334155', font: { weight: '600' } }, grid: { color: '#e2e8f0' } }
     }
   };
 
@@ -164,36 +164,37 @@ const CreatorDashboard = () => {
   }
 
   return (
-    <div className="animate-fade-in-up">
-      {/* Hero Welcome Glass Banner */}
+    <div className="animate-fade-in-up" style={{ padding: '16px 0 60px 0' }}>
+      {/* Hero Welcome Banner */}
       <div
-        className="glass-panel mb-4"
+        className="glass-panel"
         style={{
-          padding: '32px',
-          borderRadius: '24px',
-          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(236, 72, 153, 0.14) 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          padding: '48px 52px',
+          marginBottom: '44px',
+          borderRadius: '22px',
+          background: '#ffffff',
+          border: '1.5px solid #e2e8f0',
+          boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-4">
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 14px', borderRadius: '9999px', background: 'rgba(139, 92, 246, 0.2)', border: '1px solid rgba(139, 92, 246, 0.4)', color: '#8b5cf6', fontSize: '0.78rem', fontWeight: 700, marginBottom: '12px' }}>
-              <Award size={14} /> Creator Partner Verified
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', borderRadius: '9999px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e3a8a', fontSize: '0.82rem', fontWeight: 800, marginBottom: '18px' }}>
+              <Award size={16} style={{ color: '#3b82f6' }} /> Verified Creator Partner
             </div>
-            <h1 style={{ fontSize: '2rem', fontWeight: 900, margin: 0, color: '#ffffff', fontFamily: "'Outfit', var(--font-sans)" }}>
-              Welcome back, <span className="gradient-text">{user?.name}</span> 👋
+            <h1 style={{ fontSize: '2.4rem', fontWeight: 900, margin: 0, color: '#0f172a', fontFamily: "'Outfit', var(--font-sans)", letterSpacing: '-0.02em' }}>
+              Welcome back, <span style={{ color: '#1e3a8a' }}>{user?.name}</span> 👋
             </h1>
-            <p style={{ color: '#cbd5e1', margin: '6px 0 0 0', fontSize: '0.98rem' }}>
-              Track your pitch proposals, active sponsorships, and earnings in real-time.
+            <p style={{ color: '#64748b', margin: '14px 0 0 0', fontSize: '1.05rem', fontWeight: 500, maxWidth: '680px', lineHeight: '1.6' }}>
+              Track your pitch proposals, active sponsorships, and escrow earnings in real-time with total clarity.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <Link to="/discover" className="auth-btn-primary" style={{ width: 'auto', padding: '12px 24px', textDecoration: 'none', fontSize: '0.9rem' }}>
-              <Sparkles size={16} />
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <Link to="/discover" className="btn btn-primary" style={{ width: 'auto', padding: '16px 32px', textDecoration: 'none', fontSize: '0.98rem', borderRadius: '10px', fontWeight: 800 }}>
+              <Sparkles size={18} />
               Discover Campaign Briefs
             </Link>
           </div>
@@ -201,14 +202,14 @@ const CreatorDashboard = () => {
       </div>
 
       {/* 4 Stat Overview Widgets Grid */}
-      <div className="row g-4 mb-4">
+      <div className="row g-4" style={{ marginBottom: '44px', rowGap: '32px' }}>
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
           <DashboardCard
             title="ACTIVE CAMPAIGNS"
             value={stats.activeCampaigns}
             subtitle="Ongoing collaborations"
-            icon={<Briefcase size={20} style={{ color: '#8b5cf6' }} />}
-            color="#8b5cf6"
+            icon={<Briefcase size={24} style={{ color: '#1e3a8a' }} />}
+            color="#1e3a8a"
             trend="+12.4%"
           />
         </div>
@@ -218,8 +219,8 @@ const CreatorDashboard = () => {
             title="PENDING PITCHES"
             value={stats.pendingPitches}
             subtitle="Awaiting brand review"
-            icon={<Clock size={20} style={{ color: '#f59e0b' }} />}
-            color="#f59e0b"
+            icon={<Clock size={24} style={{ color: '#d97706' }} />}
+            color="#d97706"
             trend="Active"
           />
         </div>
@@ -227,10 +228,10 @@ const CreatorDashboard = () => {
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
           <DashboardCard
             title="TOTAL EARNINGS"
-            value={`$${stats.totalEarnings.toLocaleString()}`}
+            value={`₹${stats.totalEarnings ? stats.totalEarnings.toLocaleString() : '1,50,000'}`}
             subtitle="Approved payouts"
-            icon={<DollarSign size={20} style={{ color: '#10b981' }} />}
-            color="#10b981"
+            icon={<DollarSign size={24} style={{ color: '#3b82f6' }} />}
+            color="#3b82f6"
             trend="+18.5%"
           />
         </div>
@@ -240,17 +241,17 @@ const CreatorDashboard = () => {
             title="COMPLETED WORK"
             value={stats.completedCampaigns}
             subtitle="Successfully closed"
-            icon={<CheckCircle size={20} style={{ color: '#ec4899' }} />}
-            color="#ec4899"
+            icon={<CheckCircle size={24} style={{ color: '#1e3a8a' }} />}
+            color="#1e3a8a"
             trend="100% Rate"
           />
         </div>
       </div>
 
       {/* Analytics Charts */}
-      <div className="row g-4 mb-4">
+      <div className="row g-4" style={{ marginBottom: '44px', rowGap: '32px' }}>
         <div className="col-12 col-lg-7">
-          <AnalyticsCard title="Earnings Overview Trend ($)">
+          <AnalyticsCard title="Earnings Overview Trend (₹)">
             <Line data={monthlyEarningsData} options={chartOptions} height={220} />
           </AnalyticsCard>
         </div>
@@ -263,34 +264,34 @@ const CreatorDashboard = () => {
       </div>
 
       {/* Bottom Grid: Pitch History & Recommendations */}
-      <div className="row g-4">
+      <div className="row g-4" style={{ rowGap: '32px' }}>
         {/* Recent Applications Feed */}
         <div className="col-12 col-lg-7">
-          <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px' }}>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff' }}>
-                <FileText size={20} style={{ color: '#8b5cf6' }} />
+          <div className="glass-panel" style={{ padding: '38px 42px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+            <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '28px' }}>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '12px', color: '#0f172a' }}>
+                <FileText size={22} style={{ color: '#1e3a8a' }} />
                 Recent Pitch Proposals
               </h4>
             </div>
 
             {applications.length === 0 ? (
-              <p style={{ color: '#a1a1aa', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>
+              <p style={{ color: '#64748b', fontSize: '0.95rem', fontStyle: 'italic', margin: 0, padding: '24px 0' }}>
                 You haven't pitched to any campaigns yet. Explore the Discover section to find briefs!
               </p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {applications.slice(0, 4).map((app) => (
-                  <div key={app._id} className="p-3" style={{ background: '#140d24', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h5 style={{ fontSize: '0.9rem', fontWeight: 800, margin: 0, color: '#ffffff' }}>
+                  <div key={app._id} style={{ padding: '24px 28px', background: '#f8fafc', borderRadius: '16px', border: '1.5px solid #e2e8f0' }}>
+                    <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '12px' }}>
+                      <h5 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
                         {app.campaignId?.title || app.projectId?.title || 'Campaign Pitch'}
                       </h5>
-                      <span className={`badge badge-${app.status}`} style={{ fontSize: '0.75rem' }}>{app.status}</span>
+                      <span className={`badge badge-${app.status}`} style={{ fontSize: '0.8rem', padding: '5px 14px' }}>{app.status}</span>
                     </div>
-                    <p style={{ fontSize: '0.83rem', color: '#cbd5e1', margin: '4px 0' }}>"{app.pitch?.substring(0, 80)}..."</p>
-                    <div className="d-flex justify-content-between align-items-center mt-2" style={{ fontSize: '0.78rem', color: '#8b85a3' }}>
-                      <span>Proposed rate: ${app.proposedRate}</span>
+                    <p style={{ fontSize: '0.9rem', color: '#475569', margin: '10px 0 16px 0', lineHeight: '1.6' }}>"{app.pitch?.substring(0, 95)}..."</p>
+                    <div className="d-flex justify-content-between align-items-center" style={{ fontSize: '0.84rem', color: '#64748b', fontWeight: 600, paddingTop: '14px', borderTop: '1px solid #e2e8f0' }}>
+                      <span>Proposed rate: <strong style={{ color: '#0f172a' }}>₹{app.proposedRate ? app.proposedRate.toLocaleString() : '50,000'}</strong></span>
                       <span>{new Date(app.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
@@ -302,25 +303,25 @@ const CreatorDashboard = () => {
 
         {/* Campaign Recommendations */}
         <div className="col-12 col-lg-5">
-          <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px' }}>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff' }}>
-                <Compass size={20} style={{ color: '#ec4899' }} />
+          <div className="glass-panel" style={{ padding: '38px 42px', borderRadius: '20px', background: '#ffffff', border: '1.5px solid #e2e8f0', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)' }}>
+            <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '28px' }}>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '12px', color: '#0f172a' }}>
+                <Compass size={22} style={{ color: '#3b82f6' }} />
                 Recommended Briefs
               </h4>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {recommendations.map((camp) => (
-                <div key={camp._id} className="p-3 d-flex justify-content-between align-items-center" style={{ background: '#140d24', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div key={camp._id} className="d-flex justify-content-between align-items-center" style={{ padding: '24px 28px', background: '#f8fafc', borderRadius: '16px', border: '1.5px solid #e2e8f0', gap: '20px' }}>
                   <div>
-                    <h5 style={{ fontSize: '0.9rem', fontWeight: 800, margin: '0 0 4px 0', color: '#ffffff' }}>{camp.title}</h5>
-                    <span style={{ fontSize: '0.78rem', color: '#8b85a3' }}>
-                      Budget: ${camp.budget?.min} - ${camp.budget?.max}
+                    <h5 style={{ fontSize: '0.98rem', fontWeight: 800, margin: '0 0 6px 0', color: '#0f172a' }}>{camp.title}</h5>
+                    <span style={{ fontSize: '0.84rem', color: '#64748b', fontWeight: 600 }}>
+                      Budget: ₹{camp.budget?.min ? camp.budget.min.toLocaleString() : '1,00,000'} - ₹{camp.budget?.max ? camp.budget.max.toLocaleString() : '5,00,000'}
                     </span>
                   </div>
-                  <Link to={`/campaigns/${camp._id}`} className="auth-btn-primary" style={{ padding: '6px 14px', fontSize: '0.78rem', width: 'auto', textDecoration: 'none' }}>
-                    Pitch <ArrowUpRight size={14} />
+                  <Link to={`/campaigns/${camp._id}`} className="btn btn-primary" style={{ padding: '10px 18px', fontSize: '0.84rem', width: 'auto', textDecoration: 'none', borderRadius: '8px', flexShrink: 0, fontWeight: 800 }}>
+                    Pitch <ArrowUpRight size={16} />
                   </Link>
                 </div>
               ))}
